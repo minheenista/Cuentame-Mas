@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+// TODO: ARREGLAR LAS CARD PARA RESPONSIVIDAD
+// TODO: ARREGLAR EL FORM
+// TODO: ARREGLAR DRAWER
 
 class FaqScreen extends StatelessWidget {
   const FaqScreen({super.key});
@@ -220,7 +223,7 @@ class _FaqScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             const Text('Preguntas Frecuentes',
@@ -241,7 +244,31 @@ class _FaqScreen extends StatelessWidget {
               )),
             ),
             const SizedBox(height: 20),
-            QuestionCard(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                QuestionCard(),
+                QuestionCard(),
+                QuestionCard(),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                QuestionCard(),
+                QuestionCard(),
+                QuestionCard(),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                QuestionCard(),
+                QuestionCard(),
+                QuestionCard(),
+              ],
+            ),
+
             /* LayoutBuilder(
               builder: (context, constraints) {
                 if (constraints.maxWidth > 880) {
@@ -274,16 +301,16 @@ class _FaqScreen extends StatelessWidget {
                 }
               },
             ) */
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
               alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 70),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 70),
                 child: Text(
                   "Tienes mas dudas? Llena le siguiente formulario.",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -307,7 +334,7 @@ class _FaqScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       Expanded(
                         child: TextField(
                           decoration: InputDecoration(
@@ -318,18 +345,18 @@ class _FaqScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: 80),
+                      const SizedBox(width: 80),
                       ElevatedButton.icon(
                         onPressed: () {},
-                        icon: Icon(Icons.send, color: Colors.white),
+                        icon: const Icon(Icons.send, color: Colors.white),
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xffF09D99), // Color de fondo
+                          primary: const Color(0xffF09D99), // Color de fondo
 
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 16,
                               horizontal: 20), // Ajusta la altura del botón
                         ),
-                        label: Text(
+                        label: const Text(
                           'Enviar',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -340,7 +367,7 @@ class _FaqScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextField(
                     decoration: InputDecoration(
                       hintText: 'Mensaje',
@@ -349,9 +376,14 @@ class _FaqScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 50.0),
                 ],
               ),
             ),
+            Container(
+              height: 50.0,
+              color: const Color(0xffF09D99),
+            )
           ],
         ),
       ),
@@ -360,6 +392,8 @@ class _FaqScreen extends StatelessWidget {
 }
 
 class QuestionCard extends StatelessWidget {
+  const QuestionCard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -393,7 +427,7 @@ class QuestionCard extends StatelessWidget {
               ),
               content: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
-                child: const Text(
+                child: Text(
                   'Contenido de la pregunta...',
                   style: TextStyle(fontSize: 16),
                 ),
@@ -402,7 +436,7 @@ class QuestionCard extends StatelessWidget {
           },
         );
       },
-      child: Container(
+      child: SizedBox(
         height: 150,
         width: 400,
         child: Card(
