@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-//TODO: ARREGLAR DRAWER
 
 class TosScreen extends StatelessWidget {
   const TosScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return _TosScreen();
+    return const _TosScreen();
   }
 }
 
@@ -141,12 +140,11 @@ class _TosScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    tileColor: const Color.fromARGB(255, 219, 135, 131),
-                    leading:
-                        const Icon(Icons.home_rounded, color: Colors.white),
+                    leading: const Icon(Icons.home_rounded,
+                        color: Color(0xff292929)),
                     title: const Text(
                       'Menu Principal',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Color(0xff292929)),
                     ),
                     onTap: () {
                       // Acciones de la ruta
@@ -166,11 +164,12 @@ class _TosScreen extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.article_rounded,
-                        color: Color(0xff292929)),
+                    tileColor: const Color.fromARGB(255, 219, 135, 131),
+                    leading:
+                        const Icon(Icons.article_rounded, color: Colors.white),
                     title: const Text(
                       'Términos y Condiciones',
-                      style: TextStyle(color: Color(0xff292929)),
+                      style: TextStyle(color: Colors.white),
                     ),
                     onTap: () {
                       // Acciones de la ruta
@@ -229,8 +228,7 @@ class _TosScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 const Text(
                   "Terminos y Condiciones de Uso",
-                  style: const TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
                 /* SizedBox(height: 20),
                 Text(
@@ -247,10 +245,10 @@ class _TosScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
+                  children: const [
+                    Text(
                       "Vestibulum facilisis fringilla",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -268,7 +266,7 @@ class _TosScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
             height: 50.0,
             color: const Color(0xffF09D99),

@@ -3,9 +3,9 @@ import 'package:cuentame_mas/features/faq/ui/screens/faq_screen.dart';
 import 'package:cuentame_mas/features/privacy/ui/screens/privacy_screen.dart';
 import 'package:cuentame_mas/features/tos/ui/screens/tos_screen.dart';
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
+//import 'dart:typed_data';
 
-import 'package:go_router/go_router.dart';
+//import 'package:go_router/go_router.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -24,8 +24,8 @@ class CuentameMas extends StatelessWidget {
       home: const MyHomePage(title: 'Cuentame +'),
       routes: {
         '/faq': (context) => const FaqScreen(),
-        '/tos': (context) => TosScreen(),
-        '/privacy': (context) => PrivacyScreen(),
+        '/tos': (context) => const TosScreen(),
+        '/privacy': (context) => const PrivacyScreen(),
       },
     );
   }
@@ -229,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Navigator.of(context).pushNamed('/privacy');
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 250,
                     ),
                     Padding(

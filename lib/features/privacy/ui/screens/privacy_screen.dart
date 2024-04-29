@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// TODO: ARRGELAR DRAWER
 
 class PrivacyScreen extends StatelessWidget {
   const PrivacyScreen({super.key});
@@ -141,12 +140,11 @@ class _PrivacyScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    tileColor: const Color.fromARGB(255, 219, 135, 131),
-                    leading:
-                        const Icon(Icons.home_rounded, color: Colors.white),
+                    leading: const Icon(Icons.home_rounded,
+                        color: Color(0xff292929)),
                     title: const Text(
                       'Menu Principal',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Color(0xff292929)),
                     ),
                     onTap: () {
                       // Acciones de la ruta
@@ -177,11 +175,12 @@ class _PrivacyScreen extends StatelessWidget {
                     },
                   ),
                   ListTile(
+                    tileColor: const Color.fromARGB(255, 219, 135, 131),
                     leading: const Icon(Icons.privacy_tip_rounded,
-                        color: Color(0xff292929)),
+                        color: Colors.white),
                     title: const Text(
                       'Políticas de Privacidad',
-                      style: TextStyle(color: Color(0xff292929)),
+                      style: TextStyle(color: Colors.white),
                     ),
                     onTap: () {
                       // Acciones de la ruta
@@ -228,8 +227,7 @@ class _PrivacyScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 const Text(
                   "Políticas de Privacidad",
-                  style: const TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
                 /* SizedBox(height: 20),
                 Text(
@@ -246,10 +244,10 @@ class _PrivacyScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
+                  children: const [
+                    Text(
                       "Vestibulum facilisis fringilla",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -267,7 +265,7 @@ class _PrivacyScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
             height: 50.0,
             color: const Color(0xffF09D99),

@@ -1,7 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// TODO: ARREGLAR LAS CARD PARA RESPONSIVIDAD
-// TODO: ARREGLAR EL FORM
-// TODO: ARREGLAR DRAWER
 
 class FaqScreen extends StatelessWidget {
   const FaqScreen({super.key});
@@ -143,23 +141,23 @@ class _FaqScreen extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    tileColor: const Color.fromARGB(255, 219, 135, 131),
-                    leading:
-                        const Icon(Icons.home_rounded, color: Colors.white),
+                    leading: const Icon(Icons.home_rounded,
+                        color: Color(0xff292929)),
                     title: const Text(
                       'Menu Principal',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Color(0xff292929)),
                     ),
                     onTap: () {
                       // Acciones de la ruta
                     },
                   ),
                   ListTile(
+                    tileColor: const Color.fromARGB(255, 219, 135, 131),
                     leading: const Icon(Icons.question_answer_rounded,
-                        color: Color(0xff292929)),
+                        color: Colors.white),
                     title: const Text(
                       'Preguntas Frecuentes',
-                      style: TextStyle(color: Color(0xff292929)),
+                      style: TextStyle(color: Colors.white),
                     ),
                     onTap: () {
                       // Acciones de la ruta
@@ -228,12 +226,17 @@ class _FaqScreen extends StatelessWidget {
             ),
             const Text('Preguntas Frecuentes',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 48,
                 )),
             const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 180.0),
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width > 1000
+                      ? 180
+                      : MediaQuery.of(context).size.width < 880
+                          ? 80
+                          : 120),
               child: TextField(
                   decoration: InputDecoration(
                 hintText: 'Buscar',
@@ -244,9 +247,9 @@ class _FaqScreen extends StatelessWidget {
               )),
             ),
             const SizedBox(height: 20),
-            Row(
+            /* Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 QuestionCard(),
                 QuestionCard(),
                 QuestionCard(),
@@ -254,7 +257,7 @@ class _FaqScreen extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 QuestionCard(),
                 QuestionCard(),
                 QuestionCard(),
@@ -262,12 +265,81 @@ class _FaqScreen extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 QuestionCard(),
                 QuestionCard(),
                 QuestionCard(),
               ],
-            ),
+            ), */
+
+            if (MediaQuery.of(context).size.width > 1200)
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      QuestionCard(),
+                      QuestionCard(),
+                      QuestionCard(),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      QuestionCard(),
+                      QuestionCard(),
+                      QuestionCard(),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      QuestionCard(),
+                      QuestionCard(),
+                      QuestionCard(),
+                    ],
+                  ),
+                ],
+              )
+            else if (MediaQuery.of(context).size.width > 830)
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      QuestionCard(),
+                      QuestionCard(),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      QuestionCard(),
+                      QuestionCard(),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      QuestionCard(),
+                      QuestionCard(),
+                    ],
+                  ),
+                ],
+              )
+            else
+              Column(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      QuestionCard(),
+                      QuestionCard(),
+                      QuestionCard(),
+                    ],
+                  ),
+                ],
+              ),
 
             /* LayoutBuilder(
               builder: (context, constraints) {
@@ -276,7 +348,6 @@ class _FaqScreen extends StatelessWidget {
                   return GridView.count(
                     crossAxisCount: 3,
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
                     children: List.generate(9, (index) {
                       return QuestionCard();
                     }),
@@ -286,7 +357,6 @@ class _FaqScreen extends StatelessWidget {
                   return GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
                     children: List.generate(6, (index) {
                       return QuestionCard();
                     }),
@@ -300,7 +370,7 @@ class _FaqScreen extends StatelessWidget {
                   );
                 }
               },
-            ) */
+            ), */
             const SizedBox(
               height: 20,
             ),
@@ -310,7 +380,7 @@ class _FaqScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 70),
                 child: Text(
                   "Tienes mas dudas? Llena le siguiente formulario.",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -322,10 +392,80 @@ class _FaqScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
+                  if (MediaQuery.of(context).size.width > 888)
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Nombre',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Correo',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width > 1000
+                                    ? 280
+                                    : MediaQuery.of(context).size.width < 880
+                                        ? 100
+                                        : 200),
+                            ElevatedButton.icon(
+                              onPressed: () {},
+                              icon: const Icon(Icons.send, color: Colors.white),
+                              style: ElevatedButton.styleFrom(
+                                primary:
+                                    const Color(0xffF09D99), // Color de fondo
+
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                    horizontal:
+                                        20), // Ajusta la altura del botón
+                              ),
+                              label: const Text(
+                                'Enviar',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 18, // Tamaño del texto
+                                    color: Colors.white // Color del texto
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: 'Mensaje',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (MediaQuery.of(context).size.width < 889)
+                    Column(
+                      children: [
+                        TextField(
                           decoration: InputDecoration(
                             hintText: 'Nombre',
                             border: OutlineInputBorder(
@@ -333,10 +473,8 @@ class _FaqScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: TextField(
+                        const SizedBox(height: 20),
+                        TextField(
                           decoration: InputDecoration(
                             hintText: 'Correo',
                             border: OutlineInputBorder(
@@ -344,38 +482,43 @@ class _FaqScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 80),
-                      ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.send, color: Colors.white),
-                        style: ElevatedButton.styleFrom(
-                          primary: const Color(0xffF09D99), // Color de fondo
+                        const SizedBox(height: 20),
+                        TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: 'Mensaje',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.send, color: Colors.white),
+                            style: ElevatedButton.styleFrom(
+                              primary:
+                                  const Color(0xffF09D99), // Color de fondo
 
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                              horizontal: 20), // Ajusta la altura del botón
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                  horizontal: 20), // Ajusta la altura del botón
+                            ),
+                            label: const Text(
+                              'Enviar',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 18, // Tamaño del texto
+                                  color: Colors.white // Color del texto
+                                  ),
+                            ),
+                          ),
                         ),
-                        label: const Text(
-                          'Enviar',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 18, // Tamaño del texto
-                              color: Colors.white // Color del texto
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Mensaje',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      ],
                     ),
-                  ),
                   const SizedBox(height: 50.0),
                 ],
               ),
