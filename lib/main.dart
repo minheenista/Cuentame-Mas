@@ -1,5 +1,7 @@
 import 'package:cuentame_mas/config/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'dart:typed_data';
+// import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const CuentameMas());
@@ -54,7 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               // Logo de la aplicación
               Padding(
-                padding: const EdgeInsets.only(left: 16.0),
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                ),
                 child: Image.asset(
                   'assets/logojpg.png',
                   width: 50,
@@ -142,29 +146,65 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: <Widget>[
                     DrawerHeader(
                       child: Container(
-                        alignment: Alignment.centerRight,
-                        child: const Text(
-                          'Cuentame +',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: [
+                            Image(
+                              image: AssetImage('assets/logojpg.png'),
+                              height: 89,
+                              alignment: Alignment.centerLeft,
+                            ),
+                            const Text(
+                              'Cuentame +',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                     ListTile(
-                      title: const Text('Preguntas Frecuentes'),
-                      onTap: () {
-                        // Acciones de la ruta
-                      },
-                    ),
-                    ListTile(
+                      tileColor: Color.fromARGB(255, 219, 135, 131),
+                      leading: Icon(Icons.home_rounded, color: Colors.white),
                       title: const Text(
-                        'Términos y Condiciones',
+                        'Menu Principal',
+                        style: TextStyle(color: Colors.white),
                       ),
                       onTap: () {
                         // Acciones de la ruta
                       },
                     ),
                     ListTile(
-                      title: const Text('Políticas de Privacidad'),
+                      leading: Icon(Icons.question_answer_rounded,
+                          color: Color(0xff292929)),
+                      title: const Text(
+                        'Preguntas Frecuentes',
+                        style: TextStyle(color: Color(0xff292929)),
+                      ),
+                      onTap: () {
+                        // Acciones de la ruta
+                      },
+                    ),
+                    ListTile(
+                      leading:
+                          Icon(Icons.article_rounded, color: Color(0xff292929)),
+                      title: const Text(
+                        'Términos y Condiciones',
+                        style: TextStyle(color: Color(0xff292929)),
+                      ),
+                      onTap: () {
+                        // Acciones de la ruta
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.privacy_tip_rounded,
+                          color: Color(0xff292929)),
+                      title: const Text(
+                        'Políticas de Privacidad',
+                        style: TextStyle(color: Color(0xff292929)),
+                      ),
                       onTap: () {
                         // Acciones de la ruta
                       },
@@ -193,7 +233,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(
                               fontSize: MediaQuery.of(context).size.width > 1000
                                   ? 64.0
-                                  : 36.0,
+                                  : MediaQuery.of(context).size.width > 500
+                                      ? 48.0
+                                      : 24.0,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
@@ -316,33 +358,49 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 20.0),
               // Columnas de iconos y textos
-              MediaQuery.of(context).size.width > 600
+              MediaQuery.of(context).size.width > 880
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.savings_outlined,
-                              color: Color(0xff7EC9E0),
-                              size: 50.0,
-                            ),
-                            SizedBox(height: 10.0),
-                            Text(
-                              'Cuentame 1',
-                            ),
-                          ],
+                        Expanded(
+                          child: Column(
+                            children: const [
+                              Icon(
+                                Icons.savings_outlined,
+                                color: Color(0xff7EC9E0),
+                                size: 50.0,
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(left: 70.0, right: 50.0),
+                                child: Text(
+                                  'Cuentame + es  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat erat ut finibus tincidunt. Duis vel convallis ex, maximus tempus augue. Etiam imperdiet mattis est, eu scelerisque orci tempor rutrum. 1',
+                                  softWrap: true,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.account_balance_outlined,
-                              color: Color(0xff7EC9E0),
-                              size: 50.0,
-                            ),
-                            SizedBox(height: 10.0),
-                            Text('Cuentame2'),
-                          ],
+                        Expanded(
+                          child: Column(
+                            children: const [
+                              Icon(
+                                Icons.account_balance_outlined,
+                                color: Color(0xff7EC9E0),
+                                size: 50.0,
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(left: 50.0, right: 70.0),
+                                child: Text(
+                                  'Cuentame + es  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat erat ut finibus tincidunt. Duis vel convallis ex, maximus tempus augue. Etiam imperdiet mattis est, eu scelerisque orci tempor rutrum. 2',
+                                  softWrap: true,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     )
@@ -379,6 +437,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ],
                     ),
+              SizedBox(height: 50.0),
+              Container(
+                height: 50.0,
+                color: Color(0xffF09D99),
+              )
             ],
           ),
         ));
