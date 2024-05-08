@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 
-class TosScreen extends StatelessWidget {
-  const TosScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const _TosScreen();
-  }
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _TosScreen extends StatelessWidget {
-  const _TosScreen({
-    Key? key,
-  }) : super(key: key);
+class _RegisterScreenState extends State<RegisterScreen> {
+  bool isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -149,15 +145,15 @@ class _TosScreen extends StatelessWidget {
                     ),
                     onTap: () {
                       // Acciones de la ruta
-                      Navigator.of(context).pushNamed('/');
                     },
                   ),
                   ListTile(
+                    tileColor: const Color.fromARGB(255, 219, 135, 131),
                     leading: const Icon(Icons.question_answer_rounded,
-                        color: Color(0xff292929)),
+                        color: Colors.white),
                     title: const Text(
                       'Preguntas Frecuentes',
-                      style: TextStyle(color: Color(0xff292929)),
+                      style: TextStyle(color: Colors.white),
                     ),
                     onTap: () {
                       // Acciones de la ruta
@@ -165,12 +161,11 @@ class _TosScreen extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    tileColor: const Color.fromARGB(255, 219, 135, 131),
-                    leading:
-                        const Icon(Icons.article_rounded, color: Colors.white),
+                    leading: const Icon(Icons.article_rounded,
+                        color: Color(0xff292929)),
                     title: const Text(
                       'Términos y Condiciones',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Color(0xff292929)),
                     ),
                     onTap: () {
                       // Acciones de la ruta
@@ -221,59 +216,172 @@ class _TosScreen extends StatelessWidget {
             )
           : null,
       body: SingleChildScrollView(
-          child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                const Text(
-                  "Terminos y Condiciones de Uso",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
-                /* SizedBox(height: 20),
-                Text(
-                  "Última actualización: 1 de enero de 2022",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
-                ), */
-                const SizedBox(height: 20),
-                const Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat erat ut finibus tincidunt. Duis vel convallis ex, maximus tempus augue. Etiam imperdiet mattis est, eu scelerisque orci tempor rutrum. Proin malesuada eros tempus commodo dapibus. In magna augue, vehicula eu porta in, mollis non neque. Praesent eget enim ac dui pellentesque congue at et mi. Fusce varius sagittis egestas. Maecenas pellentesque mattis felis ut cursus. Donec pretium faucibus ultrices. Morbi in dignissim justo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin pulvinar dolor vel lorem pretium, sed aliquet magna pretium. Vestibulum commodo nisi quis leo tempus dignissim. Proin ornare, lectus et ultricies sodales, massa nisl laoreet elit, ut dictum massa tortor in ipsum. Donec finibus felis nec tortor venenatis euismod. Morbi consequat eget risus ac condimentum."),
-                const SizedBox(height: 20),
-                const Text(
-                    "Pellentesque nec urna vitae enim tempor congue ac id arcu. Suspendisse pulvinar vel lectus quis egestas. Duis ipsum libero, sodales at lacus vel, sollicitudin pharetra orci. Etiam laoreet ultricies libero, ut finibus orci auctor eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In nunc turpis, fringilla non turpis eget, fringilla pretium diam. In semper lorem dignissim, egestas nisl ac, eleifend turpis. Proin in orci sed elit facilisis efficitur et vel ex."),
-                const SizedBox(height: 20),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      "Vestibulum facilisis fringilla",
-                      style: TextStyle(
+          child: Container(
+        color: const Color(0xffFCBCB8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 80.0),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: Card(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Image.asset(
+                    "assets/logo.png",
+                    height: 100,
+                    width: 100,
+                  ),
+                  const Text(
+                    "Registro de usuario",
+                    style: TextStyle(
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: Color(0xffF09D99)),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    child: SizedBox(
+                      width: 300,
+                      child: Column(
+                        children: [
+                          TextField(
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.person_rounded),
+                              prefixIconColor: const Color(0xffF09D99),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: const BorderSide(
+                                  color: Color(0xffF09D99),
+                                  width: 2,
+                                ), // Color del borde cuando está habilitado
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: const BorderSide(
+                                    color: Color(0xffF09D99),
+                                    width:
+                                        2), // Color del borde cuando está habilitado
+                              ),
+                              labelText: "Nombre de usuario",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          TextField(
+                            obscureText: !isPasswordVisible,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.lock_rounded),
+                              prefixIconColor: const Color(0xffF09D99),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isPasswordVisible = !isPasswordVisible;
+                                    });
+                                  },
+                                  icon: Icon(isPasswordVisible
+                                      ? Icons.visibility_off_rounded
+                                      : Icons.visibility_rounded)),
+                              labelText: 'Contraseña',
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: const BorderSide(
+                                    color: Color(0xffF09D99),
+                                    width:
+                                        2), // Color del borde cuando está habilitado
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: const BorderSide(
+                                    color: Color(0xffF09D99),
+                                    width:
+                                        2), // Color del borde cuando está habilitado
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                    "Pellentesque nec urna vitae enim tempor congue ac id arcu. Suspendisse pulvinar vel lectus quis egestas. Duis ipsum libero, sodales at lacus vel, sollicitudin pharetra orci. Etiam laoreet ultricies libero, ut finibus orci auctor eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In nunc turpis, fringilla non turpis eget, fringilla pretium diam. In semper lorem dignissim, egestas nisl ac, eleifend turpis. Proin in orci sed elit facilisis efficitur et vel ex."),
-                const SizedBox(height: 20),
-                const Text(
-                    "Pellentesque nec urna vitae enim tempor congue ac id arcu. Suspendisse pulvinar vel lectus quis egestas. Duis ipsum libero, sodales at lacus vel, sollicitudin pharetra orci. Etiam laoreet ultricies libero, ut finibus orci auctor eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In nunc turpis, fringilla non turpis eget, fringilla pretium diam. In semper lorem dignissim, egestas nisl ac, eleifend turpis. Proin in orci sed elit facilisis efficitur et vel ex."),
-                const SizedBox(height: 20),
-                const Text(
-                    "Pellentesque nec urna vitae enim tempor congue ac id arcu. Suspendisse pulvinar vel lectus quis egestas. Duis ipsum libero, sodales at lacus vel, sollicitudin pharetra orci. Etiam laoreet ultricies libero, ut finibus orci auctor eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In nunc turpis, fringilla non turpis eget, fringilla pretium diam. In semper lorem dignissim, egestas nisl ac, eleifend turpis. Proin in orci sed elit facilisis efficitur et vel ex."),
-              ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text("¿Ya tienes una cuenta? Inicia"),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: const Color(0xff292929)),
+                    onPressed: () {},
+                    child: const Text("Iniciar sesión",
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "O ingresa como invitado",
+                      style: TextStyle(color: Color(0xff959595)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  )
+    
+                  /* Form(
+                    autovalidateMode: AutovalidateMode.always,
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _userController,
+                          decoration: const InputDecoration(
+                            labelText: "Nombre de usuario",
+                            hintText: "Correo",
+                            prefixIcon: Icon(Icons.person_rounded),
+                          ),
+                        ),
+                        TextField(
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                            labelText: "Contraseña",
+                            hintText: "Contraseña",
+                            prefixIcon: Icon(Icons.lock_rounded),
+                          ),
+                        ),
+                        
+                        /* TextButton(
+                      onPressed: () {},
+                      child: Text("¿Olvidaste tu contraseña?"),
+                    ), */
+                        
+                      ],
+                    ),
+                  ) */
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 20),
-          Container(
-            height: 50.0,
-            color: const Color(0xffF09D99),
-          )
-        ],
+        ),
       )),
     );
   }

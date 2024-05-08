@@ -94,6 +94,7 @@ class _FaqScreen extends StatelessWidget {
               child: TextButton(
                 onPressed: () {
                   // Acción del botón
+                  Navigator.of(context).pushNamed('/login');
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
@@ -196,6 +197,7 @@ class _FaqScreen extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         // Acción del botón
+                        Navigator.of(context).pushNamed('/login');
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(

@@ -1,5 +1,6 @@
 import 'package:cuentame_mas/config/theme/app_theme.dart';
 import 'package:cuentame_mas/features/faq/ui/screens/faq_screen.dart';
+import 'package:cuentame_mas/features/login/ui/screens/login_screen.dart';
 import 'package:cuentame_mas/features/privacy/ui/screens/privacy_screen.dart';
 import 'package:cuentame_mas/features/tos/ui/screens/tos_screen.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class CuentameMas extends StatelessWidget {
         '/faq': (context) => const FaqScreen(),
         '/tos': (context) => const TosScreen(),
         '/privacy': (context) => const PrivacyScreen(),
+        '/login': (context) => const LoginScreen(),
       },
     );
   }
@@ -135,6 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: TextButton(
                   onPressed: () {
                     // Acción del botón
+                    Navigator.of(context).pushNamed('/login');
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -237,6 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: TextButton(
                         onPressed: () {
                           // Acción del botón
+                          Navigator.of(context).pushNamed('/login');
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
