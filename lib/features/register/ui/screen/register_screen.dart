@@ -35,7 +35,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             // Título de la aplicación
             const Text(
               'Cuentame +',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
 
             const Padding(padding: EdgeInsets.symmetric(horizontal: 20)),
@@ -60,7 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Navigator.of(context).pushNamed('/tos');
                       },
                       child: const Text(
-                        "Terminos y Condiciones",
+                        "Términos y Condiciones",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff292929)),
@@ -73,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Navigator.of(context).pushNamed('/privacy');
                       },
                       child: const Text(
-                        "Politicas de Privacidad",
+                        "Políticas de Privacidad",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff292929)),
@@ -128,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             alignment: Alignment.centerLeft,
                           ),
                           Text(
-                            'Cuentame +',
+                            'Cuéntame +',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 32,
@@ -142,11 +145,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     leading: const Icon(Icons.home_rounded,
                         color: Color(0xff292929)),
                     title: const Text(
-                      'Menu Principal',
+                      'Menú Principal',
                       style: TextStyle(color: Color(0xff292929)),
                     ),
                     onTap: () {
                       // Acciones de la ruta
+                      Navigator.of(context).pushNamed('/home');
                     },
                   ),
                   ListTile(
@@ -280,7 +284,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         width:
                                             2), // Color del borde cuando está habilitado
                                   ),
-                                  labelText: "Nombre y apellido",
+                                  labelText: "Nombre",
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
@@ -318,7 +322,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         width:
                                             2), // Color del borde cuando está habilitado
                                   ),
-                                  labelText: "Nombre de usuario",
+                                  labelText: "Apellido",
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
@@ -434,7 +438,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             TextButton(
                               onPressed: () {},
                               child: const Text(
-                                "O ingresa como invitado",
+                                "O ingresa en modo invitado",
                                 style: TextStyle(color: Color(0xff959595)),
                               ),
                             ),

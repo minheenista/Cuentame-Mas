@@ -37,7 +37,7 @@ class _FaqScreen extends StatelessWidget {
             const SizedBox(width: 10),
             // Título de la aplicación
             const Text(
-              'Cuentame +',
+              'Cuéntame +',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
@@ -63,7 +63,7 @@ class _FaqScreen extends StatelessWidget {
                         Navigator.of(context).pushNamed('/tos');
                       },
                       child: const Text(
-                        "Terminos y Condiciones",
+                        "Términos y Condiciones",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff292929)),
@@ -76,7 +76,7 @@ class _FaqScreen extends StatelessWidget {
                         Navigator.of(context).pushNamed('/privacy');
                       },
                       child: const Text(
-                        "Politicas de Privacidad",
+                        "Políticas de Privacidad",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff292929)),
@@ -131,7 +131,7 @@ class _FaqScreen extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                           ),
                           Text(
-                            'Cuentame +',
+                            'Cuéntame +',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 32,
@@ -145,11 +145,12 @@ class _FaqScreen extends StatelessWidget {
                     leading: const Icon(Icons.home_rounded,
                         color: Color(0xff292929)),
                     title: const Text(
-                      'Menu Principal',
+                      'Menú Principal',
                       style: TextStyle(color: Color(0xff292929)),
                     ),
                     onTap: () {
                       // Acciones de la ruta
+                      Navigator.of(context).pushNamed('/home');
                     },
                   ),
                   ListTile(
@@ -338,6 +339,8 @@ class _FaqScreen extends StatelessWidget {
                       QuestionCard(),
                       QuestionCard(),
                       QuestionCard(),
+                      QuestionCard(),
+                      QuestionCard(),
                     ],
                   ),
                 ],
@@ -376,7 +379,7 @@ class _FaqScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Container(
+            /* Container(
               alignment: Alignment.centerLeft,
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 70),
@@ -388,8 +391,8 @@ class _FaqScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            Padding(
+            ), */
+            /* Padding(
               padding: const EdgeInsets.only(left: 70, right: 70, top: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -524,7 +527,7 @@ class _FaqScreen extends StatelessWidget {
                   const SizedBox(height: 50.0),
                 ],
               ),
-            ),
+            ), */
             Container(
               height: 50.0,
               color: const Color(0xffF09D99),
@@ -550,15 +553,18 @@ class QuestionCard extends StatelessWidget {
               titlePadding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               title: Row(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal:
+                            MediaQuery.of(context).size.width > 830 ? 50 : 20),
                     child: Text(
                       'Pregunta  jasgdjagsjd',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 24,
+                          fontSize:
+                              MediaQuery.of(context).size.width > 830 ? 24 : 18,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xffF09D99)),
+                          color: const Color(0xffF09D99)),
                     ),
                   ),
                   IconButton(
@@ -570,9 +576,11 @@ class QuestionCard extends StatelessWidget {
                   )
                 ],
               ),
-              content: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: Text(
+              content: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal:
+                        MediaQuery.of(context).size.width > 830 ? 50 : 20),
+                child: const Text(
                   'Contenido de la pregunta...',
                   style: TextStyle(fontSize: 16),
                 ),

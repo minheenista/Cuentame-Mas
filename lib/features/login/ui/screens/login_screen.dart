@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(width: 10),
             // Título de la aplicación
             const Text(
-              'Cuentame +',
+              'Cuéntame +',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.of(context).pushNamed('/tos');
                       },
                       child: const Text(
-                        "Terminos y Condiciones",
+                        "Términos y Condiciones",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff292929)),
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.of(context).pushNamed('/privacy');
                       },
                       child: const Text(
-                        "Politicas de Privacidad",
+                        "Políticas de Privacidad",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff292929)),
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             alignment: Alignment.centerLeft,
                           ),
                           Text(
-                            'Cuentame +',
+                            'Cuéntame +',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 32,
@@ -140,11 +140,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     leading: const Icon(Icons.home_rounded,
                         color: Color(0xff292929)),
                     title: const Text(
-                      'Menu Principal',
+                      'Menú Principal',
                       style: TextStyle(color: Color(0xff292929)),
                     ),
                     onTap: () {
                       // Acciones de la ruta
+                      Navigator.of(context).pushNamed('/home');
                     },
                   ),
                   ListTile(
@@ -237,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 20),
                           const Text(
-                            "Bienvenido de nuevo!",
+                            "¡Bienvenido de nuevo!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 20,
@@ -333,7 +334,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextButton(
                             onPressed: () {},
                             child: const Text(
-                              "O ingresa como invitado",
+                              "O ingresa en modo invitado",
                               style: TextStyle(color: Color(0xff959595)),
                             ),
                           ),

@@ -36,7 +36,7 @@ class _PrivacyScreen extends StatelessWidget {
             const SizedBox(width: 10),
             // Título de la aplicación
             const Text(
-              'Cuentame +',
+              'Cuéntame +',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
 
@@ -62,7 +62,7 @@ class _PrivacyScreen extends StatelessWidget {
                         Navigator.of(context).pushNamed('/tos');
                       },
                       child: const Text(
-                        "Terminos y Condiciones",
+                        "Términos y Condiciones",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff292929)),
@@ -75,7 +75,7 @@ class _PrivacyScreen extends StatelessWidget {
                         Navigator.of(context).pushNamed('/privacy');
                       },
                       child: const Text(
-                        "Politicas de Privacidad",
+                        "Políticas de Privacidad",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff292929)),
@@ -130,7 +130,7 @@ class _PrivacyScreen extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                           ),
                           Text(
-                            'Cuentame +',
+                            'Cuéntame +',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 32,
@@ -144,11 +144,12 @@ class _PrivacyScreen extends StatelessWidget {
                     leading: const Icon(Icons.home_rounded,
                         color: Color(0xff292929)),
                     title: const Text(
-                      'Menu Principal',
+                      'Menú Principal',
                       style: TextStyle(color: Color(0xff292929)),
                     ),
                     onTap: () {
                       // Acciones de la ruta
+                      Navigator.of(context).pushNamed('/home');
                     },
                   ),
                   ListTile(
@@ -239,16 +240,18 @@ class _PrivacyScreen extends StatelessWidget {
                 ), */
                 const SizedBox(height: 20),
                 const Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat erat ut finibus tincidunt. Duis vel convallis ex, maximus tempus augue. Etiam imperdiet mattis est, eu scelerisque orci tempor rutrum. Proin malesuada eros tempus commodo dapibus. In magna augue, vehicula eu porta in, mollis non neque. Praesent eget enim ac dui pellentesque congue at et mi. Fusce varius sagittis egestas. Maecenas pellentesque mattis felis ut cursus. Donec pretium faucibus ultrices. Morbi in dignissim justo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin pulvinar dolor vel lorem pretium, sed aliquet magna pretium. Vestibulum commodo nisi quis leo tempus dignissim. Proin ornare, lectus et ultricies sodales, massa nisl laoreet elit, ut dictum massa tortor in ipsum. Donec finibus felis nec tortor venenatis euismod. Morbi consequat eget risus ac condimentum."),
+                  "Última actualización: 11 de febrero de 2024.",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 20),
                 const Text(
-                    "Pellentesque nec urna vitae enim tempor congue ac id arcu. Suspendisse pulvinar vel lectus quis egestas. Duis ipsum libero, sodales at lacus vel, sollicitudin pharetra orci. Etiam laoreet ultricies libero, ut finibus orci auctor eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In nunc turpis, fringilla non turpis eget, fringilla pretium diam. In semper lorem dignissim, egestas nisl ac, eleifend turpis. Proin in orci sed elit facilisis efficitur et vel ex."),
+                    "Este Aviso de Privacidad fue redactado conforme los principios de licitud, consentimiento, información, calidad, finalidad, lealtad, proporcionalidad y responsabilidad establecidos en la Ley Federal de Protección de Datos Personales en Posesión de Particulares (LFPDPPP) publicada en el Diario Oficial de la Federación el 05-07-2010 y las Leyes aplicables dentro de la jurisdicción correspondiente."),
                 const SizedBox(height: 20),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
                     Text(
-                      "Vestibulum facilisis fringilla",
+                      "RESUMEN DE LA POLITICA DE PRIVACIDAD",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -257,13 +260,13 @@ class _PrivacyScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                    "Pellentesque nec urna vitae enim tempor congue ac id arcu. Suspendisse pulvinar vel lectus quis egestas. Duis ipsum libero, sodales at lacus vel, sollicitudin pharetra orci. Etiam laoreet ultricies libero, ut finibus orci auctor eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In nunc turpis, fringilla non turpis eget, fringilla pretium diam. In semper lorem dignissim, egestas nisl ac, eleifend turpis. Proin in orci sed elit facilisis efficitur et vel ex."),
+                  "Datos Personales tratados para las siguientes finalidades y utilizando los siguientes servicios:",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 20),
                 const Text(
-                    "Pellentesque nec urna vitae enim tempor congue ac id arcu. Suspendisse pulvinar vel lectus quis egestas. Duis ipsum libero, sodales at lacus vel, sollicitudin pharetra orci. Etiam laoreet ultricies libero, ut finibus orci auctor eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In nunc turpis, fringilla non turpis eget, fringilla pretium diam. In semper lorem dignissim, egestas nisl ac, eleifend turpis. Proin in orci sed elit facilisis efficitur et vel ex."),
+                    "Contactar con el Usuario  Formulario de contacto: Datos Personales: nombre; apellido(s); dirección de correo electrónico. Permisos sobre dispositivos para acceder a Datos Personales Permisos sobre dispositivos para acceder a Datos Personales Datos Personales: Permiso de ubicación aproximada (en modo no continuo); Permiso para acceder a la ubicación exacta (en modo no continuo); Permiso para la cámara; Permiso para la Galería de Fotos Registro y autenticación Firebase Authentication Datos Personales: nombre; apellido(s); username; cuentas en redes sociales; foto de perfil; dirección de correo electrónico. Facebook Oauth Datos Personales: distintas clases de Datos; Rastreador Twitter OAuth y Google OAuth Datos Personales: distintas clases de Datos, según se especifica en la Política de Privacidad del servicio"),
                 const SizedBox(height: 20),
-                const Text(
-                    "Pellentesque nec urna vitae enim tempor congue ac id arcu. Suspendisse pulvinar vel lectus quis egestas. Duis ipsum libero, sodales at lacus vel, sollicitudin pharetra orci. Etiam laoreet ultricies libero, ut finibus orci auctor eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In nunc turpis, fringilla non turpis eget, fringilla pretium diam. In semper lorem dignissim, egestas nisl ac, eleifend turpis. Proin in orci sed elit facilisis efficitur et vel ex."),
               ],
             ),
           ),
