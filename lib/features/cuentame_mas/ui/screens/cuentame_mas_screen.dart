@@ -6,101 +6,119 @@ class CuentameMasScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xffF09D99),
-          titleSpacing: 0,
-          title: Row(
-            children: [
-              // Logo de la aplicación
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 16.0,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(100.0),
+          // TODO: Ajustar al centro la barra
+          child: AppBar(
+            backgroundColor: const Color(0xffF09D99),
+            titleSpacing: 0,
+            centerTitle: true,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Logo de la aplicación
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                  ),
+                  child: Image.asset(
+                    'assets/logojpg.png',
+                    width: 50,
+                    height: 50,
+                  ),
                 ),
-                child: Image.asset(
-                  'assets/logojpg.png',
-                  width: 50,
-                  height: 50,
+                const SizedBox(width: 10),
+                // Título de la aplicación
+                const Text(
+                  'Cuéntame +',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              // Título de la aplicación
-              const Text(
-                'Cuéntame +',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-
-              const Padding(padding: EdgeInsets.symmetric(horizontal: 20)),
-              if (MediaQuery.of(context).size.width > 888)
-                Row(
-                  children: [
-                    TextButton(
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 20)),
+                if (MediaQuery.of(context).size.width > 888)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextButton(
                         onPressed: () {
                           Navigator.of(context).pushNamed('/faq');
                         },
                         child: const Text(
                           "Preguntas Frecuentes",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff292929)),
-                        )),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    TextButton(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff292929),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      TextButton(
                         onPressed: () {
                           Navigator.of(context).pushNamed('/tos');
                         },
                         child: const Text(
                           "Términos y Condiciones",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff292929)),
-                        )),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    TextButton(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff292929),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      TextButton(
                         onPressed: () {
                           Navigator.of(context).pushNamed('/privacy');
                         },
                         child: const Text(
                           "Políticas de Privacidad",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff292929)),
-                        )),
-                  ],
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff292929),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+            actions: [
+              // Botón de iniciar sesión solo en escritorio
+              if (MediaQuery.of(context).size.width > 880)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 16.0,
+                    top: 10.0,
+                    bottom: 10.0,
+                    left: 20.0,
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      // Acción del botón
+                      Navigator.of(context).pushNamed('/login');
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(0xff292929),
+                      ), // Color de fondo
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              200.0), // Radio de los bordes
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Iniciar Sesión',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
             ],
           ),
-          actions: [
-            // Botón de iniciar sesión solo en escritorio
-            if (MediaQuery.of(context).size.width > 880)
-              Padding(
-                padding: const EdgeInsets.only(
-                    right: 16.0, top: 10.0, bottom: 10.0, left: 20.0),
-                child: TextButton(
-                  onPressed: () {
-                    // Acción del botón
-                    Navigator.of(context).pushNamed('/login');
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        const Color(0xff292929)), // Color de fondo
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(200.0), // Radio de los bordes
-                      ),
-                    ),
-                  ),
-                  child: const Text(
-                    'Iniciar Sesión',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-          ],
         ),
         endDrawer: MediaQuery.of(context).size.width < 880
             ? Drawer(

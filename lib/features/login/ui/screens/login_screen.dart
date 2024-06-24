@@ -272,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       width:
                                           2), // Color del borde cuando está habilitado
                                 ),
-                                labelText: "Nombre de usuario",
+                                labelText: "Correo Electrónico",
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -326,7 +326,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: const Color(0xff292929)),
-                            onPressed: () {},
+                            onPressed: () {
+                              // Acciones de la ruta
+                              Navigator.of(context).pushNamed('/chats');
+                            },
                             child: const Text("Iniciar sesión",
                                 style: TextStyle(color: Colors.white)),
                           ),
