@@ -436,7 +436,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             const SizedBox(height: 30),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/chats-guest');
+                              },
                               child: const Text(
                                 "O ingresa en modo invitado",
                                 style: TextStyle(color: Color(0xff959595)),

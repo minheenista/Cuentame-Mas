@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 
 class ChatsScreens extends StatelessWidget {
@@ -161,7 +159,7 @@ class ChatsScreens extends StatelessWidget {
             ListTile(
               trailing: Icon(Icons.settings_rounded, color: Colors.black),
               title: Text("Nombre de usuario"),
-              leading: Image.asset("avatar.png", width: 40, height: 40),
+              leading: Image.asset("assets/avatar.png", width: 40, height: 40),
             ),
           ],
         ),

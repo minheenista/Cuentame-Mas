@@ -300,6 +300,7 @@ class CuentameMasScreen extends StatelessWidget {
                             OutlinedButton(
                               onPressed: () {
                                 // Acción del botón
+                                Navigator.of(context).pushNamed('/chats-guest');
                               },
                               child: const Text('Ingresar como invitado',
                                   style: TextStyle(color: Color(0xff292929))),
@@ -327,6 +328,7 @@ class CuentameMasScreen extends StatelessWidget {
                             OutlinedButton(
                               onPressed: () {
                                 // Acción del botón
+                                Navigator.of(context).pushNamed('/chats-guest');
                               },
                               child: const Text('Ingresar como invitado',
                                   style: TextStyle(color: Color(0xff292929))),

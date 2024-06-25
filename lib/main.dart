@@ -1,5 +1,6 @@
 import 'package:cuentame_mas/config/theme/app_theme.dart';
 import 'package:cuentame_mas/features/chats/ui/screens/chats_screen.dart';
+import 'package:cuentame_mas/features/chats_guest/ui/screens/chats_guest_screen.dart';
 import 'package:cuentame_mas/features/cuentame_mas/ui/screens/cuentame_mas_screen.dart';
 import 'package:cuentame_mas/features/faq/ui/screens/faq_screen.dart';
 import 'package:cuentame_mas/features/login/ui/screens/login_screen.dart';
@@ -35,6 +36,7 @@ class CuentameMas extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/chats': (context) => const ChatsScreens(),
+        '/chats-guest': (context) => const ChatsGuestScreens(),
       },
     );
   }

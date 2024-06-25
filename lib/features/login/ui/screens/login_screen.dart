@@ -335,7 +335,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 30),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              // Acciones de la ruta
+                              Navigator.of(context).pushNamed('/chats-guest');
+                            },
                             child: const Text(
                               "O ingresa en modo invitado",
                               style: TextStyle(color: Color(0xff959595)),
