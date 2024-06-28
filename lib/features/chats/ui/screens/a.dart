@@ -8,6 +8,19 @@ class ChatsScreens extends StatelessWidget {
     return Scaffold(
       appBar: MediaQuery.of(context).size.width < 800
           ? AppBar(
+              title: Row(children: [
+                Image.asset('assets/logojpg.png', width: 50, height: 50),
+                const SizedBox(width: 20),
+                const Text(
+                  "Cuéntame + ",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ]),
+              backgroundColor: const Color(0xFFFCBCB8),
               leading: Builder(
                 builder: (BuildContext context) {
                   return IconButton(
@@ -22,114 +35,134 @@ class ChatsScreens extends StatelessWidget {
           : null,
       drawer: Drawer(
         backgroundColor: const Color(0xFFFCBCB8),
-        child: ListView(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment
+              .spaceBetween, // Alinea el contenido con espacio entre ellos
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                children: [
-                  Image.asset('assets/logojpg.png', width: 50, height: 50),
-                  const SizedBox(width: 20),
-                  const Text(
-                    "Cuéntame + ",
-                    style: TextStyle(
-                        fontSize: 32,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(color: Color.fromARGB(120, 179, 179, 179)),
-            TextButton.icon(
-              style: const ButtonStyle(
-                alignment: Alignment.centerLeft,
-              ),
-              onPressed: () {},
-              icon: const Icon(
-                Icons.add_rounded,
-                color: Colors.black,
-              ),
-              label: const Text(
-                "Nueva conversación",
-                style: TextStyle(
-                  color: Colors.black,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 20,
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
+                    children: [
+                      Image.asset('assets/logojpg.png', width: 50, height: 50),
+                      const SizedBox(width: 20),
+                      const Text(
+                        "Cuéntame + ",
+                        style: TextStyle(
+                          fontSize: 32,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(color: Color.fromARGB(120, 179, 179, 179)),
+                TextButton.icon(
+                  style: const ButtonStyle(
+                    alignment: Alignment.centerLeft,
+                  ),
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.add_rounded,
+                    color: Colors.black,
+                  ),
+                  label: const Text(
+                    "Nueva conversación",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const Divider(color: Color.fromARGB(120, 179, 179, 179)),
+                const Text(
+                  "Conversaciones",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                ListTile(
+                  title: const Text('¿Qué es el rfc?'),
+                  trailing: PopupMenuButton(
+                    icon: const Icon(Icons.more_horiz_rounded,
+                        color: Colors.black),
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        child: Text('Eliminar'),
+                      ),
+                      const PopupMenuItem(
+                        child: Text('Editar'),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/status');
+                  },
+                ),
+                ListTile(
+                  title: const Text('¿Qué es situación fiscal?'),
+                  trailing: PopupMenuButton(
+                    icon: const Icon(Icons.more_horiz_rounded,
+                        color: Colors.black),
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        child: Text('Eliminar'),
+                      ),
+                      const PopupMenuItem(
+                        child: Text('Editar'),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/status');
+                  },
+                ),
+                ListTile(
+                  title: const Text('¿Cómo funciona el crédito?'),
+                  trailing: PopupMenuButton(
+                    icon: const Icon(Icons.more_horiz_rounded,
+                        color: Colors.black),
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        child: Text('Eliminar'),
+                      ),
+                      const PopupMenuItem(
+                        child: Text('Editar'),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/status');
+                  },
+                ),
+                ListTile(
+                  title: const Text('¿Para qué sirve la firma electronica'),
+                  trailing: PopupMenuButton(
+                    icon: const Icon(Icons.more_horiz_rounded,
+                        color: Colors.black),
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        child: Text('Eliminar'),
+                      ),
+                      const PopupMenuItem(
+                        child: Text('Editar'),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/status');
+                  },
+                ),
+              ],
             ),
-            const Divider(color: Color.fromARGB(120, 179, 179, 179)),
-            const Text(
-              "Conversaciones",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
+            // Aquí está el último ListTile que se mostrará en la parte inferior del Drawer
             ListTile(
-              title: const Text('¿Qué es el rfc?'),
-              trailing: PopupMenuButton(
-                icon: const Icon(Icons.more_horiz_rounded, color: Colors.black),
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    child: Text('Eliminar'),
-                  ),
-                  const PopupMenuItem(
-                    child: Text('Editar'),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, '/status');
-              },
-            ),
-            ListTile(
-              title: const Text('¿Qué es situación fiscal?'),
-              trailing: PopupMenuButton(
-                icon: const Icon(Icons.more_horiz_rounded, color: Colors.black),
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    child: Text('Eliminar'),
-                  ),
-                  const PopupMenuItem(
-                    child: Text('Editar'),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, '/status');
-              },
-            ),
-            ListTile(
-              title: const Text('¿Cómo funciona el crédito?'),
-              trailing: PopupMenuButton(
-                icon: const Icon(Icons.more_horiz_rounded, color: Colors.black),
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    child: Text('Eliminar'),
-                  ),
-                  const PopupMenuItem(
-                    child: Text('Editar'),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, '/status');
-              },
-            ),
-            ListTile(
-              title: const Text('¿Para qué sirve la firma electronica'),
-              trailing: PopupMenuButton(
-                icon: const Icon(Icons.more_horiz_rounded, color: Colors.black),
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    child: Text('Eliminar'),
-                  ),
-                  const PopupMenuItem(
-                    child: Text('Editar'),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, '/status');
-              },
+              trailing: Icon(Icons.settings_rounded, color: Colors.black),
+              title: Text("Nombre de usuario"),
+              leading: Image.asset("assets/avatar.png", width: 40, height: 40),
             ),
           ],
         ),
@@ -139,126 +172,154 @@ class ChatsScreens extends StatelessWidget {
           if (constraints.maxWidth > 800) {
             return Row(
               children: [
-                Container(
-                  width: 300,
-                  color: const Color(0xFFFCBCB8),
-                  child: ListView(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: [
-                            Image.asset('assets/logojpg.png',
-                                width: 50, height: 50),
-                            const SizedBox(width: 20),
-                            const Text(
-                              "Cuéntame + ",
-                              style: TextStyle(
-                                  fontSize: 32,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Divider(color: Color.fromARGB(120, 179, 179, 179)),
-                      TextButton.icon(
-                        style: const ButtonStyle(
-                          alignment: Alignment.centerLeft,
-                        ),
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.add_rounded,
-                          color: Colors.black,
-                        ),
-                        label: const Text(
-                          "Nueva conversación",
-                          style: TextStyle(
-                            color: Colors.black,
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 16.0, bottom: 16.0),
+                  child: Container(
+                    width: 300,
+                    color: const Color(0xFFFCBCB8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment
+                          .spaceBetween, // Alinea el contenido con espacio entre ellos
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  children: [
+                                    Image.asset('assets/logojpg.png',
+                                        width: 50, height: 50),
+                                    const SizedBox(width: 20),
+                                    const Text(
+                                      "Cuéntame + ",
+                                      style: TextStyle(
+                                        fontSize: 32,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Divider(
+                                  color: Color.fromARGB(120, 179, 179, 179)),
+                              TextButton.icon(
+                                style: const ButtonStyle(
+                                  alignment: Alignment.centerLeft,
+                                ),
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.add_rounded,
+                                  color: Colors.black,
+                                ),
+                                label: const Text(
+                                  "Nueva conversación",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              const Divider(
+                                  color: Color.fromARGB(120, 179, 179, 179)),
+                              const Text(
+                                "Conversaciones",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              ListTile(
+                                title: const Text('¿Qué es el rfc?'),
+                                trailing: PopupMenuButton(
+                                  icon: const Icon(Icons.more_horiz_rounded,
+                                      color: Colors.black),
+                                  itemBuilder: (context) => [
+                                    const PopupMenuItem(
+                                      child: Text('Eliminar'),
+                                    ),
+                                    const PopupMenuItem(
+                                      child: Text('Editar'),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/status');
+                                },
+                              ),
+                              ListTile(
+                                title: const Text('¿Qué es situación fiscal?'),
+                                trailing: PopupMenuButton(
+                                  icon: const Icon(Icons.more_horiz_rounded,
+                                      color: Colors.black),
+                                  itemBuilder: (context) => [
+                                    const PopupMenuItem(
+                                      child: Text('Eliminar'),
+                                    ),
+                                    const PopupMenuItem(
+                                      child: Text('Editar'),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/status');
+                                },
+                              ),
+                              ListTile(
+                                title: const Text('¿Cómo funciona el crédito?'),
+                                trailing: PopupMenuButton(
+                                  icon: const Icon(Icons.more_horiz_rounded,
+                                      color: Colors.black),
+                                  itemBuilder: (context) => [
+                                    const PopupMenuItem(
+                                      child: Text('Eliminar'),
+                                    ),
+                                    const PopupMenuItem(
+                                      child: Text('Editar'),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/status');
+                                },
+                              ),
+                              ListTile(
+                                title: const Text(
+                                    '¿Para qué sirve la firma electronica'),
+                                trailing: PopupMenuButton(
+                                  icon: const Icon(Icons.more_horiz_rounded,
+                                      color: Colors.black),
+                                  itemBuilder: (context) => [
+                                    const PopupMenuItem(
+                                      child: Text('Eliminar'),
+                                    ),
+                                    const PopupMenuItem(
+                                      child: Text('Editar'),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(context, '/status');
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      const Divider(color: Color.fromARGB(120, 179, 179, 179)),
-                      const Text(
-                        "Conversaciones",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      ListTile(
-                        title: const Text('¿Qué es el rfc?'),
-                        trailing: PopupMenuButton(
-                          icon: const Icon(Icons.more_horiz_rounded,
-                              color: Colors.black),
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                              child: Text('Eliminar'),
-                            ),
-                            const PopupMenuItem(
-                              child: Text('Editar'),
-                            ),
-                          ],
+                        // Aquí está el último ListTile que se mostrará en la parte inferior del Container
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            trailing: Icon(Icons.settings_rounded,
+                                color: Colors.black),
+                            title: Text("Nombre de usuario"),
+                            leading: Image.asset("avatar.png",
+                                width: 40, height: 40),
+                          ),
                         ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/status');
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('¿Qué es situación fiscal?'),
-                        trailing: PopupMenuButton(
-                          icon: const Icon(Icons.more_horiz_rounded,
-                              color: Colors.black),
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                              child: Text('Eliminar'),
-                            ),
-                            const PopupMenuItem(
-                              child: Text('Editar'),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/status');
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('¿Cómo funciona el crédito?'),
-                        trailing: PopupMenuButton(
-                          icon: const Icon(Icons.more_horiz_rounded,
-                              color: Colors.black),
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                              child: Text('Eliminar'),
-                            ),
-                            const PopupMenuItem(
-                              child: Text('Editar'),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/status');
-                        },
-                      ),
-                      ListTile(
-                        title:
-                            const Text('¿Para qué sirve la firma electronica'),
-                        trailing: PopupMenuButton(
-                          icon: const Icon(Icons.more_horiz_rounded,
-                              color: Colors.black),
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                              child: Text('Eliminar'),
-                            ),
-                            const PopupMenuItem(
-                              child: Text('Editar'),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/status');
-                        },
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -268,16 +329,17 @@ class ChatsScreens extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Card(
-                            elevation: 1,
+                            elevation: 0,
                             borderOnForeground: true,
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(height: 200),
+                                  const SizedBox(height: 200),
                                   Image.asset('assets/logovariant.png',
-                                      width: 50, height: 50),
+                                      width: 200, height: 200),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
@@ -286,7 +348,7 @@ class ChatsScreens extends StatelessWidget {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xff7EC9E0),
-                                            fontSize: 20),
+                                            fontSize: 36),
                                       ),
                                     ],
                                   ),
@@ -296,7 +358,7 @@ class ChatsScreens extends StatelessWidget {
                                       builder: (context, constraints) {
                                         return Wrap(
                                           crossAxisAlignment:
-                                              WrapCrossAlignment.center,
+                                              WrapCrossAlignment.end,
                                           direction: constraints.maxWidth > 800
                                               ? Axis.horizontal
                                               : Axis.vertical,
@@ -304,13 +366,13 @@ class ChatsScreens extends StatelessWidget {
                                           runSpacing: 8.0,
                                           children: [
                                             _buildQuestionCard(
-                                                '¿Qué es el rfc?'),
+                                                '¿Cómo empezar a invertir?'),
                                             _buildQuestionCard(
-                                                '¿Qué es situación fiscal?'),
+                                                '¿Qué es la E-Firma?'),
                                             _buildQuestionCard(
                                                 '¿Cómo funciona el crédito?'),
                                             _buildQuestionCard(
-                                                '¿Para qué sirve la firma electronica?'),
+                                                '¿Qué es el Afore?'),
                                           ],
                                         );
                                       },
@@ -323,11 +385,33 @@ class ChatsScreens extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        TextField(
-                          decoration: const InputDecoration(
-                            hintText: 'Escribe un mensaje',
-                            suffixIcon: Icon(Icons.send),
-                          ),
+                        Row(
+                          children: [
+                            const Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xff7EC9E0)),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xff7EC9E0)),
+                                  ),
+                                  hintText: 'Escribe un mensaje',
+                                  prefixIcon: Icon(Icons.edit_rounded,
+                                      color: Color(0xff7EC9E0)),
+                                  suffixIcon: Icon(Icons.mic_rounded,
+                                      color: Color(0xFF616161)),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.send_rounded),
+                              color: const Color(0xff7EC9E0),
+                            )
+                          ],
                         ),
                       ],
                     ),
@@ -342,25 +426,25 @@ class ChatsScreens extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Card(
-                      elevation: 1,
+                      elevation: 0,
                       borderOnForeground: true,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            SizedBox(height: 200),
+                            const SizedBox(height: 50),
                             Image.asset('assets/logovariant.png',
-                                width: 50, height: 50),
+                                width: 100, height: 100),
                             const SizedBox(width: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   'Preguntas + Preguntadas',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xff7EC9E0),
-                                      fontSize: 20),
+                                      fontSize: 24),
                                 ),
                               ],
                             ),
@@ -369,39 +453,57 @@ class ChatsScreens extends StatelessWidget {
                               child: LayoutBuilder(
                                 builder: (context, constraints) {
                                   return Wrap(
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
+                                    crossAxisAlignment: WrapCrossAlignment.end,
                                     direction: constraints.maxWidth > 800
                                         ? Axis.horizontal
                                         : Axis.vertical,
-                                    spacing: 8.0,
+                                    spacing: 16.0,
                                     runSpacing: 8.0,
                                     children: [
-                                      _buildQuestionCard('¿Qué es el rfc?'),
                                       _buildQuestionCard(
-                                          '¿Qué es situación fiscal?'),
+                                          '¿Cómo empezar a invertir?'),
+                                      _buildQuestionCard('¿Qué es la E-Firma?'),
                                       _buildQuestionCard(
                                           '¿Cómo funciona el crédito?'),
-                                      _buildQuestionCard(
-                                          '¿Para qué sirve la firma electronica?'),
+                                      _buildQuestionCard('¿Qué es el Afore?'),
                                     ],
                                   );
                                 },
                               ),
                             ),
-                            const SizedBox(height: 16),
                           ],
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 16),
-                  TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'Escribe un mensaje',
-                      suffixIcon: Icon(Icons.send),
-                    ),
-                  ),
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: TextField(
+                          // TODO: cambiar color del cosito de texto
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff7EC9E0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff7EC9E0)),
+                            ),
+                            hintText: 'Escribe un mensaje',
+                            prefixIcon: Icon(Icons.edit_rounded,
+                                color: Color(0xff7EC9E0)),
+                            suffixIcon: Icon(Icons.mic_rounded,
+                                color: Color(0xFF616161)),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.send_rounded),
+                        color: const Color(0xff7EC9E0),
+                      )
+                    ],
+                  )
                 ],
               ),
             );
@@ -412,13 +514,16 @@ class ChatsScreens extends StatelessWidget {
   }
 
   Widget _buildQuestionCard(String question) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Color(0xff7EC9E0)),
-        borderRadius: BorderRadius.circular(8.0),
+    return SizedBox(
+      width: 200,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xff7EC9E0)),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        padding: const EdgeInsets.all(8.0),
+        child: Text(question),
       ),
-      padding: const EdgeInsets.all(8.0),
-      child: Text(question),
     );
   }
 }

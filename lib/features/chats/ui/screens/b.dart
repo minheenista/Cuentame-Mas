@@ -8,9 +8,9 @@ class ChatsScreens extends StatefulWidget {
 }
 
 class _ChatsScreensState extends State<ChatsScreens> {
-  final TextEditingController _textController = TextEditingController();
-  bool _showQuestions = true;
+  final TextEditingController _controller = TextEditingController();
   List<String> _messages = [];
+  bool _showQuestions = true;
 
   @override
   Widget build(BuildContext context) {
@@ -319,7 +319,7 @@ class _ChatsScreensState extends State<ChatsScreens> {
                             trailing: Icon(Icons.settings_rounded,
                                 color: Colors.black),
                             title: Text("Nombre de usuario"),
-                            leading: Image.asset("avatar.png",
+                            leading: Image.asset("assets/avatar.png",
                                 width: 40, height: 40),
                           ),
                         ),
@@ -333,127 +333,71 @@ class _ChatsScreensState extends State<ChatsScreens> {
                     child: Column(
                       children: [
                         Expanded(
-                          child: Card(
-                            elevation: 0,
-                            borderOnForeground: true,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  if (_showQuestions) ...[
-                                    const SizedBox(height: 200),
-                                    Image.asset('assets/logovariant.png',
-                                        width: 200, height: 200),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Text(
-                                          'Preguntas + Preguntadas',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xff7EC9E0),
-                                              fontSize: 36),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Expanded(
-                                      child: LayoutBuilder(
-                                        builder: (context, constraints) {
-                                          return Wrap(
-                                            crossAxisAlignment:
-                                                WrapCrossAlignment.end,
-                                            direction:
-                                                constraints.maxWidth > 800
-                                                    ? Axis.horizontal
-                                                    : Axis.vertical,
-                                            spacing: 8.0,
-                                            runSpacing: 8.0,
-                                            children: [
-                                              _buildQuestionCard(
-                                                  '¿Cómo empezar a invertir?'),
-                                              _buildQuestionCard(
-                                                  '¿Qué es la E-Firma?'),
-                                              _buildQuestionCard(
-                                                  '¿Cómo funciona el crédito?'),
-                                              _buildQuestionCard(
-                                                  '¿Qué es el Afore?'),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                  ] else ...[
-                                    for (var message in _messages)
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 4.0),
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: const Color(0xffA8DFEF),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                                border: Border.all(
-                                                    color: Color(0xff7EC9E0))),
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: ListTile(
-                                              title: Text(
-                                                message,
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color: Colors.black),
-                                              ),
-                                              trailing: Image.asset(
-                                                  "assets/avatar.png"),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                          child: _showQuestions
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _buildQuestionButton(
+                                        '¿Qué es el RFC?', context),
+                                    _buildQuestionButton(
+                                        '¿Cómo se tramita el RFC?', context),
+                                    _buildQuestionButton(
+                                        '¿Qué documentos necesito para tramitar el RFC?',
+                                        context),
+                                    _buildQuestionButton(
+                                        '¿Para qué sirve el RFC?', context),
                                   ],
-                                ],
-                              ),
-                            ),
-                          ),
+                                )
+                              : ListView.builder(
+                                  itemCount: _messages.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: new EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 10),
+                                      padding: new EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Color(0xFFA8DFEF),
+                                          border: Border.all(
+                                              color: Color(0xff7EC9E0))),
+                                      child: ListTile(
+                                        title: Text(
+                                          _messages[index],
+                                          textAlign: TextAlign.end,
+                                        ),
+                                        trailing:
+                                            Image.asset("assets/avatar.png"),
+                                      ),
+                                    );
+                                  },
+                                ),
                         ),
-                        const SizedBox(height: 16),
                         Row(
                           children: [
                             Expanded(
                               child: TextField(
-                                controller: _textController,
+                                controller: _controller,
                                 decoration: const InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff7EC9E0)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff7EC9E0)),
-                                  ),
-                                  hintText: 'Escribe un mensaje',
-                                  prefixIcon: Icon(Icons.edit_rounded,
-                                      color: Color(0xff7EC9E0)),
-                                  suffixIcon: Icon(Icons.mic_rounded,
-                                      color: Color(0xFF616161)),
+                                  hintText: 'Type your message here...',
                                 ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _showQuestions = value.isEmpty;
+                                  });
+                                },
                               ),
                             ),
                             IconButton(
+                              icon: const Icon(Icons.send),
                               onPressed: () {
                                 setState(() {
-                                  _messages.add(_textController.text);
-                                  _textController.clear();
-                                  _showQuestions = false;
+                                  _messages.add(_controller.text);
+                                  _controller.clear();
                                 });
                               },
-                              icon: const Icon(Icons.send_rounded),
-                              color: const Color(0xff7EC9E0),
-                            )
+                            ),
                           ],
                         ),
                       ],
@@ -468,123 +412,70 @@ class _ChatsScreensState extends State<ChatsScreens> {
               child: Column(
                 children: [
                   Expanded(
-                    child: Card(
-                      elevation: 0,
-                      borderOnForeground: true,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            if (_showQuestions) ...[
-                              const SizedBox(height: 50),
-                              Image.asset('assets/logovariant.png',
-                                  width: 100, height: 100),
-                              const SizedBox(width: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    'Preguntas + Preguntadas',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff7EC9E0),
-                                        fontSize: 24),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              Expanded(
-                                child: LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    return Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.end,
-                                      direction: constraints.maxWidth > 800
-                                          ? Axis.horizontal
-                                          : Axis.vertical,
-                                      spacing: 16.0,
-                                      runSpacing: 8.0,
-                                      children: [
-                                        _buildQuestionCard(
-                                            '¿Cómo empezar a invertir?'),
-                                        _buildQuestionCard(
-                                            '¿Qué es la E-Firma?'),
-                                        _buildQuestionCard(
-                                            '¿Cómo funciona el crédito?'),
-                                        _buildQuestionCard('¿Qué es el Afore?'),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                            ] else ...[
-                              for (var message in _messages)
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: const Color(0xffA8DFEF),
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          border: Border.all(
-                                              color: Color(0xff7EC9E0))),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ListTile(
-                                        title: Text(
-                                          message,
-                                          textAlign: TextAlign.end,
-                                          style: const TextStyle(
-                                              color: Colors.black),
-                                        ),
-                                        trailing:
-                                            Image.asset("assets/avatar.png"),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                    child: _showQuestions
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _buildQuestionButton('¿Qué es el RFC?', context),
+                              _buildQuestionButton(
+                                  '¿Cómo se tramita el RFC?', context),
+                              _buildQuestionButton(
+                                  '¿Qué documentos necesito para tramitar el RFC?',
+                                  context),
+                              _buildQuestionButton(
+                                  '¿Para qué sirve el RFC?', context),
                             ],
-                          ],
-                        ),
-                      ),
-                    ),
+                          )
+                        : ListView.builder(
+                            itemCount: _messages.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: new EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 10),
+                                padding: new EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Color(0xFFA8DFEF),
+                                    border:
+                                        Border.all(color: Color(0xff7EC9E0))),
+                                child: ListTile(
+                                  title: Text(
+                                    _messages[index],
+                                    textAlign: TextAlign.end,
+                                  ),
+                                  trailing: Image.asset("assets/avatar.png"),
+                                ),
+                              );
+                            },
+                          ),
                   ),
-                  const SizedBox(height: 16),
                   Row(
                     children: [
                       Expanded(
                         child: TextField(
-                          controller: _textController,
+                          controller: _controller,
                           decoration: const InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xff7EC9E0)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xff7EC9E0)),
-                            ),
-                            hintText: 'Escribe un mensaje',
-                            prefixIcon: Icon(Icons.edit_rounded,
-                                color: Color(0xff7EC9E0)),
-                            suffixIcon: Icon(Icons.mic_rounded,
-                                color: Color(0xFF616161)),
+                            hintText: 'Type your message here...',
                           ),
+                          onChanged: (value) {
+                            setState(() {
+                              _showQuestions = value.isEmpty;
+                            });
+                          },
                         ),
                       ),
                       IconButton(
+                        icon: const Icon(Icons.send),
                         onPressed: () {
                           setState(() {
-                            _messages.add(_textController.text);
-                            _textController.clear();
-                            _showQuestions = false;
+                            _messages.add(_controller.text);
+                            _controller.clear();
                           });
                         },
-                        icon: const Icon(Icons.send_rounded),
-                        color: const Color(0xff7EC9E0),
-                      )
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             );
@@ -594,23 +485,20 @@ class _ChatsScreensState extends State<ChatsScreens> {
     );
   }
 
-  Widget _buildQuestionCard(String question) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _textController.text = question;
-        });
-      },
-      child: SizedBox(
-        width: 200,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xff7EC9E0)),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          padding: const EdgeInsets.all(8.0),
-          child: Text(question),
+  Widget _buildQuestionButton(String text, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: const Color(0xFFFCBCB8),
         ),
+        onPressed: () {
+          setState(() {
+            _controller.text = text;
+            _showQuestions = false;
+          });
+        },
+        child: Text(text),
       ),
     );
   }
