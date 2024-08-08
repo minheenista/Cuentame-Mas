@@ -1,37 +1,31 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import React from "react";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import explore from "./explore";
+import HomeScreen from ".";
+import { Dimensions } from "react-native";
 
 export default function TabLayout() {
+  const { width } = Dimensions.get("window");
   const colorScheme = useColorScheme();
 
+  const Drawer = createDrawerNavigator();
+
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
+    <Drawer.Navigator screenOptions={{}}>
+      <Drawer.Screen
+        name="Feed"
+        component={explore}
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
+          headerTitle: "Cuentame +",
+          headerShown: width < 800 ? true : false,
         }}
       />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+      <Drawer.Screen name="Article" component={HomeScreen} />
+    </Drawer.Navigator>
   );
 }
