@@ -1,7 +1,8 @@
 import { Image, StyleSheet, Platform, View, Button } from "react-native";
 import * as React from "react";
 import { Drawer } from "react-native-paper";
-
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
@@ -10,8 +11,9 @@ import { Card, PaperProvider, Text } from "react-native-paper";
 import { useState } from "react";
 import LeftDrawer from "@/components/LeftDrawer";
 import RightDrawer from "@/components/RightDrawer";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [active, setActive] = React.useState("");
 
   const [isLeftDrawerVisible, setLeftDrawerVisible] = useState(false);
@@ -27,6 +29,13 @@ export default function HomeScreen() {
 
   return (
     <PaperProvider>
+      <View>
+        <Text>Cuentame mas</Text>
+        <Button
+          title="Go to Details"
+          onPress={() => navigation.navigate("Feed")}
+        />
+      </View>
       <LeftDrawer
         isVisible={isLeftDrawerVisible}
         toggleDrawer={toggleLeftDrawer}
