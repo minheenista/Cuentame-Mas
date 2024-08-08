@@ -16,7 +16,9 @@ export default function TabLayout() {
   const Drawer = createDrawerNavigator();
 
   return (
-    <Drawer.Navigator screenOptions={{}}>
+    <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Screen name="Home" component={HomeScreen} />
+
       <Drawer.Screen
         name="Feed"
         component={explore}
@@ -25,7 +27,6 @@ export default function TabLayout() {
           headerShown: width < 800 ? true : false,
         }}
       />
-      <Drawer.Screen name="Article" component={HomeScreen} />
     </Drawer.Navigator>
   );
 }
