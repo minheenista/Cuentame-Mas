@@ -33,7 +33,7 @@ export default function HomeScreen({ navigation }) {
         <Text>INDEX</Text>
         <Button
           title="Go to Details"
-          onPress={() => navigation.navigate("Feed")}
+          onPress={() => navigation.navigate("Cuentame Mas")}
         />
       </View>
       <LeftDrawer

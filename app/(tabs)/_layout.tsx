@@ -7,11 +7,12 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import explore from "./explore";
 import HomeScreen from ".";
-import { Dimensions } from "react-native";
+import { Dimensions, View, Image, Text, StyleSheet } from "react-native";
 import FaqScreen from "./faq";
 import CuentameMasScreen from "./cuentamemas";
 import TermsOfServiceScreen from "./tos";
 import PrivacyScreen from "./privacy";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 export default function TabLayout() {
   const { width } = Dimensions.get("window");
@@ -20,56 +21,140 @@ export default function TabLayout() {
   const Drawer = createDrawerNavigator();
 
   return (
-    <Drawer.Navigator initialRouteName="CuentameMas">
+    /* TODO: Add title to drawer */
+    <Drawer.Navigator
+      initialRouteName="CuentameMas"
+      screenOptions={{
+        drawerActiveBackgroundColor: Colors.light.primaryLight,
+        drawerActiveTintColor: Colors.light.text,
+        drawerInactiveTintColor: Colors.light.onPrimary,
+        drawerContentStyle: {
+          backgroundColor: Colors.light.primary,
+        },
+        drawerLabelStyle: {
+          fontFamily: "Poppins-Regular", // Reemplaza 'YourCustomFont' con la fuente que quieras usar
+          fontSize: 14, // Ajusta el tamaño de la fuente si es necesario
+        },
+        headerStyle: {
+          backgroundColor: Colors.light.primary, // Set header background color to pink
+        },
+        /*         drawerPosition: "right", TODO: Mover a la derecha
+         */
+
+        headerTintColor: Colors.light.onPrimary, // Set header text color to white
+      }}
+    >
       <Drawer.Screen
         name="CuentameMas"
         component={CuentameMasScreen}
         options={{
-          headerTitle: "Cuentame +",
-          headerShown: width < 800 ? true : false,
-        }}
-      />
-      <Drawer.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          headerTitle: "Cuentame +",
-          headerShown: width < 800 ? true : false,
-        }}
-      />
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" size={size} color={color} />
+          ),
+          drawerLabel: "Menú Principal",
 
-      <Drawer.Screen
-        name="Explore"
-        component={explore}
-        options={{
-          headerTitle: "Cuentame +",
+          headerTitle: () => (
+            <View style={styles.header}>
+              <Image
+                style={styles.logo}
+                source={require("./../../assets/images/logo.png")} // Replace with the path to your image
+              />
+              <Text style={styles.title}>Cuéntame +</Text>
+            </View>
+          ),
           headerShown: width < 800 ? true : false,
         }}
       />
       <Drawer.Screen
-        name="Preguntas Frecuentes"
+        name="faq"
         component={FaqScreen}
         options={{
-          headerTitle: "Cuentame +",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="frequently-asked-questions"
+              size={size}
+              color={color}
+            />
+          ),
+          drawerLabel: "Preguntas Frecuentes",
+          headerTitle: () => (
+            <View style={styles.header}>
+              <Image
+                style={styles.logo}
+                source={require("./../../assets/images/logo.png")} // Replace with the path to your image
+              />
+              <Text style={styles.title}>Cuentame +</Text>
+            </View>
+          ),
           headerShown: width < 800 ? true : false,
         }}
       />
       <Drawer.Screen
-        name="Terminos y Condiciones"
+        name="tos"
         component={TermsOfServiceScreen}
         options={{
-          headerTitle: "Cuentame +",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="file-document"
+              size={size}
+              color={color}
+            />
+          ),
+          drawerLabel: "Términos y Condiciones",
+          headerTitle: () => (
+            <View style={styles.header}>
+              <Image
+                style={styles.logo}
+                source={require("./../../assets/images/logo.png")} // Replace with the path to your image
+              />
+              <Text style={styles.title}>Cuentame +</Text>
+            </View>
+          ),
           headerShown: width < 800 ? true : false,
         }}
       />
       <Drawer.Screen
-        name="Politicas de Privacidad"
+        name="privacy"
         component={PrivacyScreen}
         options={{
-          headerTitle: "Cuentame +",
+          drawerIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="shield-lock"
+              size={size}
+              color={color}
+            />
+          ),
+          drawerLabel: "Políticas de Privacidad",
+          headerTitle: () => (
+            <View style={styles.header}>
+              <Image
+                style={styles.logo}
+                source={require("./../../assets/images/logo.png")} // Replace with the path to your image
+              />
+              <Text style={styles.title}>Cuentame +</Text>
+            </View>
+          ),
           headerShown: width < 800 ? true : false,
         }}
       />
     </Drawer.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    gap: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  logo: {
+    width: 50,
+    height: 50,
+  },
+  title: {
+    fontSize: 24,
+    color: "#ffffff",
+    fontFamily: "Poppins-Bold",
+  },
+});

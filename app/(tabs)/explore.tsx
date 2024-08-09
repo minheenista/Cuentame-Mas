@@ -20,7 +20,7 @@ export default function TabTwoScreen({ navigation }) {
       </ThemedView>
       <Button
         title="Go to Details"
-        onPress={() => navigation.navigate("CuentameMas")}
+        onPress={() => navigation.navigate("Cuentame Mas")}
       />
       <ThemedText>
         This app includes example code to help you get started.

@@ -20,7 +20,7 @@ export default function FaqScreen({ navigation }) {
       </ThemedView>
       <Button
         title="Go to Details"
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.navigate("CuentameMas")}
       />
       <ThemedText>
         This app includes example code to help you get started.

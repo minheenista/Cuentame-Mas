@@ -24,6 +24,7 @@ import NavBar from "@/components/NavBar";
 import BlackButton from "@/components/BlackButton";
 import OutlinedBlackButton from "@/components/OutlinedBlackButton";
 import { Colors } from "@/constants/Colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function CuentameMasScreen({ navigation }) {
   const { width } = Dimensions.get("window");
@@ -104,7 +105,57 @@ export default function CuentameMasScreen({ navigation }) {
         </View>
       </View>
 
-      <ThemedView style={styles.titleContainer}>
+      {/* ===================== ABOUT ======================== */}
+      <View style={styles.section}>
+        <Text
+          style={
+            width > 750 ? styles.sectionTitleWeb : styles.sectionTitleMobile
+          }
+        >
+          Qué es Cuéntame + ?
+        </Text>
+
+        <View style={width > 880 ? styles.row : styles.column}>
+          <View
+            style={
+              width > 880 ? styles.sectionItemWeb : styles.sectionItemMobile
+            }
+          >
+            <MaterialCommunityIcons
+              name="piggy-bank-outline"
+              color={Colors.light.secondaryDark}
+              size={100}
+            ></MaterialCommunityIcons>
+            <Text style={styles.sectionText}>
+              Cuéntame + es tu mejor compañero para resolver tus dudas de
+              educación financiera y contabilidad. En un mundo donde las
+              decisiones financieras son cada vez más complejas y determinantes
+              para el bienestar económico, Cuéntame + ofrece una solución
+              accesible y personalizada.
+            </Text>
+          </View>
+          <View
+            style={
+              width > 880 ? styles.sectionItemWeb : styles.sectionItemMobile
+            }
+          >
+            <MaterialCommunityIcons
+              name="bank-outline"
+              color={Colors.light.secondaryDark}
+              size={100}
+            ></MaterialCommunityIcons>
+            <Text style={styles.sectionText}>
+              Cuéntame + analiza y responde a consultas específicas,
+              proporcionando explicaciones claras y concisas sobre temas como la
+              planificación presupuestaria, la inversión, el ahorro, la gestión
+              de deudas, impuestos y más.
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View style={styles.footer} />
+
+      {/* <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
       </ThemedView>
@@ -137,7 +188,7 @@ export default function CuentameMasScreen({ navigation }) {
           <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
         </ThemedText>
-      </ThemedView>
+      </ThemedView> */}
     </ScrollView>
   );
 }

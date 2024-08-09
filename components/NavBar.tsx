@@ -28,19 +28,13 @@ const NavBar = ({ navigation }: { navigation: any }) => {
         <Text style={styles.title}>Cuéntame +</Text>
         {width > 1090 && (
           <View style={styles.menu}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Preguntas Frecuentes")}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("faq")}>
               <Text style={styles.menuItem}>Preguntas Frecuentes</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Terminos y Condiciones")}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("tos")}>
               <Text style={styles.menuItem}>Términos y Condiciones</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Politicas de Privacidad")}
-            >
+            <TouchableOpacity onPress={() => navigation.navigate("privacy")}>
               <Text style={styles.menuItem}>Políticas de Privacidad</Text>
             </TouchableOpacity>
           </View>
