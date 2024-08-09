@@ -7,7 +7,7 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
-export default function TabTwoScreen({ navigation }) {
+export default function PrivacyScreen({ navigation }) {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -16,7 +16,7 @@ export default function TabTwoScreen({ navigation }) {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
+        <ThemedText type="title">POLITICAS DE PRIVACIDAD</ThemedText>
       </ThemedView>
       <Button
         title="Go to Details"
