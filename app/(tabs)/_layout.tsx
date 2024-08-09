@@ -8,6 +8,8 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import explore from "./explore";
 import HomeScreen from ".";
 import { Dimensions } from "react-native";
+import FaqScreen from "./faq";
+import CuentameMasScreen from "./cuentamemas";
 
 export default function TabLayout() {
   const { width } = Dimensions.get("window");
@@ -16,12 +18,35 @@ export default function TabLayout() {
   const Drawer = createDrawerNavigator();
 
   return (
-    <Drawer.Navigator initialRouteName="Home">
-      <Drawer.Screen name="Home" component={HomeScreen} />
+    <Drawer.Navigator initialRouteName="CuentameMas">
+      <Drawer.Screen
+        name="CuentameMas"
+        component={CuentameMasScreen}
+        options={{
+          headerTitle: "Cuentame +",
+          headerShown: width < 800 ? true : false,
+        }}
+      />
+      <Drawer.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerTitle: "Cuentame +",
+          headerShown: width < 800 ? true : false,
+        }}
+      />
 
       <Drawer.Screen
-        name="Feed"
+        name="Explore"
         component={explore}
+        options={{
+          headerTitle: "Cuentame +",
+          headerShown: width < 800 ? true : false,
+        }}
+      />
+      <Drawer.Screen
+        name="Preguntas Frecuentes"
+        component={FaqScreen}
         options={{
           headerTitle: "Cuentame +",
           headerShown: width < 800 ? true : false,

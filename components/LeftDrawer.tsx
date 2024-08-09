@@ -7,23 +7,18 @@ import {
   Animated,
   Dimensions,
   TouchableOpacity,
+  Button,
 } from "react-native";
 
 const { width } = Dimensions.get("window");
 const drawerWidth = 250;
 
-const LeftDrawer = ({
-  isVisible,
-  toggleDrawer,
-}: {
-  isVisible: boolean;
-  toggleDrawer: () => void;
-}) => {
+const LeftDrawer = ({ isVisible, toggleDrawer, navigation }) => {
   const animatedValue = new Animated.Value(isVisible ? 0 : -drawerWidth);
 
   Animated.timing(animatedValue, {
     toValue: isVisible ? 0 : -drawerWidth,
-    duration: 3000,
+    duration: 300,
     useNativeDriver: true,
   }).start();
 
@@ -35,6 +30,13 @@ const LeftDrawer = ({
         <Text style={styles.closeButton}>Close Left Drawer</Text>
       </TouchableOpacity>
       <Text>Left Drawer Content</Text>
+      <Button
+        title="Go to Explore"
+        onPress={() => {
+          toggleDrawer(); // Close the drawer
+          navigation.navigate("Explore"); // Navigate to Explore screen
+        }}
+      />
     </Animated.View>
   );
 };

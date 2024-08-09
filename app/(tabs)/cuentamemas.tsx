@@ -13,7 +13,7 @@ import LeftDrawer from "@/components/LeftDrawer";
 import RightDrawer from "@/components/RightDrawer";
 import { TouchableHighlight } from "react-native-gesture-handler";
 
-export default function HomeScreen({ navigation }) {
+export default function CuentameMasScreen({ navigation }) {
   const [active, setActive] = React.useState("");
 
   const [isLeftDrawerVisible, setLeftDrawerVisible] = useState(false);
@@ -30,7 +30,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <PaperProvider>
       <View>
-        <Text>INDEX</Text>
+        <Text>Cuentame mas</Text>
         <Button
           title="Go to Details"
           onPress={() => navigation.navigate("Feed")}
