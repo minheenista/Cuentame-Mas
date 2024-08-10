@@ -6,6 +6,7 @@ import { ExternalLink } from "@/components/ExternalLink";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import NavBar from "@/components/NavBar";
 
 export default function FaqScreen({ navigation }) {
   return (
@@ -15,6 +16,7 @@ export default function FaqScreen({ navigation }) {
         <Ionicons size={310} name="code-slash" style={styles.headerImage} />
       }
     >
+      <NavBar navigation={navigation}></NavBar>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Explore</ThemedText>
       </ThemedView>

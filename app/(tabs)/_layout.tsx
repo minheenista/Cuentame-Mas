@@ -1,6 +1,10 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from "@react-navigation/drawer";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
@@ -13,6 +17,9 @@ import CuentameMasScreen from "./cuentamemas";
 import TermsOfServiceScreen from "./tos";
 import PrivacyScreen from "./privacy";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { Button } from "@nextui-org/react";
+import BlackButton from "@/components/BlackButton";
 
 export default function TabLayout() {
   const { width } = Dimensions.get("window");
@@ -20,29 +27,60 @@ export default function TabLayout() {
 
   const Drawer = createDrawerNavigator();
 
+  function CustomDrawerContent(props: any) {
+    const navigation = useNavigation();
+
+    return (
+      <DrawerContentScrollView {...props}>
+        <View style={styles.drawerHeader}>
+          <Image
+            source={require("./../../assets/images/logo.png")}
+            style={styles.drawerImage}
+          />
+          <Text style={styles.drawerTitle}>Cuéntame +</Text>
+        </View>
+
+        <DrawerItemList {...props} />
+
+        <View style={styles.drawerFooter}>
+          <BlackButton
+            title={"Login"}
+            handlePress={() => navigation.navigate("login")}
+            isLoading={false}
+          ></BlackButton>
+        </View>
+      </DrawerContentScrollView>
+    );
+  }
+
   return (
-    /* TODO: Add title to drawer */
     <Drawer.Navigator
       initialRouteName="CuentameMas"
       screenOptions={{
-        drawerActiveBackgroundColor: Colors.light.primaryLight,
-        drawerActiveTintColor: Colors.light.text,
-        drawerInactiveTintColor: Colors.light.onPrimary,
+        drawerActiveBackgroundColor: Colors.light.primary,
+        drawerActiveTintColor: Colors.light.onPrimary,
+        drawerInactiveBackgroundColor: Colors.light.primaryLight,
+        drawerInactiveTintColor: Colors.light.text,
+        drawerContentContainerStyle: {
+          backgroundColor: Colors.light.primaryLight,
+        },
         drawerContentStyle: {
           backgroundColor: Colors.light.primary,
         },
+        drawerStyle: {
+          backgroundColor: Colors.light.primaryLight,
+        },
+
         drawerLabelStyle: {
-          fontFamily: "Poppins-Regular", // Reemplaza 'YourCustomFont' con la fuente que quieras usar
-          fontSize: 14, // Ajusta el tamaño de la fuente si es necesario
+          fontFamily: "Poppins-Regular",
+          fontSize: 14,
         },
         headerStyle: {
-          backgroundColor: Colors.light.primary, // Set header background color to pink
+          backgroundColor: Colors.light.primary,
         },
-        /*         drawerPosition: "right", TODO: Mover a la derecha
-         */
-
-        headerTintColor: Colors.light.onPrimary, // Set header text color to white
+        headerTintColor: Colors.light.onPrimary,
       }}
+      drawerContent={(props) => <CustomDrawerContent {...props} />} // Uso del contenido personalizado
     >
       <Drawer.Screen
         name="CuentameMas"
@@ -57,7 +95,7 @@ export default function TabLayout() {
             <View style={styles.header}>
               <Image
                 style={styles.logo}
-                source={require("./../../assets/images/logo.png")} // Replace with the path to your image
+                source={require("./../../assets/images/logo.png")}
               />
               <Text style={styles.title}>Cuéntame +</Text>
             </View>
@@ -81,7 +119,7 @@ export default function TabLayout() {
             <View style={styles.header}>
               <Image
                 style={styles.logo}
-                source={require("./../../assets/images/logo.png")} // Replace with the path to your image
+                source={require("./../../assets/images/logo.png")}
               />
               <Text style={styles.title}>Cuentame +</Text>
             </View>
@@ -105,7 +143,7 @@ export default function TabLayout() {
             <View style={styles.header}>
               <Image
                 style={styles.logo}
-                source={require("./../../assets/images/logo.png")} // Replace with the path to your image
+                source={require("./../../assets/images/logo.png")}
               />
               <Text style={styles.title}>Cuentame +</Text>
             </View>
@@ -129,7 +167,7 @@ export default function TabLayout() {
             <View style={styles.header}>
               <Image
                 style={styles.logo}
-                source={require("./../../assets/images/logo.png")} // Replace with the path to your image
+                source={require("./../../assets/images/logo.png")}
               />
               <Text style={styles.title}>Cuentame +</Text>
             </View>
@@ -156,5 +194,24 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "#ffffff",
     fontFamily: "Poppins-Bold",
+  },
+  drawerHeader: {
+    padding: 20,
+    alignItems: "flex-start",
+  },
+  drawerImage: {
+    width: 70,
+    height: 70,
+    marginBottom: 10,
+  },
+  drawerTitle: {
+    color: "#ffffff",
+    fontSize: 34,
+    fontFamily: "Poppins-Bold",
+  },
+  drawerFooter: {
+    marginTop: "auto",
+    padding: 20,
+    alignSelf: "center",
   },
 });
