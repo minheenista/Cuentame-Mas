@@ -8,23 +8,25 @@ import {
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Dimensions, View, Image, Text, StyleSheet } from "react-native";
-import FaqScreen from "./faq";
-import CuentameMasScreen from "./cuentamemas";
-import TermsOfServiceScreen from "./tos";
-import PrivacyScreen from "./privacy";
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import BlackButton from "@/components/BlackButton";
 import LoginScreen from "../(auth)/login";
 import RegisterScreen from "../(auth)/register";
+import CuentameMasScreen from "../(tabs)/cuentamemas";
+import FaqScreen from "../(tabs)/faq";
+import TermsOfServiceScreen from "../(tabs)/tos";
+import PrivacyScreen from "../(tabs)/privacy";
+import { Stack } from "expo-router";
 
-export default function TabLayout() {
+export default function AuthLayout() {
   const { width } = Dimensions.get("window");
   const colorScheme = useColorScheme();
 
-  const Drawer = createDrawerNavigator();
+  //const Drawer = createDrawerNavigator();
 
-  function CustomDrawerContent(props: any) {
+  /* function CustomDrawerContent(props: any) {
     const navigation = useNavigation();
 
     return (
@@ -48,10 +50,16 @@ export default function TabLayout() {
         </View>
       </DrawerContentScrollView>
     );
-  }
+  } */
 
   return (
-    <Drawer.Navigator
+    <Stack screenOptions={{ headerTitle: "" }}>
+      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="register" />
+      <Stack.Screen name="+not-found" />
+    </Stack>
+
+    /* <Drawer.Navigator
       initialRouteName="CuentameMas"
       screenOptions={{
         drawerActiveBackgroundColor: Colors.light.primary,
@@ -176,31 +184,26 @@ export default function TabLayout() {
         name="login"
         component={LoginScreen}
         options={{
-          headerShown: width < 800 ? true : false,
-
           drawerActiveBackgroundColor: Colors.light.primaryLight,
           drawerLabel: () => null, // Oculta la ruta en el drawer
           drawerIcon: () => null, // También oculta el icono
         }}
       />
 
-      {/* Ruta de Registro - Oculta en el drawer */}
       <Drawer.Screen
         name="register"
         component={RegisterScreen}
         options={{
-          headerShown: width < 800 ? true : false,
-
           drawerActiveBackgroundColor: Colors.light.primaryLight,
           drawerLabel: () => null, // Oculta la ruta en el drawer
           drawerIcon: () => null, // También oculta el icono
         }}
       />
-    </Drawer.Navigator>
+    </Drawer.Navigator> */
   );
 }
 
-const styles = StyleSheet.create({
+/* const styles = StyleSheet.create({
   header: {
     gap: 20,
     flexDirection: "row",
@@ -236,3 +239,4 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
+ */

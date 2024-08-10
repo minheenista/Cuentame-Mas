@@ -43,9 +43,7 @@ const NavBar = ({ navigation }: { navigation: any }) => {
       {width > 1090 && (
         <BlackButton
           title={"Iniciar Sesión"}
-          handlePress={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          handlePress={() => navigation.navigate("login")}
           isLoading={false}
         ></BlackButton>
       )}

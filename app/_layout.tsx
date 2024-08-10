@@ -4,17 +4,22 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
+import {} from "@react-navigation/stack";
+import { Dimensions } from "react-native";
+import LoginScreen from "./(auth)/login";
+import { Stack } from "expo-router";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const { width } = Dimensions.get("window");
+
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     "Poppins-Black": require("./../assets/fonts/Poppins-Black.ttf"),
@@ -42,6 +47,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerTitle: "" }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" />
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>

@@ -1,46 +1,23 @@
 import {
   Image,
   StyleSheet,
-  Platform,
+  Text,
   View,
-  Button,
   Dimensions,
+  Button,
   ScrollView,
 } from "react-native";
 import * as React from "react";
-import { Drawer } from "react-native-paper";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { Card, PaperProvider, Text } from "react-native-paper";
-import { useState } from "react";
-import LeftDrawer from "@/components/LeftDrawer";
-import RightDrawer from "@/components/RightDrawer";
-import { TouchableHighlight } from "react-native-gesture-handler";
 import NavBar from "@/components/NavBar";
 import BlackButton from "@/components/BlackButton";
 import OutlinedBlackButton from "@/components/OutlinedBlackButton";
 import { Colors } from "@/constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 export default function CuentameMasScreen({ navigation }) {
   const { width } = Dimensions.get("window");
-
-  /* const [active, setActive] = React.useState("");
-
-  const [isLeftDrawerVisible, setLeftDrawerVisible] = useState(false);
-  const [isRightDrawerVisible, setRightDrawerVisible] = useState(false);
-
-  const toggleLeftDrawer = () => {
-    setLeftDrawerVisible(!isLeftDrawerVisible);
-  };
-
-  const toggleRightDrawer = () => {
-    setRightDrawerVisible(!isRightDrawerVisible);
-  }; */
+  const router = useRouter();
 
   return (
     <ScrollView>
@@ -84,9 +61,7 @@ export default function CuentameMasScreen({ navigation }) {
         <View style={width > 400 ? styles.buttonsWeb : styles.buttonsMobile}>
           <BlackButton
             title={"Regístrate"}
-            handlePress={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            handlePress={() => navigation.navigate("register")}
             isLoading={false}
           ></BlackButton>
           <OutlinedBlackButton
