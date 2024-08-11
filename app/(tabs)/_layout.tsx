@@ -41,7 +41,7 @@ export default function TabLayout() {
 
         <View style={styles.drawerFooter}>
           <BlackButton
-            title={"Login"}
+            title={"Iniciar Sesión"}
             handlePress={() => navigation.navigate("login")}
             isLoading={false}
           ></BlackButton>

@@ -15,7 +15,7 @@ import { Colors } from "@/constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-export default function CuentameMasScreen({ navigation }) {
+export default function CuentameMasScreen({ navigation }: { navigation: any }) {
   const { width } = Dimensions.get("window");
   const router = useRouter();
 

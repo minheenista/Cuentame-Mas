@@ -40,6 +40,9 @@ export const Colors = {
     secondaryDark,
     onBackground,
     onPrimary,
+    divider,
+    textSecondary,
+    textHint,
   },
   dark: {
     text: "#ECEDEE",

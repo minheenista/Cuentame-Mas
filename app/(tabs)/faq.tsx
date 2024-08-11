@@ -1,5 +1,15 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, Image, Platform, Button } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  Platform,
+  Button,
+  ScrollView,
+  View,
+  Dimensions,
+  Text,
+  SafeAreaView,
+} from "react-native";
 
 import { Collapsible } from "@/components/Collapsible";
 import { ExternalLink } from "@/components/ExternalLink";
@@ -7,124 +17,131 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import NavBar from "@/components/NavBar";
+import SearchInput from "@/components/SearchInput";
+import QuestionCard from "@/components/QuestionCard";
 
-export default function FaqScreen({ navigation }) {
+export default function FaqScreen({ navigation }: { navigation: any }) {
+  const { width } = Dimensions.get("window");
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
-      headerImage={
-        <Ionicons size={310} name="code-slash" style={styles.headerImage} />
-      }
-    >
-      <NavBar navigation={navigation}></NavBar>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate("CuentameMas")}
-      />
-      <ThemedText>
-        This app includes example code to help you get started.
-      </ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          and{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{" "}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the
-          web version, press <ThemedText type="defaultSemiBold">w</ThemedText>{" "}
-          in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the{" "}
-          <ThemedText type="defaultSemiBold">@2x</ThemedText> and{" "}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to
-          provide files for different screen densities
-        </ThemedText>
-        <Image
-          source={require("@/assets/images/react-logo.png")}
-          style={{ alignSelf: "center" }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText>{" "}
-          to see how to load{" "}
-          <ThemedText style={{ fontFamily: "SpaceMono" }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{" "}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook
-          lets you inspect what the user's current color scheme is, and so you
-          can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{" "}
-          <ThemedText type="defaultSemiBold">
-            components/HelloWave.tsx
-          </ThemedText>{" "}
-          component uses the powerful{" "}
-          <ThemedText type="defaultSemiBold">
-            react-native-reanimated
-          </ThemedText>{" "}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The{" "}
-              <ThemedText type="defaultSemiBold">
-                components/ParallaxScrollView.tsx
-              </ThemedText>{" "}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <ScrollView>
+      <SafeAreaView>
+        {/* ================ HEADER WEB ===================== */}
+        {width > 880 && (
+          <View>
+            <NavBar navigation={navigation}></NavBar>
+          </View>
+        )}
+
+        {/* ====================== CONTENT ================= */}
+
+        <View style={styles.container}>
+          <Text style={width > 720 ? styles.titleWeb : styles.titleMobile}>
+            Preguntas Frecuentes
+          </Text>
+          <SearchInput></SearchInput>
+          <View style={styles.questions}>
+            <QuestionCard
+              question={"¿Qué preguntas puedo hacer?"}
+              answer={
+                "Puedes hacer preguntas sobre educación financiera, como por ejemplo: ¿Qué es una tarjeta de crédito?, ¿Cómo puedo ahorrar dinero?, ¿Qué es un presupuesto?, entre otras."
+              }
+            ></QuestionCard>
+
+            <QuestionCard
+              question={"¿Qué son los chats?"}
+              answer={
+                "Los chats son cada una de las conversaciones que tienes con la inteligencia artificial sobre tus preguntas de educación financiera. A través de estos chats, puedes hacer preguntas específicas y recibir respuestas personalizadas y detalladas en tiempo real."
+              }
+            ></QuestionCard>
+
+            <QuestionCard
+              question={"¿Qué es el modo invitado?"}
+              answer={
+                "El modo invitado es una forma de usar la aplicación sin tener que crear una cuenta. Puedes hacer preguntas y recibir respuestas de la inteligencia artificial sin necesidad de registrarte."
+              }
+            ></QuestionCard>
+
+            <QuestionCard
+              question={"¿Qué son los recordatorios?"}
+              answer={
+                "Los recordatorios son notificaciones que puedes configurar para que la aplicación te recuerde hacer una acción específica, como revisar tu presupuesto, ahorrar dinero o pagar tus deudas. Esta función es solo para usuarios registrados."
+              }
+            ></QuestionCard>
+
+            <QuestionCard
+              question={"¿Para qué sirve registrar mi perfil?"}
+              answer={
+                "Registrar tu perfil te permite acceder a funciones adicionales de la aplicación, como creación de recordatorios y activar notificaciones, además puedes tener un historial de chats de preguntas que hayas realizado anteriormente."
+              }
+            ></QuestionCard>
+
+            <QuestionCard
+              question={"¿Por qué debo registrar mi situación fiscal?"}
+              answer={
+                "Registrar tu situacion fiscal es opcional, pero es de ayuda para que la inteligencia artificial pueda darte respuestas más personalizadas y detalladas sobre tus preguntas de educación financiera. Esta función es solo para usuarios registrados."
+              }
+            ></QuestionCard>
+
+            <QuestionCard
+              question={"¿Es seguro usar Cuéntame +?"}
+              answer={
+                "Sí, es seguro. La aplicación no almacena información sensible de los usuarios y cumple con las leyes de protección de datos. Además, la inteligencia artificial no tiene acceso a información personal de los usuarios."
+              }
+            ></QuestionCard>
+
+            <QuestionCard
+              question={"¿Cuentame + puede darme consejos personalizados?"}
+              answer={
+                "Sí, la inteligencia artificial de Cuéntame + puede darte consejos personalizados sobre educación financiera, como por ejemplo: cómo ahorrar dinero, cómo pagar deudas, cómo invertir, entre otros. Estos consejos se basan en la información que proporcionas al registrar tu situación fiscal."
+              }
+            ></QuestionCard>
+
+            <QuestionCard
+              question={"¿Cuéntame + es gratis?"}
+              answer={
+                "Sí, Cuéntame + es una aplicación gratuita que puedes descargar y usar sin costo alguno. No hay cargos ocultos ni compras dentro de la aplicación."
+              }
+            ></QuestionCard>
+          </View>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
+  container: {
+    flex: 1,
+    gap: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
   },
-  titleContainer: {
-    flexDirection: "row",
-    gap: 8,
+  header: {
+    gap: 20,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  titleWeb: {
+    fontSize: 60,
+    fontFamily: "Poppins-Regular",
+    color: "#000",
+    textAlign: "center",
+  },
+  titleMobile: {
+    marginTop: 20,
+    fontSize: 24,
+    fontFamily: "Poppins-Regular",
+    color: "#000",
+    textAlign: "center",
+  },
+  questions: {
+    flexDirection: "row", // Hace que las tarjetas estén en fila
+    flexWrap: "wrap", // Permite que las tarjetas se envuelvan a la siguiente línea si no hay suficiente espacio
+    justifyContent: "space-around", // Distribuye las tarjetas de manera uniforme
+    gap: 20,
+    marginTop: 20,
   },
 });
