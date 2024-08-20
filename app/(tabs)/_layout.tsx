@@ -97,7 +97,7 @@ export default function TabLayout() {
               <Text style={styles.title}>Cuéntame +</Text>
             </View>
           ),
-          headerShown: width < 800 ? true : false,
+          headerShown: width < 880 ? true : false,
         }}
       />
       <Drawer.Screen
@@ -121,7 +121,7 @@ export default function TabLayout() {
               <Text style={styles.title}>Cuentame +</Text>
             </View>
           ),
-          headerShown: width < 800 ? true : false,
+          headerShown: width < 880 ? true : false,
         }}
       />
       <Drawer.Screen
@@ -145,7 +145,7 @@ export default function TabLayout() {
               <Text style={styles.title}>Cuentame +</Text>
             </View>
           ),
-          headerShown: width < 800 ? true : false,
+          headerShown: width < 880 ? true : false,
         }}
       />
       <Drawer.Screen
@@ -169,18 +169,27 @@ export default function TabLayout() {
               <Text style={styles.title}>Cuentame +</Text>
             </View>
           ),
-          headerShown: width < 800 ? true : false,
+          headerShown: width < 880 ? true : false,
         }}
       />
       <Drawer.Screen
         name="login"
         component={LoginScreen}
         options={{
-          headerShown: width < 800 ? true : false,
+          headerShown: width < 880 ? true : false,
 
           drawerActiveBackgroundColor: Colors.light.primaryLight,
           drawerLabel: () => null, // Oculta la ruta en el drawer
           drawerIcon: () => null, // También oculta el icono
+          headerTitle: () => (
+            <View style={styles.header}>
+              <Image
+                style={styles.logo}
+                source={require("./../../assets/images/logo.png")}
+              />
+              <Text style={styles.title}>Cuentame +</Text>
+            </View>
+          ),
         }}
       />
 
@@ -189,11 +198,20 @@ export default function TabLayout() {
         name="register"
         component={RegisterScreen}
         options={{
-          headerShown: width < 800 ? true : false,
+          headerShown: width < 880 ? true : false,
 
           drawerActiveBackgroundColor: Colors.light.primaryLight,
           drawerLabel: () => null, // Oculta la ruta en el drawer
           drawerIcon: () => null, // También oculta el icono
+          headerTitle: () => (
+            <View style={styles.header}>
+              <Image
+                style={styles.logo}
+                source={require("./../../assets/images/logo.png")}
+              />
+              <Text style={styles.title}>Cuentame +</Text>
+            </View>
+          ),
         }}
       />
     </Drawer.Navigator>

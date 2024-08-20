@@ -52,6 +52,7 @@ export const Styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 16,
     lineHeight: 24,
+    letterSpacing: 0.1,
   },
 });
 
