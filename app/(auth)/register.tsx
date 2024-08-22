@@ -23,7 +23,79 @@ import { Card, TextInput } from "react-native-paper";
 import BlackButton from "@/components/BlackButton";
 import { useState } from "react";
 
+// apollo
+import { gql, useMutation } from "@apollo/client";
+import { input } from "@nextui-org/react";
+
+const REGISTER_USER = gql`
+  mutation registerUser($input: CreateUserInput!) {
+    registerUser(input: $input) {
+      _id
+      name
+      lastname
+      email
+      password
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export default function RegisterScreen({ navigation }: { navigation: any }) {
+  // state del formulario
+  const [name, saveName] = useState("");
+  const [lastname, saveLastName] = useState("");
+  const [email, saveEmail] = useState("");
+  const [password, savePassword] = useState("");
+
+  const [message, saveMessage] = useState("");
+
+  //mutation para crear nuevos usuarios
+  const [registerUser] = useMutation(REGISTER_USER);
+
+  // cuando el usuario presiona el boton de crear cuenta
+  const handleSubmit = async () => {
+    // validar el formulario
+    if (name === "" || lastname === "" || email === "" || password === "") {
+      // mostrar un error
+      saveMessage("Todos los campos son obligatorios");
+      console.log("Todos los campos son obligatorios");
+      return;
+    } else {
+      saveMessage("");
+    }
+
+    // password minimo de 6 caracteres
+    if (password.length < 8) {
+      saveMessage("La contraseña debe ser de al menos 8 caracteres");
+      console.log("La contraseña debe ser de al menos 8 caracteres");
+      return;
+    } else {
+      saveMessage("");
+    }
+
+    // email valido
+
+    // guardar el usuario en la base
+    try {
+      const { data } = await registerUser({
+        variables: {
+          input: {
+            name,
+            lastname,
+            email,
+            password,
+          },
+        },
+      });
+      console.log(data);
+      navigation.navigate("login");
+    } catch (error: any) {
+      console.log(error);
+      saveMessage(error.message);
+    }
+  };
+
   const width = Dimensions.get("window").width;
   const [secureText, setSecureText] = useState(true);
 
@@ -59,6 +131,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
 
             {/* ===================== NAME INPUT ==================== */}
             <TextInput
+              onChangeText={(texto) => saveName(texto)}
               style={width > 500 ? styles.inputWeb : styles.inputMovil}
               mode="outlined"
               label={"Nombre(s)"}
@@ -80,7 +153,10 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                 <TextInput.Icon icon="account" color={Colors.light.primary} />
               }
             ></TextInput>
+
+            {/* =================== LAST NAME INPUT ===================== */}
             <TextInput
+              onChangeText={(texto) => saveLastName(texto)}
               style={width > 500 ? styles.inputWeb : styles.inputMovil}
               mode="outlined"
               label={"Apellido(s)"}
@@ -102,7 +178,10 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                 <TextInput.Icon icon="account" color={Colors.light.primary} />
               }
             ></TextInput>
+
+            {/* =================== EMAIL INPUT ===================== */}
             <TextInput
+              onChangeText={(texto) => saveEmail(texto)}
               style={width > 500 ? styles.inputWeb : styles.inputMovil}
               mode="outlined"
               label={"Correo Electrónico"}
@@ -124,7 +203,10 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
                 <TextInput.Icon icon="email" color={Colors.light.primary} />
               }
             ></TextInput>
+
+            {/* =================== PASSWORD INPUT ===================== */}
             <TextInput
+              onChangeText={(texto) => savePassword(texto)}
               mode="outlined"
               label={"Contraseña"}
               style={width > 500 ? styles.inputWeb : styles.inputMovil}
@@ -168,10 +250,12 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
             <View style={styles.button}>
               <BlackButton
                 title={"Registrarse"}
-                handlePress={() => navigation.navigate("login")}
+                handlePress={() => handleSubmit()}
                 isLoading={false}
               ></BlackButton>
             </View>
+
+            <Text style={styles.errorText}>{message}</Text>
 
             <TouchableOpacity>
               <Text
@@ -272,9 +356,9 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: "center",
-    marginBottom: 40,
   },
   textHint: {
+    marginTop: 40,
     fontFamily: "Poppins-Regular",
     fontSize: 16,
     lineHeight: 24,
@@ -283,11 +367,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textHintMovil: {
+    marginTop: 40,
+
     fontFamily: "Poppins-Regular",
     fontSize: 14,
     lineHeight: 24,
     textAlign: "center",
     color: Colors.light.textHint,
     marginBottom: 20,
+  },
+  errorText: {
+    marginTop: 10,
+    marginHorizontal: 20,
+    color: "red",
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    textAlign: "center",
   },
 });
