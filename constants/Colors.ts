@@ -43,6 +43,11 @@ export const Colors = {
     divider,
     textSecondary,
     textHint,
+    onError,
+    success,
+    warning,
+    danger,
+    surface,
   },
   dark: {
     text: "#ECEDEE",

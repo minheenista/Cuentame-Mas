@@ -1,22 +1,13 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   StyleSheet,
   Image,
   Text,
-  Platform,
-  Button,
   ImageBackground,
   ScrollView,
   Dimensions,
   View,
   TouchableOpacity,
 } from "react-native";
-
-import { Collapsible } from "@/components/Collapsible";
-import { ExternalLink } from "@/components/ExternalLink";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import NavBar from "@/components/NavBar";
 import { Card, TextInput } from "react-native-paper";
@@ -25,7 +16,6 @@ import { useState } from "react";
 
 // apollo
 import { gql, useMutation } from "@apollo/client";
-import { input } from "@nextui-org/react";
 
 const REGISTER_USER = gql`
   mutation registerUser($input: CreateUserInput!) {
@@ -379,7 +369,7 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 10,
     marginHorizontal: 20,
-    color: "red",
+    color: Colors.light.danger,
     fontFamily: "Poppins-Regular",
     fontSize: 16,
     textAlign: "center",

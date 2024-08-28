@@ -17,6 +17,8 @@ import { useNavigation } from "@react-navigation/native";
 import BlackButton from "@/components/BlackButton";
 import LoginScreen from "../(auth)/login";
 import RegisterScreen from "../(auth)/register";
+import { Stack } from "expo-router";
+import chatUser from "../(chats)/chatUser";
 
 export default function TabLayout() {
   const { width } = Dimensions.get("window");
@@ -214,6 +216,8 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Drawer.Screen name="chatUser" component={chatUser} />
     </Drawer.Navigator>
   );
 }

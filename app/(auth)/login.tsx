@@ -25,8 +25,63 @@ import BlackButton from "@/components/BlackButton";
 import { Colors } from "@/constants/Colors";
 import { button, input } from "@nextui-org/react";
 import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+//apollo
+import { gql, useMutation } from "@apollo/client";
+import { router } from "expo-router";
+
+const LOGIN = gql`
+  mutation loginUser($input: loginInput!) {
+    loginUser(input: $input) {
+      accessToken
+      tokenType
+    }
+  }
+`;
 
 export default function LoginScreen({ navigation }: { navigation: any }) {
+  // state del form
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [message, setMessage] = useState("");
+  // mutacion para login
+  const [loginUser] = useMutation(LOGIN);
+
+  const handleSubmit = async () => {
+    //validar formulario
+    if (email === "" || password === "") {
+      setMessage("Todos los campos son obligatorios");
+      return;
+    } else {
+      setMessage("");
+    }
+
+    //autenticar usuario
+    try {
+      const { data } = await loginUser({
+        variables: {
+          input: {
+            email,
+            password,
+          },
+        },
+      });
+      const { token } = data.loginUser;
+
+      await AsyncStorage.setItem("token", token);
+
+      console.log(data);
+      setMessage("Usuario autenticado correctamente");
+      //guardar token en localstorage
+      //redirigir a chats
+      //router.push("/(chats)");
+      navigation.navigate("chatUser");
+    } catch (error: any) {
+      setMessage(error.message);
+    }
+  };
+
   const width = Dimensions.get("window").width;
   const [secureText, setSecureText] = useState(true);
 
@@ -63,6 +118,7 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
 
             {/* =================== INPUT EMAIL =================== */}
             <TextInput
+              onChangeText={(texto) => setEmail(texto)}
               style={width > 500 ? styles.inputWeb : styles.inputMovil}
               mode="outlined"
               label={"Correo Electrónico"}
@@ -87,6 +143,7 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
 
             {/* =================== INPUT PASSWORD =================== */}
             <TextInput
+              onChangeText={(texto) => setPassword(texto)}
               mode="outlined"
               label={"Contraseña"}
               style={width > 500 ? styles.inputWeb : styles.inputMovil}
@@ -129,10 +186,11 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
             <View style={styles.button}>
               <BlackButton
                 title={"INICIAR SESIÓN"}
-                handlePress={() => navigation.navigate("login")}
+                handlePress={() => handleSubmit()}
                 isLoading={false}
               ></BlackButton>
             </View>
+            <Text style={styles.errorText}>{message}</Text>
 
             <TouchableOpacity>
               <Text
@@ -233,9 +291,9 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: "center",
-    marginBottom: 40,
   },
   textHint: {
+    marginTop: 40,
     fontFamily: "Poppins-Regular",
     fontSize: 16,
     lineHeight: 24,
@@ -244,11 +302,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textHintMovil: {
+    marginTop: 40,
     fontFamily: "Poppins-Regular",
     fontSize: 14,
     lineHeight: 24,
     textAlign: "center",
     color: Colors.light.textHint,
     marginBottom: 20,
+  },
+  errorText: {
+    marginTop: 10,
+    marginHorizontal: 20,
+    color: Colors.light.danger,
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    textAlign: "center",
   },
 });

@@ -14,12 +14,15 @@ import { useNavigation } from "@react-navigation/native";
 import BlackButton from "@/components/BlackButton";
 import LoginScreen from "../(auth)/login";
 import RegisterScreen from "../(auth)/register";
+import { Stack } from "expo-router";
 
 export default function ChatsLayout() {
   const { width } = Dimensions.get("window");
   const colorScheme = useColorScheme();
 
-  const Drawer = createDrawerNavigator();
+  <Stack screenOptions={{ headerTitle: "" }}>
+    <Stack.Screen name="chatUser" redirect />
+  </Stack>;
 
   /* function CustomDrawerContent(props: any) {
     const navigation = useNavigation();
@@ -47,8 +50,8 @@ export default function ChatsLayout() {
     );
   } */
 
-  return (
-    {/* <Drawer.Navigator
+  return {
+    /* <Drawer.Navigator
       initialRouteName="CuentameMas"
       screenOptions={{
         drawerActiveBackgroundColor: Colors.light.primary,
@@ -210,8 +213,8 @@ export default function ChatsLayout() {
           ),
         }}
       />
-    </Drawer.Navigator> */}
-  );
+    </Drawer.Navigator> */
+  };
 }
 
 const styles = StyleSheet.create({
