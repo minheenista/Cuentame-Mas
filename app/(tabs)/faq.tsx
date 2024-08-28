@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   questions: {
+    paddingHorizontal: 30,
     flexDirection: "row", // Hace que las tarjetas estén en fila
     flexWrap: "wrap", // Permite que las tarjetas se envuelvan a la siguiente línea si no hay suficiente espacio
     justifyContent: "space-around", // Distribuye las tarjetas de manera uniforme

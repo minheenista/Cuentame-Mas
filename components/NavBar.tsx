@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   StyleSheet,
+  Pressable,
 } from "react-native";
 import React from "react";
 import BlackButton from "./BlackButton";
@@ -25,7 +26,9 @@ const NavBar = ({ navigation }: { navigation: any }) => {
           source={require("./../assets/images/logo.png")}
           style={styles.logo}
         />
-        <Text style={styles.title}>Cuéntame +</Text>
+        <Pressable onPress={() => navigation.navigate("CuentameMas")}>
+          <Text style={styles.title}>Cuéntame +</Text>
+        </Pressable>
         {width > 1090 && (
           <View style={styles.menu}>
             <TouchableOpacity onPress={() => navigation.navigate("faq")}>
