@@ -217,7 +217,11 @@ export default function TabLayout() {
         }}
       />
 
-      <Drawer.Screen name="chatUser" component={chatUser} />
+      <Drawer.Screen
+        name="chatUser"
+        component={chatUser}
+        options={{ headerShown: false }}
+      />
     </Drawer.Navigator>
   );
 }

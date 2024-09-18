@@ -1,19 +1,82 @@
 // LeftDrawer.js
-import React from "react";
+import { Colors } from "@/constants/Colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React, { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Animated,
+  Image,
   Dimensions,
   TouchableOpacity,
   Button,
+  FlatList,
+  Pressable,
 } from "react-native";
+import { Avatar, Divider, Menu } from "react-native-paper";
+import { fontConfig } from "react-native-paper/lib/typescript/styles/fonts";
+
+const chats = [
+  { id: "1", name: "Que son los puntos infonavit y como usarlos?" },
+  { id: "2", name: "Chat 2" },
+  { id: "3", name: "Chat 3" },
+  // Agrega más chats según sea necesario
+];
+
+const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const showMenu = () => setMenuVisible(true);
+  const hideMenu = () => setMenuVisible(false);
+
+  return (
+    <View style={styles.chatItemContainer}>
+      <TouchableOpacity
+        onPress={() => onSelectChat(chat.id)}
+        style={styles.chatItem}
+      >
+        <Text style={styles.chatName}>{chat.name}</Text>
+      </TouchableOpacity>
+      <Menu
+        visible={menuVisible}
+        onDismiss={hideMenu}
+        anchor={
+          <TouchableOpacity onPress={showMenu}>
+            <MaterialCommunityIcons
+              name="dots-vertical"
+              size={24}
+            ></MaterialCommunityIcons>
+          </TouchableOpacity>
+        }
+      >
+        <Menu.Item
+          onPress={() => {}}
+          title="Editar Nombre"
+          leadingIcon="pencil"
+        />
+        <Menu.Item
+          onPress={() => {}}
+          title="Eliminar Chat"
+          leadingIcon="trash-can"
+        />
+      </Menu>
+    </View>
+  );
+};
 
 const { width } = Dimensions.get("window");
 const drawerWidth = 250;
 
-const LeftDrawer = ({ isVisible, toggleDrawer, navigation }) => {
+const LeftDrawer = ({
+  isVisible,
+  toggleDrawer,
+  navigation,
+}: {
+  isVisible: any;
+  toggleDrawer: any;
+  navigation: any;
+}) => {
   const animatedValue = new Animated.Value(isVisible ? 0 : -drawerWidth);
 
   Animated.timing(animatedValue, {
@@ -22,21 +85,67 @@ const LeftDrawer = ({ isVisible, toggleDrawer, navigation }) => {
     useNativeDriver: true,
   }).start();
 
+  const handleSelectChat = (chatId: any) => {
+    console.log("Selected Chat ID:", chatId);
+    // Navegar a la pantalla del chat con el ID correspondiente
+  };
+
   return (
     <Animated.View
       style={[styles.drawer, { transform: [{ translateX: animatedValue }] }]}
     >
       <TouchableOpacity onPress={toggleDrawer}>
-        <Text style={styles.closeButton}>Close Left Drawer</Text>
+        <Text style={styles.closeButton}>X</Text>
       </TouchableOpacity>
-      <Text>Left Drawer Content</Text>
-      <Button
-        title="Go to Explore"
-        onPress={() => {
-          toggleDrawer(); // Close the drawer
-          navigation.navigate("Explore"); // Navigate to Explore screen
+
+      {/* ====================== SIDEBAR TITLE =============================== */}
+      <View style={styles.sidebarHeader}>
+        <Image
+          source={require("./../assets/images/logo.png")}
+          style={styles.logo}
+        ></Image>
+        <Text style={styles.title}> Cuentame +</Text>
+      </View>
+      <Divider />
+
+      {/* =================== CREATE CHAT BUTTON ============================ */}
+      <TouchableOpacity
+        style={styles.buttonCreate}
+        onPress={function (): void {
+          throw new Error("Function not implemented.");
         }}
+      >
+        <MaterialCommunityIcons name="plus" size={24}></MaterialCommunityIcons>
+        <Text style={styles.textButton}> Crear Conversación</Text>
+      </TouchableOpacity>
+      <Divider />
+
+      {/* ============= LISTA DE CONVERSACIONES ============================== */}
+      <Text style={styles.subtitle2}>Conversaciones anteriores</Text>
+
+      <FlatList
+        data={chats}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ChatItem chat={item} onSelectChat={handleSelectChat}></ChatItem>
+        )}
       />
+
+      <Divider />
+      <View style={styles.sidebarFooter}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <Avatar.Text label="A" size={36}></Avatar.Text>
+          <Text style={styles.body1}>Usuario</Text>
+        </View>
+
+        <Pressable onPress={() => {}}>
+          <MaterialCommunityIcons
+            name="cog"
+            size={24}
+            color={Colors.light.text}
+          ></MaterialCommunityIcons>
+        </Pressable>
+      </View>
     </Animated.View>
   );
 };
@@ -49,7 +158,7 @@ const styles = StyleSheet.create({
     left: 0,
     zIndex: 1000,
     width: drawerWidth,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.light.primary,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -58,8 +167,83 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   closeButton: {
+    textAlign: "right",
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: "Poppins-Bold",
+  },
+
+  sidebar: {
+    width: "auto",
+    backgroundColor: Colors.light.primary,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  sidebarHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  title: {
+    fontFamily: "Poppins-Bold",
+    color: Colors.light.onPrimary,
+    fontSize: 24,
+  },
+  logo: {
+    width: 50,
+    height: 50,
+  },
+  buttonCreate: {
+    padding: 10,
+    borderRadius: 8,
+    color: Colors.light.onPrimary,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textButton: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+  },
+  subtitle2: {
+    marginVertical: 15,
+    fontFamily: "Poppins-Bold",
+    fontSize: 14,
+    color: Colors.light.text,
+  },
+  chatItemContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  chatItem: {
+    flex: 1,
+  },
+  chatName: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    color: Colors.light.text,
+  },
+  menuButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  menuButtonText: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 20,
+    color: "#333",
+  },
+  sidebarFooter: {
+    marginTop: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  body1: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    color: Colors.light.text,
   },
 });
 

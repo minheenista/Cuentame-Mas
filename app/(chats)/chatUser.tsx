@@ -5,19 +5,14 @@ import {
   View,
   Button,
   Dimensions,
+  Text,
   ScrollView,
   Pressable,
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
 import * as React from "react";
-import { Divider, Drawer, Menu } from "react-native-paper";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { HelloWave } from "@/components/HelloWave";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { Card, PaperProvider, Text } from "react-native-paper";
+import { Avatar, Divider, Menu, TextInput } from "react-native-paper";
 import { useState } from "react";
 import LeftDrawer from "@/components/LeftDrawer";
 import RightDrawer from "@/components/RightDrawer";
@@ -26,11 +21,14 @@ import { Colors } from "@/constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 
+import PreguntasPreguntadas from "@/components/PreguntasPreguntadas";
+import UserMessage from "@/components/UserMessage";
+import IaMessage from "@/components/IaMessage";
+
 const chats = [
-  { id: "1", name: "Chat 1" },
+  { id: "1", name: "Que son los puntos infonavit y como usarlos" },
   { id: "2", name: "Chat 2" },
   { id: "3", name: "Chat 3" },
-  // Agrega más chats según sea necesario
 ];
 
 const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
@@ -51,13 +49,24 @@ const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
         visible={menuVisible}
         onDismiss={hideMenu}
         anchor={
-          <TouchableOpacity onPress={showMenu}>Show menu</TouchableOpacity>
+          <TouchableOpacity onPress={showMenu}>
+            <MaterialCommunityIcons
+              name="dots-vertical"
+              size={24}
+            ></MaterialCommunityIcons>
+          </TouchableOpacity>
         }
       >
-        <Menu.Item onPress={() => {}} title="Item 1" />
-        <Menu.Item onPress={() => {}} title="Item 2" />
-        <Divider />
-        <Menu.Item onPress={() => {}} title="Item 3" />
+        <Menu.Item
+          onPress={() => {}}
+          title="Editar Nombre"
+          leadingIcon="pencil"
+        />
+        <Menu.Item
+          onPress={() => {}}
+          title="Eliminar Chat"
+          leadingIcon="trash-can"
+        />
       </Menu>
     </View>
   );
@@ -84,7 +93,7 @@ export default function ChatUser({ navigation }: { navigation: any }) {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safeArea}>
       <LeftDrawer
         isVisible={isLeftDrawerVisible}
         toggleDrawer={toggleLeftDrawer}
@@ -95,96 +104,258 @@ export default function ChatUser({ navigation }: { navigation: any }) {
         toggleDrawer={toggleRightDrawer}
       />
 
-      <View>
-        {width < 880 ? (
-          <Button title="Toggle Left Drawer" onPress={toggleLeftDrawer} />
-        ) : null}
-        <Button title="Toggle Right Drawer" onPress={toggleRightDrawer} />
-      </View>
-
-      <View style={styles.container}>
-        <View style={styles.sidebar}>
-          {/* ====================== SIDEBAR TITLE =============================== */}
-          <View style={styles.sidebarHeader}>
+      {width < 880 ? (
+        <View style={styles.headerMobile}>
+          <View style={styles.headerMobile2}>
+            <TouchableOpacity onPress={toggleLeftDrawer}>
+              <MaterialCommunityIcons
+                name="menu"
+                size={24}
+              ></MaterialCommunityIcons>
+            </TouchableOpacity>
             <Image
               source={require("./../../assets/images/logo.png")}
-              style={styles.logo}
+              style={styles.logoHeader}
             ></Image>
-            <Text style={styles.title}> Cuentame +</Text>
-          </View>
-          <Divider bold />
 
-          {/* =================== CREATE CHAT BUTTON ============================ */}
-          <TouchableOpacity
-            style={styles.buttonCreate}
-            onPress={function (): void {
-              throw new Error("Function not implemented.");
-            }}
-          >
+            <Text style={styles.titleHeader}>Cuentame +</Text>
+          </View>
+          <TouchableOpacity onPress={toggleRightDrawer}>
             <MaterialCommunityIcons
-              name="plus"
+              name="text-search"
               size={24}
             ></MaterialCommunityIcons>
-            <Text style={styles.textButton}> Crear Conversación</Text>
           </TouchableOpacity>
-          <Divider bold />
-
-          {/* ============= LISTA DE CONVERSACIONES ============================== */}
-          <Text style={styles.subtitle2}>Conversaciones anteriores</Text>
-          {/* <FlatList
-            data={chats}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <ChatItem chat={item} onSelectChat={handleSelectChat} />
-            )}
-            style={styles.sidebar}
-          /> */}
-          <FlatList
-            data={chats}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <ChatItem chat={item} onSelectChat={handleSelectChat}></ChatItem>
-              /* <View>
-                <Pressable
-                  onPress={function (): void {
-                    throw new Error("Function not implemented. " + item);
-                  }}
-                >
-                  <Text>{item.name}</Text>
-                </Pressable>
-                <Pressable>
-                  <MaterialCommunityIcons name="more"></MaterialCommunityIcons>
-                </Pressable>
-              </View> */
-            )}
-          />
         </View>
+      ) : null}
 
-        {/* =========================  CHAT SECTION ============================ */}
-        <ScrollView>
-          <View style={styles.card}>
-            <Text style={styles.cardText}>Contenido Dinámico</Text>
+      <View style={styles.container}>
+        {width > 880 ? (
+          <View style={styles.sidebar}>
+            {/* ====================== SIDEBAR TITLE =============================== */}
+            <View style={styles.sidebarHeader}>
+              <Image
+                source={require("./../../assets/images/logo.png")}
+                style={styles.logo}
+              ></Image>
+              <Text style={styles.title}> Cuentame +</Text>
+            </View>
+            <Divider bold />
+
+            {/* =================== CREATE CHAT BUTTON ============================ */}
+            <TouchableOpacity
+              style={styles.buttonCreate}
+              onPress={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            >
+              <MaterialCommunityIcons
+                name="plus"
+                size={24}
+              ></MaterialCommunityIcons>
+              <Text style={styles.textButton}> Crear Conversación</Text>
+            </TouchableOpacity>
+            <Divider bold />
+
+            {/* ============= LISTA DE CONVERSACIONES ============================== */}
+            <Text style={styles.subtitle2}>Conversaciones anteriores</Text>
+
+            <FlatList
+              data={chats}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ChatItem
+                  chat={item}
+                  onSelectChat={handleSelectChat}
+                ></ChatItem>
+              )}
+            />
+
+            <Divider bold />
+            <View style={styles.sidebarFooter}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                  minWidth: 250,
+                }}
+              >
+                <Avatar.Text label="A" size={36}></Avatar.Text>
+                <Text style={styles.body1}>Usuario</Text>
+              </View>
+
+              <Pressable onPress={() => {}}>
+                <MaterialCommunityIcons
+                  name="cog"
+                  size={24}
+                  color={Colors.light.text}
+                ></MaterialCommunityIcons>
+              </Pressable>
+            </View>
           </View>
-        </ScrollView>
+        ) : null}
+
+        {/* ===============================   CHATS ================================= */}
+        <View style={styles.cardContainer}>
+          <View style={{ flexDirection: "row-reverse", flex: 1 }}>
+            <TouchableOpacity
+              onPress={toggleRightDrawer}
+              style={{ maxWidth: 24, width: 24, margin: 10, flex: 1 }}
+            >
+              <MaterialCommunityIcons
+                name="text-search"
+                size={24}
+                color={Colors.light.text}
+              ></MaterialCommunityIcons>
+            </TouchableOpacity>
+            <View style={styles.card}>
+              <ScrollView style={{ gap: 20 }}>
+                <UserMessage message="Que es el RFC?" />
+                <IaMessage message="El RFC es una clave única de registro utilizada en México para identificar a las personas físicas y morales que realizan actividades económicas y deben contribuir con el gasto público ante el SAT (Servicio de Administración Tributaria). Esta clave se compone de 13 caracteres alfanuméricos, formados por las iniciales del nombre de la persona física o moral, seguido de la fecha de nacimiento o constitución y 3 caracteres más llamados homoclave que el SAT otorga para que el RFC sea una clave única e irrepetible entre todos los contribuyentes del país" />
+                {/* <PreguntasPreguntadas></PreguntasPreguntadas> */}
+              </ScrollView>
+            </View>
+          </View>
+
+          {/* ================= INPUT TEXT =============================== */}
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TextInput
+              style={{ flex: 1, height: 50, flexShrink: 0 }}
+              mode="outlined"
+              label={"Ingresa tu pregunta"}
+              outlineColor={Colors.light.secondaryDark}
+              theme={{
+                colors: {
+                  primary: Colors.light.secondaryDark,
+                  text: Colors.light.text,
+                  placeholder: Colors.light.text,
+                  background: Colors.light.background,
+                },
+                fonts: {
+                  regular: { fontFamily: "Poppins-Regular" },
+                },
+              }}
+              outlineStyle={{ borderRadius: 10, borderWidth: 2 }}
+              underlineStyle={{ backgroundColor: "transparent" }}
+              left={
+                <TextInput.Icon
+                  icon="pencil"
+                  color={Colors.light.secondaryDark}
+                />
+              }
+              right={
+                <TextInput.Icon
+                  icon="microphone"
+                  color={Colors.light.textSecondary}
+                  onPress={() => {
+                    throw new Error("Function not implemented.");
+                  }}
+                />
+              }
+            ></TextInput>
+
+            {/* =================== SEND BUTTON =================== */}
+            <View style={styles.sendButton}>
+              <TouchableOpacity
+                onPress={() => {
+                  throw new Error("Envianding.");
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="send"
+                  color={Colors.light.secondaryDark}
+                  size={24}
+                ></MaterialCommunityIcons>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    height: "100%",
-    minHeight: "100%",
+    backgroundColor: Colors.light.background,
+  },
+  headerMobile: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+    gap: 10,
+    backgroundColor: Colors.light.primary,
+  },
+  headerMobile2: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 10,
+  },
+  container: {
+    margin: 10,
+    flex: 1,
     flexDirection: "row",
   },
   sidebar: {
-    width: "auto",
+    width: 350,
     backgroundColor: Colors.light.primary,
     padding: 20,
     justifyContent: "center",
     alignItems: "flex-start",
   },
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    padding: 16,
+  },
+  cardContainer: {
+    flex: 1,
+    flexGrow: 1,
+    marginHorizontal: 10,
+    backgroundColor: "#fff",
+  },
+  card: {
+    flex: 1,
+    minHeight: "99%",
+    height: "99%",
+    flexGrow: 3,
+    backgroundColor: "#fff",
+    padding: 20,
+    marginBottom: 15,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  cardText: {
+    fontSize: 16,
+  },
+  chatItemContainer: {
+    flex: 1,
+    flexGrow: 1,
+    minWidth: 250,
+    gap: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  chatItem: {
+    flex: 1,
+  },
+  chatName: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    color: Colors.light.text,
+    flex: 1,
+  },
+
   sidebarHeader: {
     flexDirection: "row",
     alignItems: "center",
@@ -194,9 +365,18 @@ const styles = StyleSheet.create({
     color: Colors.light.onPrimary,
     fontSize: 34,
   },
+  titleHeader: {
+    fontFamily: "Poppins-Bold",
+    color: Colors.light.onPrimary,
+    fontSize: 24,
+  },
   logo: {
     width: 70,
     height: 70,
+  },
+  logoHeader: {
+    width: 50,
+    height: 50,
   },
   buttonCreate: {
     padding: 10,
@@ -214,6 +394,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Bold",
     fontSize: 14,
     color: Colors.light.text,
+    paddingVertical: 10,
   },
 
   content: {
@@ -223,43 +404,39 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#ecf0f1",
   },
-  card: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  cardText: {
-    fontSize: 16,
-    color: "#34495e",
-  },
 
-  chatItemContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  chatItem: {
-    flex: 1,
-  },
-  chatName: {
-    fontSize: 16,
-    color: "#333",
-  },
   menuButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
   menuButtonText: {
+    fontFamily: "Poppins-Regular",
     fontSize: 20,
     color: "#333",
   },
   deleteItem: {
     color: "red",
+  },
+  sidebarFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  body1: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    color: Colors.light.text,
+  },
+  sendButton: {
+    height: 50,
+    width: 50,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    borderColor: Colors.light.secondaryDark,
+    borderWidth: 2,
+    padding: 10,
+    marginLeft: 10,
   },
 });

@@ -25,10 +25,10 @@ import BlackButton from "@/components/BlackButton";
 import { Colors } from "@/constants/Colors";
 import { button, input } from "@nextui-org/react";
 import { useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 //apollo
 import { gql, useMutation } from "@apollo/client";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LOGIN = gql`
   mutation loginUser($input: loginInput!) {
@@ -67,13 +67,18 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
           },
         },
       });
-      const { token } = data.loginUser;
+      const { accessToken, tokenType } = data.loginUser;
 
-      await AsyncStorage.setItem("token", token);
-
-      console.log(data);
-      setMessage("Usuario autenticado correctamente");
       //guardar token en localstorage
+
+      if (accessToken) {
+        await AsyncStorage.setItem("token", `${tokenType} ${accessToken}`);
+        console.log("Token guardado:", `${tokenType} ${accessToken}`);
+      } else {
+        console.warn("No se obtuvo un token");
+      }
+      console.log(accessToken);
+      setMessage("Usuario autenticado correctamente");
       //redirigir a chats
       //router.push("/(chats)");
       navigation.navigate("chatUser");
