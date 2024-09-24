@@ -360,6 +360,7 @@ const styles = StyleSheet.create({
 
   sidebarHeader: {
     flexDirection: "row",
+    gap: 10,
     alignItems: "center",
   },
   title: {
