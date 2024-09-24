@@ -70,11 +70,11 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     borderColor: Colors.light.primary,
     borderWidth: 2,
+    width: "90%",
     borderRadius: 10,
   },
   container: {
     alignSelf: "flex-start",
-    width: "90%",
     alignContent: "center",
     verticalAlign: "middle",
     flexDirection: "row",
