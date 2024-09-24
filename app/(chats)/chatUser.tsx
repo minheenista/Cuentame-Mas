@@ -178,7 +178,7 @@ export default function ChatUser({ navigation }: { navigation: any }) {
                   flexDirection: "row",
                   alignItems: "center",
                   gap: 10,
-                  minWidth: 250,
+                  minWidth: 240,
                 }}
               >
                 <Avatar.Text label="A" size={36}></Avatar.Text>
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   sidebar: {
-    width: 350,
+    width: 300,
     backgroundColor: Colors.light.primary,
     padding: 20,
     justifyContent: "center",
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "Poppins-Bold",
     color: Colors.light.onPrimary,
-    fontSize: 34,
+    fontSize: 28,
   },
   titleHeader: {
     fontFamily: "Poppins-Bold",
