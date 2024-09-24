@@ -138,7 +138,9 @@ export default function ChatUser({ navigation }: { navigation: any }) {
                 source={require("./../../assets/images/logo.png")}
                 style={styles.logo}
               ></Image>
-              <Text style={styles.title}> Cuentame +</Text>
+              <Pressable onPress={() => navigation.navigate("CuentameMas")}>
+                <Text style={styles.titleHeader}>Cuentame +</Text>
+              </Pressable>
             </View>
             <Divider bold />
 
@@ -368,7 +370,7 @@ const styles = StyleSheet.create({
   titleHeader: {
     fontFamily: "Poppins-Bold",
     color: Colors.light.onPrimary,
-    fontSize: 24,
+    fontSize: 28,
   },
   logo: {
     width: 70,

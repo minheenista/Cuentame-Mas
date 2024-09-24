@@ -16,7 +16,7 @@ import {
 } from "react-native";
 
 const { width } = Dimensions.get("window");
-const drawerWidth = 250;
+const drawerWidth = 300;
 
 const ReferenciaItem = ({ referencia }: { referencia: any }) => {
   return (
