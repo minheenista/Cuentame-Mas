@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   textTitle: {
+    textAlign: "center",
     alignSelf: "center",
     fontFamily: "Poppins-Bold",
     fontSize: 34,

@@ -19,6 +19,7 @@ import LoginScreen from "../(auth)/login";
 import RegisterScreen from "../(auth)/register";
 import { Stack } from "expo-router";
 import chatUser from "../(chats)/chatUser";
+import chatGuest from "../(guest)/chatGuest";
 
 export default function TabLayout() {
   const { width } = Dimensions.get("window");
@@ -220,6 +221,11 @@ export default function TabLayout() {
       <Drawer.Screen
         name="chatUser"
         component={chatUser}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="chatGuest"
+        component={chatGuest}
         options={{ headerShown: false }}
       />
     </Drawer.Navigator>

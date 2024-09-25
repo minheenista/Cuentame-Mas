@@ -66,9 +66,7 @@ export default function CuentameMasScreen({ navigation }: { navigation: any }) {
           ></BlackButton>
           <OutlinedBlackButton
             title={"Ingresa como invitado"}
-            handlePress={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            handlePress={() => navigation.navigate("chatGuest")}
             isLoading={false}
           ></OutlinedBlackButton>
         </View>
