@@ -24,6 +24,7 @@ import { FlatList } from "react-native-gesture-handler";
 import PreguntasPreguntadas from "@/components/PreguntasPreguntadas";
 import UserMessage from "@/components/UserMessage";
 import IaMessage from "@/components/IaMessage";
+import ConfigModal from "@/components/ConfigModal";
 
 const chats = [
   { id: "1", name: "Que son los puntos infonavit y como usarlos" },
@@ -75,6 +76,10 @@ const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
 export default function ChatUser({ navigation }: { navigation: any }) {
   const { width } = Dimensions.get("window");
   const [active, setActive] = React.useState("");
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const showModal = () => setModalVisible(true);
+  const hideModal = () => setModalVisible(false);
 
   const [isLeftDrawerVisible, setLeftDrawerVisible] = useState(false);
   const [isRightDrawerVisible, setRightDrawerVisible] = useState(false);
@@ -187,13 +192,18 @@ export default function ChatUser({ navigation }: { navigation: any }) {
                 <Text style={styles.body1}>Usuario</Text>
               </View>
 
-              <Pressable onPress={() => {}}>
+              <Pressable onPress={showModal}>
                 <MaterialCommunityIcons
                   name="cog"
                   size={24}
                   color={Colors.light.text}
                 ></MaterialCommunityIcons>
               </Pressable>
+
+              <ConfigModal
+                isVisible={isModalVisible}
+                onClose={hideModal}
+              ></ConfigModal>
             </View>
           </View>
         ) : null}

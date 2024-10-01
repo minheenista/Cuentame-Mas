@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { Avatar, Divider, Menu } from "react-native-paper";
 import { fontConfig } from "react-native-paper/lib/typescript/styles/fonts";
+import ConfigModal from "./ConfigModal";
 
 const chats = [
   { id: "1", name: "Que son los puntos infonavit y como usarlos?" },
@@ -85,6 +86,11 @@ const LeftDrawer = ({
     useNativeDriver: true,
   }).start();
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const showModal = () => setModalVisible(true);
+  const hideModal = () => setModalVisible(false);
+
   const handleSelectChat = (chatId: any) => {
     console.log("Selected Chat ID:", chatId);
     // Navegar a la pantalla del chat con el ID correspondiente
@@ -138,7 +144,7 @@ const LeftDrawer = ({
           <Text style={styles.body1}>Usuario</Text>
         </View>
 
-        <Pressable onPress={() => {}}>
+        <Pressable onPress={showModal}>
           <MaterialCommunityIcons
             name="cog"
             size={24}
@@ -146,6 +152,8 @@ const LeftDrawer = ({
           ></MaterialCommunityIcons>
         </Pressable>
       </View>
+
+      <ConfigModal isVisible={isModalVisible} onClose={hideModal}></ConfigModal>
     </Animated.View>
   );
 };
