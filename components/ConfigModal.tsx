@@ -30,6 +30,24 @@ const FirstTab = () => {
   const [value, setValue] = useState<string | null>(null);
   const [isFocus, setIsFocus] = useState(false);
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [regimenFiscal, setRegimenFiscal] = useState<string | null>(null);
+  // const [isFocus, setIsFocus] = useState(false); // Para el dropdown
+
+  const toggleEdit = () => setIsEditing(!isEditing);
+
+  // Volver al estado inicial
+  const cancelEdit = () => {
+    setIsEditing(false);
+    setNewPassword("");
+    setConfirmPassword("");
+  };
+
   const renderLabel = () => {
     if (value || isFocus) {
       return (
@@ -45,75 +63,133 @@ const FirstTab = () => {
 
   return (
     <View style={styles.tabContent}>
-      <View style={styles.column}>
-        <Text style={styles.h6}>Configuración de Perfil</Text>
-        <Pressable>
-          <MaterialCommunityIcons
-            name="pencil"
-            size={24}
-          ></MaterialCommunityIcons>
-        </Pressable>
-      </View>
-      <View style={isMobile ? styles.mobileColumn : styles.column}>
-        <View>
-          <View style={isMobile ? styles.mobileRow : styles.row}>
-            <Text style={styles.body}>Nombre</Text>
-            <TextInput
-              placeholder="Nombre"
-              mode="outlined"
-              disabled
-            ></TextInput>
-          </View>
-          <View style={isMobile ? styles.mobileRow : styles.row}>
-            <Text style={styles.body}>Apellido</Text>
-            <TextInput
-              placeholder="Apellido"
-              mode="outlined"
-              disabled
-            ></TextInput>
-          </View>
+      <ScrollView>
+        <View style={styles.column}>
+          <Text style={styles.h6}>Configuración de Perfil</Text>
+          <Pressable
+            onPress={isEditing ? cancelEdit : toggleEdit}
+            style={styles.column}
+          >
+            <MaterialCommunityIcons
+              name={isEditing ? "close" : "pencil"}
+              color={isEditing ? Colors.light.divider : Colors.light.text}
+              size={24}
+            ></MaterialCommunityIcons>
+
+            <Text style={styles.cancel}>{isEditing ? "Cancelar" : ""}</Text>
+          </Pressable>
         </View>
-        <View>
-          <View style={isMobile ? styles.mobileRow : styles.row}>
-            <Text style={styles.body}>Correo Electrónico</Text>
-            <Text style={styles.body}>ejemplo@gmail.com</Text>
+        <View style={isMobile ? styles.mobileColumn : styles.column}>
+          <View>
+            <View style={isMobile ? styles.mobileRow : styles.row}>
+              <Text style={styles.body}>Nombre</Text>
+              <TextInput
+                placeholder="Nombre"
+                mode="outlined"
+                value={name}
+                outlineColor={Colors.light.primary}
+                activeOutlineColor={Colors.light.primary}
+                disabled={!isEditing}
+                onChangeText={setName}
+                editable={isEditing}
+                /*               style={styles.input}
+                 */
+              ></TextInput>
+            </View>
+            <View style={isMobile ? styles.mobileRow : styles.row}>
+              <Text style={styles.body}>Apellido</Text>
+              <TextInput
+                placeholder="Apellido"
+                mode="outlined"
+                outlineColor={Colors.light.primary}
+                activeOutlineColor={Colors.light.primary}
+                value={surname}
+                onChangeText={setSurname}
+                editable={isEditing}
+                disabled={!isEditing}
+              ></TextInput>
+            </View>
           </View>
-          <View style={isMobile ? styles.mobileRow : styles.row}>
-            <Text style={styles.body}>Contraseña Actual</Text>
-            <TextInput
-              placeholder="Contraseña Actual"
-              mode="outlined"
-              disabled
-            ></TextInput>
-          </View>
-          <View style={isMobile ? styles.mobileRow : styles.row}>
-            <Text style={styles.body}>Régimen Fiscal</Text>
-            <View style={styles.container}>
-              {renderLabel()}
-              <Dropdown
-                style={[
-                  styles.dropdown,
-                  isFocus && { borderColor: Colors.light.primary },
-                ]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                data={data}
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus ? "Selecciona una opción" : ""}
-                value={value}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={(item) => {
-                  setValue(item.value);
-                  setIsFocus(false);
-                }}
-              />
+          <View>
+            <View style={isMobile ? styles.mobileRow : styles.row}>
+              <Text style={styles.body}>Correo Electrónico</Text>
+              <Text style={styles.body}>ejemplo@gmail.com</Text>
+            </View>
+            <View style={isMobile ? styles.mobileRow : styles.row}>
+              <Text style={styles.body}>Contraseña Actual</Text>
+              <TextInput
+                placeholder="Contraseña Actual"
+                mode="outlined"
+                outlineColor={Colors.light.primary}
+                activeOutlineColor={Colors.light.primary}
+                value={currentPassword}
+                onChangeText={setCurrentPassword}
+                editable={isEditing}
+                disabled={!isEditing}
+                secureTextEntry
+              ></TextInput>
+            </View>
+            {isEditing && (
+              <>
+                <View style={isMobile ? styles.mobileRow : styles.row}>
+                  <Text style={styles.body}>Nueva Contraseña</Text>
+                  <TextInput
+                    mode="outlined"
+                    placeholder="Nueva Contraseña"
+                    outlineColor={Colors.light.primary}
+                    activeOutlineColor={Colors.light.primary}
+                    value={newPassword}
+                    disabled={!isEditing}
+                    onChangeText={setNewPassword}
+                    secureTextEntry
+                  />
+                </View>
+
+                <View style={isMobile ? styles.mobileRow : styles.row}>
+                  <Text style={styles.body}>Confirmar Contraseña</Text>
+                  <TextInput
+                    mode="outlined"
+                    placeholder="Confirmar Contraseña"
+                    outlineColor={Colors.light.primary}
+                    activeOutlineColor={Colors.light.primary}
+                    value={confirmPassword}
+                    disabled={!isEditing}
+                    onChangeText={setConfirmPassword}
+                    secureTextEntry
+                  />
+                </View>
+              </>
+            )}
+            <View style={isMobile ? styles.mobileRow : styles.row}>
+              <Text style={styles.body}>Régimen Fiscal</Text>
+              <View style={styles.container}>
+                {renderLabel()}
+                <Dropdown
+                  style={[
+                    styles.dropdown,
+                    isFocus && { borderColor: Colors.light.primary },
+                  ]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  data={data}
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!isFocus ? "Selecciona una opción" : ""}
+                  value={regimenFiscal}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  disable={!isEditing}
+                  onChange={(item) => {
+                    setRegimenFiscal(item.value);
+                    setIsFocus(false);
+                  }}
+                />
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -328,6 +404,7 @@ const styles = StyleSheet.create({
   column: {
     flexDirection: "row",
     gap: 20,
+    alignItems: "center",
   },
   mobileColumn: {
     flexDirection: "column",
@@ -447,6 +524,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     marginTop: 20,
+  },
+  cancel: {
+    color: Colors.light.divider,
+    fontFamily: "Poppins-Regular",
   },
 });
 
