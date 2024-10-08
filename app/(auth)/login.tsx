@@ -197,7 +197,7 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
             </View>
             <Text style={styles.errorText}>{message}</Text>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("chatGuest")}>
               <Text
                 style={width > 500 ? styles.textHint : styles.textHintMovil}
               >

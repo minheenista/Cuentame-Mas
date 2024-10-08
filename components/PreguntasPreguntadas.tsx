@@ -40,7 +40,6 @@ const PreguntasPreguntadas = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: "20%",
     verticalAlign: "bottom",
     flexGrow: 1,
     alignContent: "center",

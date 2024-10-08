@@ -247,7 +247,7 @@ export default function RegisterScreen({ navigation }: { navigation: any }) {
 
             <Text style={styles.errorText}>{message}</Text>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("chatGuest")}>
               <Text
                 style={width > 500 ? styles.textHint : styles.textHintMovil}
               >
