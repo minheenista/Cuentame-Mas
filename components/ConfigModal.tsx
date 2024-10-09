@@ -38,6 +38,19 @@ const FirstTab = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [regimenFiscal, setRegimenFiscal] = useState<string | null>(null);
   // const [isFocus, setIsFocus] = useState(false); // Para el dropdown
+  const [secureText, setSecureText] = useState(true);
+  const [secureTextConfirm, setSecureTextConfirm] = useState(true);
+  const [secureTextOld, setSecureTextOld] = useState(true);
+
+  const toggleSecureText = () => {
+    setSecureText(!secureText);
+  };
+  const toggleSecureTextConfirm = () => {
+    setSecureTextConfirm(!secureTextConfirm);
+  };
+  const toggleSecureTextOld = () => {
+    setSecureTextOld(!secureTextOld);
+  };
 
   const toggleEdit = () => setIsEditing(!isEditing);
 
@@ -126,7 +139,16 @@ const FirstTab = () => {
                 onChangeText={setCurrentPassword}
                 editable={isEditing}
                 disabled={!isEditing}
-                secureTextEntry
+                secureTextEntry={secureTextOld}
+                right={
+                  isEditing! ? (
+                    <TextInput.Icon
+                      icon={secureTextOld ? "eye" : "eye-off"}
+                      color={Colors.light.textSecondary}
+                      onPress={toggleSecureTextOld}
+                    />
+                  ) : null
+                }
               ></TextInput>
             </View>
             {isEditing && (
@@ -141,7 +163,14 @@ const FirstTab = () => {
                     value={newPassword}
                     disabled={!isEditing}
                     onChangeText={setNewPassword}
-                    secureTextEntry
+                    secureTextEntry={secureText}
+                    right={
+                      <TextInput.Icon
+                        icon={secureText ? "eye" : "eye-off"}
+                        color={Colors.light.text}
+                        onPress={toggleSecureText}
+                      />
+                    }
                   />
                 </View>
 
@@ -155,7 +184,14 @@ const FirstTab = () => {
                     value={confirmPassword}
                     disabled={!isEditing}
                     onChangeText={setConfirmPassword}
-                    secureTextEntry
+                    secureTextEntry={secureTextConfirm}
+                    right={
+                      <TextInput.Icon
+                        icon={secureTextConfirm ? "eye" : "eye-off"}
+                        color={Colors.light.text}
+                        onPress={toggleSecureTextConfirm}
+                      />
+                    }
                   />
                 </View>
               </>
@@ -206,7 +242,9 @@ const SecondTab = () => {
   const openSmallModal = () => setIsSmallModalVisible(true);
   const closeSmallModal = () => setIsSmallModalVisible(false);
 
-  const [inputDate, setInputDate] = React.useState(new Date());
+  const [inputDate, setInputDate] = React.useState<Date | undefined>(
+    new Date()
+  );
 
   const width = Dimensions.get("window").width;
   const isMobile = width < 600; // Detecta si el dispositivo es móvil
