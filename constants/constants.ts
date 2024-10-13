@@ -1,1 +1,1 @@
-export const URI = process.env.ENDPOINT_URL;
+export const URI = process.env.EXPO_PUBLIC_API;
