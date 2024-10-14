@@ -17,16 +17,16 @@ export default function userScreen() {
   return (
     <View>
       <Text>USUER CHATS</Text>
-      <Pressable onPress={() => router.navigate("cuentamemas")}>
+      <Pressable onPress={() => router.navigate("/")}>
         <Text>HOME</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("faq")}>
+      <Pressable onPress={() => router.navigate("/faq")}>
         <Text>FAQ</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("tos")}>
+      <Pressable onPress={() => router.navigate("/tos")}>
         <Text>TOS</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("privacy")}>
+      <Pressable onPress={() => router.navigate("/privacy")}>
         <Text>PRIVACY</Text>
       </Pressable>
     </View>

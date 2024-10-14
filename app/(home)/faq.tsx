@@ -20,16 +20,16 @@ export default function FaqScreen() {
       <Pressable onPress={() => router.navigate("/")}>
         <Text>HOME</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("faq")}>
+      <Pressable onPress={() => router.navigate("/faq")}>
         <Text>FAQ</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("tos")}>
+      <Pressable onPress={() => router.navigate("/tos")}>
         <Text>TOS</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("privacy")}>
+      <Pressable onPress={() => router.navigate("/privacy")}>
         <Text>PRIVACY</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("login")}>
+      <Pressable onPress={() => router.navigate("/login")}>
         <Text>LOGIN</Text>
       </Pressable>
     </View>

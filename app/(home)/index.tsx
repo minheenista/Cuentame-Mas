@@ -20,22 +20,22 @@ export default function HomeScreen() {
       <Pressable onPress={() => router.navigate("/")}>
         <Text>HOME</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("faq")}>
+      <Pressable onPress={() => router.navigate("/faq")}>
         <Text>FAQ</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("tos")}>
+      <Pressable onPress={() => router.navigate("/tos")}>
         <Text>TOS</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("privacy")}>
+      <Pressable onPress={() => router.navigate("/privacy")}>
         <Text>PRIVACY</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("signup")}>
+      <Pressable onPress={() => router.navigate("/signup")}>
         <Text>REGISTRO</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("login")}>
+      <Pressable onPress={() => router.navigate("/login")}>
         <Text>LOGIN</Text>
       </Pressable>
-      <Pressable onPress={() => router.navigate("guest")}>
+      <Pressable onPress={() => router.navigate("/guest")}>
         <Text>INVITADO</Text>
       </Pressable>
     </View>
