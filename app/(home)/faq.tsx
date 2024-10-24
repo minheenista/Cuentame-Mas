@@ -14,12 +14,18 @@ import NavBar from "@/components/NavBar";
 import React from "react";
 import SearchInput from "@/components/SearchInput";
 import QuestionCard from "@/components/QuestionCard";
+import { useColorScheme } from "react-native";
+import { Colors } from "@/constants/Colors";
 
 export default function FaqScreen() {
   const { width } = Dimensions.get("window");
 
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: activeColors.background }}>
       <SafeAreaView>
         {/* ================ HEADER WEB ===================== */}
         {width > 880 && (
@@ -30,12 +36,18 @@ export default function FaqScreen() {
 
         {/* ====================== CONTENT ================= */}
 
-        <View style={styles.container}>
-          <Text style={width > 720 ? styles.titleWeb : styles.titleMobile}>
+        <View style={styles(activeColors).container}>
+          <Text
+            style={
+              width > 720
+                ? styles(activeColors).titleWeb
+                : styles(activeColors).titleMobile
+            }
+          >
             Preguntas Frecuentes
           </Text>
           <SearchInput></SearchInput>
-          <View style={styles.questions}>
+          <View style={styles(activeColors).questions}>
             <QuestionCard
               question={"¿Qué preguntas puedo hacer?"}
               answer={
@@ -105,33 +117,35 @@ export default function FaqScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 20,
-  },
-  titleWeb: {
-    fontSize: 60,
-    fontFamily: "Poppins-Regular",
-    color: "#000",
-    textAlign: "center",
-  },
-  titleMobile: {
-    marginTop: 20,
-    fontSize: 24,
-    fontFamily: "Poppins-Regular",
-    color: "#000",
-    textAlign: "center",
-  },
-  questions: {
-    paddingHorizontal: 30,
-    flexDirection: "row", // Hace que las tarjetas estén en fila
-    flexWrap: "wrap", // Permite que las tarjetas se envuelvan a la siguiente línea si no hay suficiente espacio
-    justifyContent: "space-around", // Distribuye las tarjetas de manera uniforme
-    gap: 20,
-    marginTop: 20,
-  },
-});
+const styles = (activeColors: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      gap: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 20,
+      color: activeColors.background,
+    },
+    titleWeb: {
+      fontSize: 60,
+      fontFamily: "Poppins-Regular",
+      color: activeColors.text,
+      textAlign: "center",
+    },
+    titleMobile: {
+      marginTop: 20,
+      fontSize: 24,
+      fontFamily: "Poppins-Regular",
+      color: activeColors.text,
+      textAlign: "center",
+    },
+    questions: {
+      paddingHorizontal: 30,
+      flexDirection: "row", // Hace que las tarjetas estén en fila
+      flexWrap: "wrap", // Permite que las tarjetas se envuelvan a la siguiente línea si no hay suficiente espacio
+      justifyContent: "space-around", // Distribuye las tarjetas de manera uniforme
+      gap: 20,
+      marginTop: 20,
+    },
+  });

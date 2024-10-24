@@ -11,6 +11,7 @@ import {
   Pressable,
   Dimensions,
   TouchableWithoutFeedback,
+  useColorScheme,
 } from "react-native";
 
 interface QuestionCardProps {
@@ -21,6 +22,10 @@ interface QuestionCardProps {
 const QuestionCard = ({ question, answer }: QuestionCardProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const { width } = Dimensions.get("window");
+
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
   return (
     <View>
@@ -35,13 +40,19 @@ const QuestionCard = ({ question, answer }: QuestionCardProps) => {
         <TouchableWithoutFeedback
           onPress={() => setModalVisible(!modalVisible)}
         >
-          <View style={styles.centeredView}>
+          <View style={styles(activeColors).centeredView}>
             <TouchableWithoutFeedback onPress={() => {}}>
               <View
-                style={width > 400 ? styles.modalView : styles.modalViewMobile}
+                style={
+                  width > 400
+                    ? styles(activeColors).modalView
+                    : styles(activeColors).modalViewMobile
+                }
               >
-                <View style={styles.cardHeader}>
-                  <Text style={styles.modalTitle}>{question}</Text>
+                <View style={styles(activeColors).cardHeader}>
+                  <Text style={styles(activeColors).modalTitle}>
+                    {question}
+                  </Text>
                   <TouchableOpacity
                     onPress={() => setModalVisible(!modalVisible)}
                   >
@@ -54,7 +65,7 @@ const QuestionCard = ({ question, answer }: QuestionCardProps) => {
                     ></MaterialIcons>
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.modalText}>{answer}</Text>
+                <Text style={styles(activeColors).modalText}>{answer}</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -63,11 +74,11 @@ const QuestionCard = ({ question, answer }: QuestionCardProps) => {
 
       {/* ============= Card Question ==================== */}
       <TouchableOpacity
-        style={styles.card}
+        style={styles(activeColors).card}
         onPress={() => setModalVisible(true)}
       >
-        <View style={styles.cardContent}>
-          <Text style={styles.textCard}>{question}</Text>
+        <View style={styles(activeColors).cardContent}>
+          <Text style={styles(activeColors).textCard}>{question}</Text>
           <MaterialIcons
             name="chevron-right"
             color={Colors.light.primary}
@@ -80,97 +91,97 @@ const QuestionCard = ({ question, answer }: QuestionCardProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  card: {
-    height: 84,
-    width: 360,
-    borderRadius: 10,
-    shadowColor: "#49494986",
-    shadowOffset: {
-      width: 1,
-      height: 2,
+const styles = (activeColors: any) =>
+  StyleSheet.create({
+    card: {
+      height: 84,
+      width: 360,
+      borderRadius: 10,
+      shadowColor: "#49494986",
+      shadowOffset: {
+        width: 1,
+        height: 2,
+      },
+      shadowOpacity: 0.35,
+      shadowRadius: 2,
+      backgroundColor: "#0000000A",
     },
-    shadowOpacity: 0.35,
-    shadowRadius: 2,
-    backgroundColor: "#0000000A",
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    paddingBottom: 0,
-  },
-  cardContent: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    padding: 25,
-    paddingBottom: 0,
-  },
-  textCard: {
-    fontSize: 16,
-    marginRight: 20,
-    color: Colors.light.text,
-    fontFamily: "Poppins-Regular",
-    fontWeight: "400",
-  },
+    cardHeader: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
+      paddingBottom: 0,
+    },
+    cardContent: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
+      padding: 25,
+      paddingBottom: 0,
+    },
+    textCard: {
+      fontSize: 16,
+      marginRight: 20,
+      color: activeColors.text,
+      fontFamily: "Poppins-Regular",
+      fontWeight: "400",
+    },
 
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-    backgroundColor: "##da0505",
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 40,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    maxWidth: 640,
-  },
-  modalViewMobile: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 40,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
+    modalView: {
+      margin: 20,
+      backgroundColor: activeColors.surface,
+      borderRadius: 20,
+      padding: 40,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      maxWidth: 640,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    maxWidth: "90%",
-  },
+    modalViewMobile: {
+      margin: 20,
+      backgroundColor: activeColors.background,
+      borderRadius: 20,
+      padding: 40,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      maxWidth: "90%",
+    },
 
-  modalTitle: {
-    fontSize: 20,
-    textAlign: "center",
-    marginRight: 20,
-    color: Colors.light.primary,
-    fontFamily: "Poppins-Bold",
-  },
-  modalText: {
-    maxWidth: "80%",
-    marginTop: 20,
-    marginBottom: 20,
-    textAlign: "center",
-    fontSize: 16,
-    color: Colors.light.text,
-    fontFamily: "Poppins-Regular",
-  },
-});
+    modalTitle: {
+      fontSize: 20,
+      textAlign: "center",
+      marginRight: 20,
+      color: activeColors.primary,
+      fontFamily: "Poppins-Bold",
+    },
+    modalText: {
+      maxWidth: "80%",
+      marginTop: 20,
+      marginBottom: 20,
+      textAlign: "center",
+      fontSize: 16,
+      color: activeColors.text,
+      fontFamily: "Poppins-Regular",
+    },
+  });
 
 export default QuestionCard;
