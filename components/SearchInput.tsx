@@ -3,23 +3,27 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { useFonts } from "@/hooks/useFonts";
 
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, useColorScheme } from "react-native";
 import { TextInput } from "react-native-paper";
 
 const SearchInput = () => {
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
   return (
-    <View style={styles.container}>
+    <View style={styles(activeColors).container}>
       <TextInput
         mode="outlined"
         placeholder="Buscar pregunta"
-        style={styles.input}
-        outlineColor={Colors.light.textHint}
+        style={styles(activeColors).input}
+        outlineColor={activeColors.primary}
         theme={{
           colors: {
-            primary: Colors.light.primary,
-            text: Colors.light.text,
-            placeholder: Colors.light.text,
-            background: Colors.light.background,
+            primary: activeColors.primary,
+            text: activeColors.text,
+            placeholder: activeColors.text,
+            background: "transparent",
+            onSurface: activeColors.text,
           },
           fonts: {
             regular: { fontFamily: "Poppins-Regular" },
@@ -27,26 +31,28 @@ const SearchInput = () => {
         }}
         outlineStyle={{ borderRadius: 20 }}
         underlineStyle={{ backgroundColor: "transparent" }}
-        left={<TextInput.Icon icon={"magnify"} color={Colors.light.primary} />}
+        left={<TextInput.Icon icon={"magnify"} color={activeColors.primary} />}
       ></TextInput>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-  },
+const styles = (activeColors: any) =>
+  StyleSheet.create({
+    container: {
+      width: "100%",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+    },
 
-  input: {
-    width: "80%",
-    height: 50,
-    fontFamily: "Poppins-Regular",
-  },
-});
+    input: {
+      color: activeColors.text,
+      width: "80%",
+      height: 50,
+      fontFamily: "Poppins-Regular",
+    },
+  });
 
 export default SearchInput;
