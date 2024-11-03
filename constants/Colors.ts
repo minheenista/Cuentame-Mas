@@ -47,6 +47,7 @@ export const Colors = {
     textHint,
     divider,
     shadow,
+    blackButton: "#292929",
   },
   dark: {
     primary,
@@ -68,5 +69,6 @@ export const Colors = {
     textHint: "#959595",
     divider: "#575757",
     shadow: "#44FFFFFF",
+    blackButton: "#F09D99",
   },
 };

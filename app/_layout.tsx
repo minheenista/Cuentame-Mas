@@ -11,6 +11,8 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Dimensions } from "react-native";
+import { ApolloProvider } from "@apollo/client";
+import client from "@/config/apollo";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -42,14 +44,16 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(home)" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(guest)" />
-        <Stack.Screen name="(user)" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(home)" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(guest)" />
+          <Stack.Screen name="(user)" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ThemeProvider>
+    </ApolloProvider>
   );
 }
