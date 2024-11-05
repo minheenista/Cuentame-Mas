@@ -1,7 +1,7 @@
 // LeftDrawer.js
 import { Colors } from "@/constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,8 @@ import {
   Button,
   FlatList,
   Pressable,
+  useColorScheme,
+  Easing,
 } from "react-native";
 import { Avatar, Divider } from "react-native-paper";
 import ChatItem from "./ChatItem";
@@ -25,7 +27,7 @@ const chats = [
   // Agrega más chats según sea necesario
 ];
 
-const drawerWidth = 250;
+const drawerWidth = 300;
 
 const SidebarDrawer = ({
   isVisible,
@@ -34,13 +36,22 @@ const SidebarDrawer = ({
   isVisible: any;
   toggleDrawer: any;
 }) => {
-  const animatedValue = new Animated.Value(isVisible ? 0 : -drawerWidth);
+  const animatedValue = useRef(
+    new Animated.Value(isVisible ? 0 : -drawerWidth)
+  ).current;
 
-  Animated.timing(animatedValue, {
-    toValue: isVisible ? 0 : -drawerWidth,
-    duration: 300,
-    useNativeDriver: true,
-  }).start();
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: isVisible ? 0 : -drawerWidth,
+      duration: 300, // Duración más corta para una animación rápida
+      easing: Easing.out(Easing.circle), // Efecto de suavizado
+      useNativeDriver: true,
+    }).start();
+  }, [isVisible]);
+
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -54,33 +65,42 @@ const SidebarDrawer = ({
 
   return (
     <Animated.View
-      style={[styles.drawer, { transform: [{ translateX: animatedValue }] }]}
+      style={[
+        styles(activeColors).drawer,
+        { transform: [{ translateX: animatedValue }] },
+      ]}
     >
       <TouchableOpacity onPress={toggleDrawer}>
-        <Text style={styles.closeButton}>X</Text>
+        <Text style={styles(activeColors).closeButton}>X</Text>
       </TouchableOpacity>
       {/* ====================== SIDEBAR TITLE =============================== */}
-      <View style={styles.sidebarHeader}>
+      <View style={styles(activeColors).sidebarHeader}>
         <Image
           source={require("./../assets/images/logo.png")}
-          style={styles.logo}
+          style={styles(activeColors).logo}
         ></Image>
-        <Text style={styles.title}> Cuentame +</Text>
+        <Text style={styles(activeColors).title}> Cuentame +</Text>
       </View>
       <Divider />
       {/* =================== CREATE CHAT BUTTON ============================ */}
       <TouchableOpacity
-        style={styles.buttonCreate}
+        style={styles(activeColors).buttonCreate}
         onPress={function (): void {
           throw new Error("Function not implemented.");
         }}
       >
-        <MaterialCommunityIcons name="plus" size={24}></MaterialCommunityIcons>
-        <Text style={styles.textButton}> Crear Conversación</Text>
+        <MaterialCommunityIcons
+          name="plus"
+          size={24}
+          color={activeColors.text}
+        ></MaterialCommunityIcons>
+        <Text style={styles(activeColors).textButton}> Crear Conversación</Text>
       </TouchableOpacity>
       <Divider />
       {/* ============= LISTA DE CONVERSACIONES ============================== */}
-      <Text style={styles.subtitle2}>Conversaciones anteriores</Text>
+      <Text style={styles(activeColors).subtitle2}>
+        Conversaciones anteriores
+      </Text>
       <FlatList
         data={chats}
         keyExtractor={(item) => item.id}
@@ -89,17 +109,17 @@ const SidebarDrawer = ({
         )}
       />
       <Divider />
-      <View style={styles.sidebarFooter}>
+      <View style={styles(activeColors).sidebarFooter}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
           <Avatar.Text label="A" size={36}></Avatar.Text>
-          <Text style={styles.body1}>Usuario</Text>
+          <Text style={styles(activeColors).body1}>Usuario</Text>
         </View>
 
         <Pressable onPress={showModal}>
           <MaterialCommunityIcons
             name="cog"
             size={24}
-            color={Colors.light.text}
+            color={activeColors.text}
           ></MaterialCommunityIcons>
         </Pressable>
       </View>
@@ -109,109 +129,97 @@ const SidebarDrawer = ({
   );
 };
 
-const styles = StyleSheet.create({
-  drawer: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    zIndex: 1000,
-    width: drawerWidth,
-    backgroundColor: Colors.light.primary,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-    padding: 20,
-  },
-  closeButton: {
-    textAlign: "right",
-    fontSize: 18,
-    fontWeight: "bold",
-    fontFamily: "Poppins-Bold",
-  },
+const styles = (activeColors: any) =>
+  StyleSheet.create({
+    drawer: {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      zIndex: 1000,
+      width: drawerWidth,
+      backgroundColor: activeColors.primaryDark,
+      shadowColor: activeColors.cardShadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 8,
+      elevation: 5,
+      padding: 20,
+    },
+    closeButton: {
+      textAlign: "right",
+      fontSize: 18,
+      fontWeight: "bold",
+      fontFamily: "Poppins-Bold",
+      color: activeColors.text,
+    },
+    sidebarHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 10,
+    },
+    title: {
+      fontFamily: "Poppins-Bold",
+      color: activeColors.lightTitle,
+      fontSize: 24,
+    },
+    logo: {
+      width: 50,
+      height: 50,
+    },
+    buttonCreate: {
+      marginVertical: 5,
+      padding: 10,
+      borderRadius: 8,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    textButton: {
+      fontFamily: "Poppins-Regular",
+      fontSize: 16,
+      color: activeColors.text,
+    },
+    subtitle2: {
+      marginVertical: 15,
+      fontFamily: "Poppins-Bold",
+      fontSize: 14,
+      color: activeColors.text,
+    },
+    chatItemContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 12,
+    },
+    chatItem: {
+      flex: 1,
+      flexDirection: "row",
+    },
+    chatItemEdit: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 5,
+    },
+    chatName: {
+      fontFamily: "Poppins-Regular",
+      fontSize: 16,
+      color: Colors.light.text,
+    },
 
-  sidebar: {
-    width: "auto",
-    backgroundColor: Colors.light.primary,
-    padding: 20,
-    justifyContent: "center",
-    alignItems: "flex-start",
-  },
-  sidebarHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  title: {
-    fontFamily: "Poppins-Bold",
-    color: Colors.light.onPrimary,
-    fontSize: 24,
-  },
-  logo: {
-    width: 50,
-    height: 50,
-  },
-  buttonCreate: {
-    padding: 10,
-    borderRadius: 8,
-    color: Colors.light.onPrimary,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textButton: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-  },
-  subtitle2: {
-    marginVertical: 15,
-    fontFamily: "Poppins-Bold",
-    fontSize: 14,
-    color: Colors.light.text,
-  },
-  chatItemContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  chatItem: {
-    flex: 1,
-    flexDirection: "row",
-  },
-  chatItemEdit: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 5,
-  },
-  chatName: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-    color: Colors.light.text,
-  },
-  menuButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  menuButtonText: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 20,
-    color: "#333",
-  },
-  sidebarFooter: {
-    marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
-  body1: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-    color: Colors.light.text,
-  },
-});
+    sidebarFooter: {
+      marginTop: 20,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-around",
+    },
+    body1: {
+      fontFamily: "Poppins-Regular",
+      fontSize: 16,
+      color: activeColors.text,
+    },
+  });
 
 export default SidebarDrawer;
