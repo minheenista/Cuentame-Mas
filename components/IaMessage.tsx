@@ -9,11 +9,25 @@ import {
   useColorScheme,
 } from "react-native";
 import { Avatar } from "react-native-paper";
+import * as Speech from "expo-speech";
+import { useState } from "react";
 
 const IaMessage = ({ message }: any) => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const toggleSpeech = () => {
+    if (isPlaying) {
+      Speech.stop();
+      setIsPlaying(false);
+    } else {
+      Speech.speak(message);
+      setIsPlaying(true);
+    }
+  };
 
   return (
     <View style={styles(activeColors).iaMessage}>
@@ -25,13 +39,9 @@ const IaMessage = ({ message }: any) => {
         <Text style={styles(activeColors).text}>{message}</Text>
       </View>
       <View style={styles(activeColors).buttons}>
-        <Pressable
-          onPress={() => {
-            console.log("LEER EN VOZ ALTA");
-          }}
-        >
+        <Pressable onPress={toggleSpeech}>
           <MaterialCommunityIcons
-            name="volume-high"
+            name={isPlaying ? "pause" : "volume-high"}
             size={24}
             color={activeColors.textSecondary}
           ></MaterialCommunityIcons>
