@@ -60,7 +60,7 @@ export default function HomeLayout() {
         drawerStyle: {
           backgroundColor: Colors.light.primaryLight,
         },
-
+        headerShown: false,
         drawerLabelStyle: {
           fontFamily: "Poppins-Regular",
           fontSize: 14,
