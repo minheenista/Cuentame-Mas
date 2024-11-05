@@ -78,6 +78,7 @@ const styles = (activeColors: any) =>
       fontFamily: "Poppins-Regular",
       fontSize: 16,
       color: activeColors.text,
+      flexShrink: 1,
     },
     buttons: {
       gap: 10,

@@ -7,6 +7,7 @@ import {
   Pressable,
   Dimensions,
   useColorScheme,
+  ScrollView,
 } from "react-native";
 import Modal from "react-native-modal";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
@@ -16,7 +17,6 @@ import { Switch, TextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ReminderItem from "./ReminderItem";
 import IaMessageBookmark from "./IaMessageBookmark";
-import { ScrollView } from "react-native-gesture-handler";
 import { Dropdown } from "react-native-element-dropdown";
 import { DatePickerInput } from "react-native-paper-dates";
 
@@ -92,7 +92,7 @@ const FirstTab = () => {
   return (
     <View style={styles(activeColors).tabContent}>
       <ScrollView>
-        <View style={styles(activeColors).column}>
+        <View style={styles(activeColors).columnMini}>
           <Text style={styles(activeColors).h6}>Configuración de Perfil</Text>
           <Pressable
             onPress={isEditing ? cancelEdit : toggleEdit}
@@ -113,7 +113,7 @@ const FirstTab = () => {
           style={
             isMobile
               ? styles(activeColors).mobileColumn
-              : styles(activeColors).column
+              : styles(activeColors).columnMini
           }
         >
           <View>
@@ -134,6 +134,11 @@ const FirstTab = () => {
                 disabled={!isEditing}
                 onChangeText={setName}
                 editable={isEditing}
+                style={
+                  isMobile
+                    ? { maxHeight: 50, minWidth: "90%" }
+                    : { maxHeight: 50 }
+                }
               ></TextInput>
             </View>
             <View
@@ -153,6 +158,11 @@ const FirstTab = () => {
                 onChangeText={setSurname}
                 editable={isEditing}
                 disabled={!isEditing}
+                style={
+                  isMobile
+                    ? { maxHeight: 50, minWidth: "90%" }
+                    : { maxHeight: 50 }
+                }
               ></TextInput>
             </View>
           </View>
@@ -185,6 +195,11 @@ const FirstTab = () => {
                 editable={isEditing}
                 disabled={!isEditing}
                 secureTextEntry={secureTextOld}
+                style={
+                  isMobile
+                    ? { maxHeight: 50, minWidth: "90%" }
+                    : { maxHeight: 50 }
+                }
                 right={
                   isEditing! ? (
                     <TextInput.Icon
@@ -217,6 +232,11 @@ const FirstTab = () => {
                     disabled={!isEditing}
                     onChangeText={setNewPassword}
                     secureTextEntry={secureText}
+                    style={
+                      isMobile
+                        ? { maxHeight: 50, minWidth: "90%" }
+                        : { maxHeight: 50 }
+                    }
                     right={
                       <TextInput.Icon
                         icon={secureText ? "eye" : "eye-off"}
@@ -246,6 +266,11 @@ const FirstTab = () => {
                     disabled={!isEditing}
                     onChangeText={setConfirmPassword}
                     secureTextEntry={secureTextConfirm}
+                    style={
+                      isMobile
+                        ? { maxHeight: 50, minWidth: "90%" }
+                        : { maxHeight: 50 }
+                    }
                     right={
                       <TextInput.Icon
                         icon={secureTextConfirm ? "eye" : "eye-off"}
@@ -314,7 +339,7 @@ const SecondTab = () => {
   );
 
   const width = Dimensions.get("window").width;
-  const isMobile = width < 600; // Detecta si el dispositivo es móvil
+  const isMobile = width < 900; // Detecta si el dispositivo es móvil
 
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
@@ -324,12 +349,14 @@ const SecondTab = () => {
     <View style={styles(activeColors).tabContent}>
       <View
         style={[
-          styles(activeColors).columnMini,
+          isMobile
+            ? styles(activeColors).mobileColumn
+            : styles(activeColors).columnMini,
           { justifyContent: "space-around" },
         ]}
       >
         <View>
-          <View style={styles(activeColors).column}>
+          <View style={styles(activeColors).columnMini}>
             <Text style={styles(activeColors).h6}>Recordatorios</Text>
             <Pressable
               style={styles(activeColors).buttonAdd}
@@ -405,6 +432,9 @@ const SecondTab = () => {
               mode="outlined"
               outlineColor={activeColors.primary}
               activeOutlineColor={activeColors.primary}
+              style={
+                isMobile ? { maxHeight: 50, width: "70%" } : { maxHeight: 50 }
+              }
             ></TextInput>
           </View>
           <View style={styles(activeColors).row}>
@@ -574,10 +604,12 @@ const styles = (activeColors: any) =>
     columnMini: {
       flexDirection: "row",
       gap: 20,
+      alignItems: "center",
     },
     mobileColumn: {
       flexDirection: "column",
       gap: 20,
+      verticalAlign: "middle",
     },
     row: {
       gap: 20,
@@ -603,7 +635,7 @@ const styles = (activeColors: any) =>
       borderColor: activeColors.divider,
     },
     h6: {
-      fontSize: 20,
+      fontSize: 18,
       fontFamily: "Poppins-Bold",
       color: activeColors.text,
     },
