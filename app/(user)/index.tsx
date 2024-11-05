@@ -1,4 +1,5 @@
 import ChatItem from "@/components/ChatItem";
+import ConfigModal from "@/components/ConfigModal";
 import IaMessage from "@/components/IaMessage";
 import PreguntasPreguntadas from "@/components/PreguntasPreguntadas";
 import ReferencesDrawer from "@/components/ReferencesDrawer";
@@ -174,10 +175,10 @@ export default function userScreen() {
                 ></MaterialCommunityIcons>
               </Pressable>
 
-              {/* <ConfigModal
+              <ConfigModal
                 isVisible={isModalVisible}
                 onClose={hideModal}
-              ></ConfigModal> */}
+              ></ConfigModal>
             </View>
           </View>
         ) : null}

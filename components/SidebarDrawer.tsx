@@ -18,6 +18,7 @@ import {
 } from "react-native";
 import { Avatar, Divider } from "react-native-paper";
 import ChatItem from "./ChatItem";
+import ConfigModal from "./ConfigModal";
 //import ConfigModal from "./ConfigModal";
 
 const chats = [
@@ -123,8 +124,7 @@ const SidebarDrawer = ({
           ></MaterialCommunityIcons>
         </Pressable>
       </View>
-      {/*       <ConfigModal isVisible={isModalVisible} onClose={hideModal}></ConfigModal>
-       */}{" "}
+      <ConfigModal isVisible={isModalVisible} onClose={hideModal}></ConfigModal>
     </Animated.View>
   );
 };
