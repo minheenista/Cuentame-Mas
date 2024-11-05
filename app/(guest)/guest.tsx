@@ -8,6 +8,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  useColorScheme,
 } from "react-native";
 
 import { router } from "expo-router";
@@ -26,6 +27,10 @@ import IaMessage from "@/components/IaMessage";
 export default function guestScreen() {
   const { width } = Dimensions.get("window");
 
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
   const [isLeftDrawerVisible, setLeftDrawerVisible] = useState(false);
   const [isRightDrawerVisible, setRightDrawerVisible] = useState(false);
 
@@ -37,8 +42,15 @@ export default function guestScreen() {
     setRightDrawerVisible(!isRightDrawerVisible);
   };
 
+  // Preguntas preguntadas
+  const [inputValue, setInputValue] = useState("");
+
+  const handlePregunta = (texto: any) => {
+    setInputValue(texto);
+  };
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles(activeColors).safeArea}>
       <MenuGuestDrawer
         isVisible={isLeftDrawerVisible}
         toggleDrawer={toggleLeftDrawer}
@@ -49,8 +61,8 @@ export default function guestScreen() {
       />
 
       {width < 880 ? (
-        <View style={styles.headerMobile}>
-          <View style={styles.headerMobile2}>
+        <View style={styles(activeColors).headerMobile}>
+          <View style={styles(activeColors).headerMobile2}>
             <TouchableOpacity onPress={toggleLeftDrawer}>
               <MaterialCommunityIcons
                 name="menu"
@@ -59,10 +71,10 @@ export default function guestScreen() {
             </TouchableOpacity>
             <Image
               source={require("./../../assets/images/logo.png")}
-              style={styles.logoHeader}
+              style={styles(activeColors).logoHeader}
             ></Image>
             <Pressable onPress={() => router.navigate("/")}>
-              <Text style={styles.titleHeader}>Cuentame +</Text>
+              <Text style={styles(activeColors).titleHeader}>Cuentame +</Text>
             </Pressable>
           </View>
           {/* =============== BOTON DE REFERENCIAS - SOLO MOSTRAR SI HAY PREGUNTAS EN MOVIL*/}
@@ -76,9 +88,9 @@ export default function guestScreen() {
       ) : null}
       {width > 880 ? <NavBar></NavBar> : null}
 
-      <View style={styles.container}>
+      <View style={styles(activeColors).container}>
         {/* ===============================   CHATS ================================= */}
-        <View style={styles.cardContainer}>
+        <View style={styles(activeColors).cardContainer}>
           <View style={{ flexDirection: "row-reverse", flex: 1 }}>
             {width > 880 ? (
               <TouchableOpacity
@@ -88,17 +100,19 @@ export default function guestScreen() {
                 <MaterialCommunityIcons
                   name="text-search"
                   size={24}
-                  color={Colors.light.text}
+                  color={activeColors.text}
                 ></MaterialCommunityIcons>
               </TouchableOpacity>
             ) : null}
 
-            <View style={styles.card}>
+            <View style={styles(activeColors).card}>
               <ScrollView style={{ gap: 20 }}>
-                <UserMessage message="Que es el RFC?" />
+                {/* <UserMessage message="Que es el RFC?" />
                 <IaMessage message="El RFC es una clave única de registro utilizada en México para identificar a las personas físicas y morales que realizan actividades económicas y deben contribuir con el gasto público ante el SAT (Servicio de Administración Tributaria). Esta clave se compone de 13 caracteres alfanuméricos, formados por las iniciales del nombre de la persona física o moral, seguido de la fecha de nacimiento o constitución y 3 caracteres más llamados homoclave que el SAT otorga para que el RFC sea una clave única e irrepetible entre todos los contribuyentes del país" />
-                {/*                 <PreguntasPreguntadas></PreguntasPreguntadas>
-                 */}{" "}
+                 */}
+                <PreguntasPreguntadas
+                  onPressPregunta={handlePregunta}
+                ></PreguntasPreguntadas>
               </ScrollView>
             </View>
           </View>
@@ -106,16 +120,20 @@ export default function guestScreen() {
           {/* ================= INPUT TEXT =============================== */}
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <TextInput
+              value={inputValue}
+              onChangeText={setInputValue}
               style={{ flex: 1, height: 50, flexShrink: 0 }}
               mode="outlined"
               label={"Ingresa tu pregunta"}
-              outlineColor={Colors.light.secondaryDark}
+              outlineColor={activeColors.secondaryDark}
               theme={{
                 colors: {
-                  primary: Colors.light.secondaryDark,
-                  text: Colors.light.text,
+                  primary: activeColors.secondaryDark,
+                  text: activeColors.text,
                   placeholder: Colors.light.text,
-                  background: Colors.light.background,
+                  background: activeColors.background,
+                  onSurface: activeColors.text,
+                  //TODO: CHANGE LABEL COLOR ACTIVE
                 },
                 fonts: {
                   regular: { fontFamily: "Poppins-Regular" },
@@ -126,13 +144,13 @@ export default function guestScreen() {
               left={
                 <TextInput.Icon
                   icon="pencil"
-                  color={Colors.light.secondaryDark}
+                  color={activeColors.secondaryDark}
                 />
               }
               right={
                 <TextInput.Icon
                   icon="microphone"
-                  color={Colors.light.textSecondary}
+                  color={activeColors.textSecondary}
                   onPress={() => {
                     throw new Error("Function not implemented.");
                   }}
@@ -141,7 +159,7 @@ export default function guestScreen() {
             ></TextInput>
 
             {/* =================== SEND BUTTON =================== */}
-            <View style={styles.sendButton}>
+            <View style={styles(activeColors).sendButton}>
               <TouchableOpacity
                 onPress={() => {
                   throw new Error("Envianding.");
@@ -149,7 +167,7 @@ export default function guestScreen() {
               >
                 <MaterialCommunityIcons
                   name="send"
-                  color={Colors.light.secondaryDark}
+                  color={activeColors.secondaryDark}
                   size={24}
                 ></MaterialCommunityIcons>
               </TouchableOpacity>
@@ -161,166 +179,82 @@ export default function guestScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: Colors.light.background,
-  },
-  headerMobile: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 10,
-    gap: 10,
-    backgroundColor: Colors.light.primary,
-  },
-  headerMobile2: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    gap: 10,
-  },
-  container: {
-    margin: 10,
-    flex: 1,
-    flexDirection: "row",
-  },
-  sidebar: {
-    width: 350,
-    backgroundColor: Colors.light.primary,
-    padding: 20,
-    justifyContent: "center",
-    alignItems: "flex-start",
-  },
-  contentContainer: {
-    flexGrow: 1,
-    justifyContent: "center",
-    padding: 16,
-  },
-  cardContainer: {
-    flex: 1,
-    flexGrow: 1,
-    marginHorizontal: 10,
-  },
-  card: {
-    flex: 1,
-    minHeight: "99%",
-    height: "99%",
-    flexGrow: 3,
-    backgroundColor: "#fff",
-    padding: 20,
-    marginBottom: 15,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  cardText: {
-    fontSize: 16,
-  },
-  chatItemContainer: {
-    flex: 1,
-    flexGrow: 1,
-    minWidth: 250,
-    gap: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  chatItem: {
-    flex: 1,
-  },
-  chatName: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-    color: Colors.light.text,
-    flex: 1,
-  },
-
-  sidebarHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  title: {
-    fontFamily: "Poppins-Bold",
-    color: Colors.light.onPrimary,
-    fontSize: 34,
-  },
-  titleHeader: {
-    fontFamily: "Poppins-Bold",
-    color: Colors.light.onPrimary,
-    fontSize: 24,
-  },
-  logo: {
-    width: 70,
-    height: 70,
-  },
-  logoHeader: {
-    width: 50,
-    height: 50,
-  },
-  buttonCreate: {
-    padding: 10,
-    borderRadius: 8,
-    color: Colors.light.onPrimary,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textButton: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-  },
-  subtitle2: {
-    fontFamily: "Poppins-Bold",
-    fontSize: 14,
-    color: Colors.light.text,
-    paddingVertical: 10,
-  },
-
-  content: {
-    flexGrow: 1,
-    height: "100%",
-    minHeight: "100%",
-    padding: 16,
-    backgroundColor: "#ecf0f1",
-  },
-
-  menuButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  menuButtonText: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 20,
-    color: "#333",
-  },
-  deleteItem: {
-    color: "red",
-  },
-  sidebarFooter: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
-  body1: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-    color: Colors.light.text,
-  },
-  sendButton: {
-    height: 50,
-    width: 50,
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    borderColor: Colors.light.secondaryDark,
-    borderWidth: 2,
-    padding: 10,
-    marginLeft: 10,
-  },
-});
+const styles = (activeColors: any) =>
+  StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: activeColors.background,
+    },
+    headerMobile: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: 10,
+      gap: 10,
+      backgroundColor: activeColors.primary,
+    },
+    headerMobile2: {
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      gap: 10,
+    },
+    container: {
+      margin: 10,
+      flex: 1,
+      flexDirection: "row",
+    },
+    sidebar: {
+      width: 350,
+      backgroundColor: activeColors.primary,
+      padding: 20,
+      justifyContent: "center",
+      alignItems: "flex-start",
+    },
+    contentContainer: {
+      flexGrow: 1,
+      justifyContent: "center",
+      padding: 16,
+    },
+    cardContainer: {
+      flex: 1,
+      flexGrow: 1,
+      marginHorizontal: 10,
+    },
+    card: {
+      flex: 1,
+      minHeight: "99%",
+      height: "99%",
+      flexGrow: 3,
+      backgroundColor: activeColors.card,
+      padding: 20,
+      marginBottom: 15,
+      borderRadius: 8,
+      shadowColor: activeColors.cardShadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 8,
+      elevation: 5,
+    },
+    titleHeader: {
+      fontFamily: "Poppins-Bold",
+      color: Colors.light.onPrimary,
+      fontSize: 24,
+    },
+    logoHeader: {
+      width: 50,
+      height: 50,
+    },
+    sendButton: {
+      height: 50,
+      width: 50,
+      alignItems: "center",
+      alignContent: "center",
+      justifyContent: "center",
+      borderRadius: 10,
+      borderColor: Colors.light.secondaryDark,
+      borderWidth: 2,
+      padding: 10,
+      marginLeft: 10,
+    },
+  });

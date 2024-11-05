@@ -167,7 +167,7 @@ const styles = (activeColors: any) =>
       height: "96%",
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
-      backgroundColor: Colors.light.primary, // Color del círculo con transparencia
+      backgroundColor: activeColors.primary, // Color del círculo con transparencia
       alignSelf: "center",
     },
     intro: {
@@ -179,7 +179,7 @@ const styles = (activeColors: any) =>
       alignItems: "center",
     },
     introTextWeb: {
-      color: "#fff",
+      color: Colors.dark.text,
       marginHorizontal: 20,
       fontSize: 72,
       fontFamily: "Poppins-Bold",
@@ -274,6 +274,6 @@ const styles = (activeColors: any) =>
     footer: {
       marginTop: 20,
       height: 50,
-      backgroundColor: "#F09D99",
+      backgroundColor: activeColors.primary,
     },
   });

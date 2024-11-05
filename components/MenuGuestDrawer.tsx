@@ -15,8 +15,10 @@ import {
   FlatList,
   Pressable,
   Easing,
+  useColorScheme,
 } from "react-native";
 import BlackButton from "./BlackButton";
+import PinkButton from "./PinkButton";
 
 const ItemDrawer = ({
   icon,
@@ -27,15 +29,22 @@ const ItemDrawer = ({
   name: any;
   route: any;
 }) => {
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
   return (
     <View>
-      <Pressable style={styles.item} onPress={() => router.navigate(route)}>
+      <Pressable
+        style={styles(activeColors).item}
+        onPress={() => router.navigate(route)}
+      >
         <MaterialCommunityIcons
           name={icon}
           size={24}
-          color={Colors.light.onBackground}
+          color={activeColors.onBackground}
         ></MaterialCommunityIcons>
-        <Text style={styles.textDrawer}> {name}</Text>
+        <Text style={styles(activeColors).textDrawer}> {name}</Text>
       </Pressable>
     </View>
   );
@@ -63,21 +72,28 @@ const MenuGuestDrawer = ({
     }).start();
   }, [isVisible]);
 
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
   return (
     <Animated.View
-      style={[styles.drawer, { transform: [{ translateX: animatedValue }] }]}
+      style={[
+        styles(activeColors).drawer,
+        { transform: [{ translateX: animatedValue }] },
+      ]}
     >
       <TouchableOpacity onPress={toggleDrawer}>
-        <Text style={styles.closeButton}>X</Text>
+        <Text style={styles(activeColors).closeButton}>X</Text>
       </TouchableOpacity>
 
       {/* ====================== SIDEBAR TITLE =============================== */}
-      <View style={styles.sidebarHeader}>
+      <View style={styles(activeColors).sidebarHeader}>
         <Image
           source={require("./../assets/images/logo.png")}
-          style={styles.logo}
+          style={styles(activeColors).logo}
         ></Image>
-        <Text style={styles.title}> Cuentame +</Text>
+        <Text style={styles(activeColors).title}> Cuentame +</Text>
       </View>
       <View>
         <ItemDrawer
@@ -101,126 +117,82 @@ const MenuGuestDrawer = ({
           route={"/privacy"}
         ></ItemDrawer>
       </View>
-      <View style={styles.sidebarFooter}>
-        <BlackButton
-          handlePress={() => router.navigate("/login")}
-          title="Iniciar Sesión"
-          isLoading={false}
-        ></BlackButton>
+      <View style={styles(activeColors).sidebarFooter}>
+        {isDarkMode ? (
+          <PinkButton
+            handlePress={() => router.navigate("/login")}
+            title="Iniciar Sesión"
+            isLoading={false}
+          ></PinkButton>
+        ) : (
+          <BlackButton
+            handlePress={() => router.navigate("/login")}
+            title="Iniciar Sesión"
+            isLoading={false}
+          ></BlackButton>
+        )}
       </View>
     </Animated.View>
   );
 };
 
-const styles = StyleSheet.create({
-  drawer: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    zIndex: 1000,
-    width: drawerWidth,
-    backgroundColor: Colors.light.primary,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-    padding: 20,
-  },
-  closeButton: {
-    textAlign: "right",
-    fontSize: 18,
-    fontWeight: "bold",
-    fontFamily: "Poppins-Bold",
-  },
-
-  sidebar: {
-    width: "auto",
-    backgroundColor: Colors.light.primary,
-    padding: 20,
-    justifyContent: "center",
-    alignItems: "flex-start",
-  },
-  sidebarHeader: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  title: {
-    fontFamily: "Poppins-Bold",
-    color: Colors.light.onPrimary,
-    fontSize: 26,
-  },
-  logo: {
-    width: 60,
-    height: 60,
-  },
-  buttonCreate: {
-    padding: 10,
-    borderRadius: 8,
-    color: Colors.light.onPrimary,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textButton: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-  },
-  subtitle2: {
-    marginVertical: 15,
-    fontFamily: "Poppins-Bold",
-    fontSize: 14,
-    color: Colors.light.text,
-  },
-  chatItemContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  chatItem: {
-    flex: 1,
-  },
-  chatName: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-    color: Colors.light.text,
-  },
-  menuButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  menuButtonText: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 20,
-    color: "#333",
-  },
-  sidebarFooter: {
-    marginTop: "auto",
-    marginBottom: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
-  body1: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 16,
-    color: Colors.light.text,
-  },
-  textDrawer: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 12,
-    color: Colors.light.text,
-  },
-  item: {
-    alignContent: "center",
-    verticalAlign: "middle",
-    alignItems: "center",
-    gap: 10,
-    padding: 10,
-    flexDirection: "row",
-  },
-});
+const styles = (activeColors: any) =>
+  StyleSheet.create({
+    drawer: {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      zIndex: 1000,
+      width: drawerWidth,
+      backgroundColor: activeColors.primaryDark,
+      shadowColor: activeColors.cardShadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 8,
+      elevation: 5,
+      padding: 20,
+    },
+    closeButton: {
+      textAlign: "right",
+      fontSize: 18,
+      fontWeight: "bold",
+      fontFamily: "Poppins-Bold",
+      color: activeColors.text,
+    },
+    sidebarHeader: {
+      flexDirection: "column",
+      alignItems: "flex-start",
+    },
+    title: {
+      fontFamily: "Poppins-Bold",
+      color: activeColors.lightTitle,
+      fontSize: 26,
+    },
+    logo: {
+      width: 60,
+      height: 60,
+    },
+    sidebarFooter: {
+      marginTop: "auto",
+      marginBottom: 20,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-around",
+    },
+    textDrawer: {
+      fontFamily: "Poppins-Regular",
+      fontSize: 12,
+      color: activeColors.text,
+    },
+    item: {
+      alignContent: "center",
+      verticalAlign: "middle",
+      alignItems: "center",
+      gap: 10,
+      padding: 10,
+      flexDirection: "row",
+    },
+  });
 
 export default MenuGuestDrawer;

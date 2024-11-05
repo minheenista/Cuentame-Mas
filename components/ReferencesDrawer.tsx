@@ -9,6 +9,7 @@ import {
   Linking,
   Pressable,
   Easing,
+  useColorScheme,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -16,15 +17,19 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 const drawerWidth = 300;
 
 const ReferenciaItem = ({ referencia }: { referencia: any }) => {
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
   return (
-    <View style={styles.refer}>
+    <View style={styles(activeColors).refer}>
       <MaterialIcons
         name="menu-book"
         size={24}
-        color={Colors.light.textSecondary}
+        color={activeColors.textSecondary}
       />
       <View>
-        <Text numberOfLines={1} style={styles.sub1}>
+        <Text numberOfLines={1} style={styles(activeColors).sub1}>
           {referencia.title}
         </Text>
         <Pressable
@@ -32,7 +37,7 @@ const ReferenciaItem = ({ referencia }: { referencia: any }) => {
             Linking.openURL(referencia.link);
           }}
         >
-          <Text numberOfLines={1} style={styles.sub2}>
+          <Text numberOfLines={1} style={styles(activeColors).sub2}>
             {referencia.link}
           </Text>
         </Pressable>
@@ -74,22 +79,29 @@ const ReferencesDrawer = ({
     }).start();
   }, [isVisible]);
 
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
   return (
     <Animated.View
-      style={[styles.drawer, { transform: [{ translateX: animatedValue }] }]}
+      style={[
+        styles(activeColors).drawer,
+        { transform: [{ translateX: animatedValue }] },
+      ]}
     >
       <View>
         <FlatList
           ListHeaderComponent={
-            <View style={styles.header}>
+            <View style={styles(activeColors).header}>
               <TouchableOpacity onPress={toggleDrawer}>
                 <MaterialCommunityIcons
                   name="text-search"
                   size={24}
-                  color={Colors.light.textSecondary}
+                  color={activeColors.textSecondary}
                 />
               </TouchableOpacity>
-              <Text style={styles.h6}>Referencias</Text>
+              <Text style={styles(activeColors).h6}>Referencias</Text>
             </View>
           }
           data={referencias}
@@ -101,51 +113,52 @@ const ReferencesDrawer = ({
   );
 };
 
-const styles = StyleSheet.create({
-  drawer: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    right: 0,
-    width: drawerWidth,
-    backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-    padding: 20,
-    zIndex: 1000,
-  },
-  header: {
-    flexDirection: "row",
-    gap: 10,
-    alignItems: "center",
-  },
-  h6: {
-    fontSize: 20,
-    fontFamily: "Poppins-Bold",
-    color: Colors.light.text,
-  },
-  refer: {
-    flexDirection: "row",
-    gap: 10,
-    alignItems: "center",
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.light.secondary,
-  },
-  sub1: {
-    fontSize: 16,
-    fontFamily: "Poppins-Regular",
-    color: Colors.light.text,
-    width: "80%",
-  },
-  sub2: {
-    fontSize: 14,
-    fontFamily: "Poppins-Regular",
-    color: Colors.light.textHint,
-  },
-});
+const styles = (activeColors: any) =>
+  StyleSheet.create({
+    drawer: {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      right: 0,
+      width: drawerWidth,
+      backgroundColor: activeColors.card,
+      shadowColor: activeColors.cardShadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 8,
+      elevation: 5,
+      padding: 20,
+      zIndex: 1000,
+    },
+    header: {
+      flexDirection: "row",
+      gap: 10,
+      alignItems: "center",
+    },
+    h6: {
+      fontSize: 20,
+      fontFamily: "Poppins-Bold",
+      color: activeColors.text,
+    },
+    refer: {
+      flexDirection: "row",
+      gap: 10,
+      alignItems: "center",
+      padding: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: activeColors.secondary,
+    },
+    sub1: {
+      fontSize: 16,
+      fontFamily: "Poppins-Regular",
+      color: activeColors.text,
+      width: "80%",
+    },
+    sub2: {
+      fontSize: 14,
+      fontFamily: "Poppins-Regular",
+      color: activeColors.textHint,
+    },
+  });
 
 export default ReferencesDrawer;
