@@ -8,7 +8,7 @@ import UserMessage from "@/components/UserMessage";
 import { Colors } from "@/constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -23,6 +23,10 @@ import {
   useColorScheme,
 } from "react-native";
 import { Avatar, Divider, TextInput } from "react-native-paper";
+import "regenerator-runtime/runtime";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 const chats = [
   { id: "1", name: "Que son los puntos infonavit y como usarlos" },
@@ -63,6 +67,35 @@ export default function userScreen() {
 
   const handlePregunta = (texto: any) => {
     setInputValue(texto);
+  };
+
+  // Microfono
+  // Microfono
+  const [isListening, setIsListening] = useState(false);
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
+
+  useEffect(() => {
+    setInputValue(transcript);
+  }, [transcript]);
+
+  const toggleSpeech = () => {
+    if (isListening) {
+      SpeechRecognition.stopListening();
+      setIsListening(false);
+    } else {
+      SpeechRecognition.startListening({ continuous: true });
+      setIsListening(true);
+    }
   };
 
   return (
@@ -241,10 +274,10 @@ export default function userScreen() {
               }
               right={
                 <TextInput.Icon
-                  icon="microphone"
+                  icon={isListening ? "microphone-off" : "microphone"}
                   color={activeColors.textSecondary}
                   onPress={() => {
-                    throw new Error("Function not implemented.");
+                    toggleSpeech();
                   }}
                 />
               }

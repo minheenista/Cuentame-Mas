@@ -17,12 +17,16 @@ import NavBar from "@/components/NavBar";
 import { TextInput } from "react-native-paper";
 import { Colors } from "@/constants/Colors";
 import MenuGuestDrawer from "@/components/MenuGuestDrawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import ReferencesDrawer from "@/components/ReferencesDrawer";
 import PreguntasPreguntadas from "@/components/PreguntasPreguntadas";
 import UserMessage from "@/components/UserMessage";
 import IaMessage from "@/components/IaMessage";
+import "regenerator-runtime/runtime";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 export default function guestScreen() {
   const { width } = Dimensions.get("window");
@@ -47,6 +51,34 @@ export default function guestScreen() {
 
   const handlePregunta = (texto: any) => {
     setInputValue(texto);
+  };
+
+  // Microfono
+  const [isListening, setIsListening] = useState(false);
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
+
+  useEffect(() => {
+    setInputValue(transcript);
+  }, [transcript]);
+
+  const toggleSpeech = () => {
+    if (isListening) {
+      SpeechRecognition.stopListening();
+      setIsListening(false);
+    } else {
+      SpeechRecognition.startListening({ continuous: true });
+      setIsListening(true);
+    }
   };
 
   return (
@@ -149,10 +181,10 @@ export default function guestScreen() {
               }
               right={
                 <TextInput.Icon
-                  icon="microphone"
+                  icon={isListening ? "microphone-off" : "microphone"}
                   color={activeColors.textSecondary}
                   onPress={() => {
-                    throw new Error("Function not implemented.");
+                    toggleSpeech();
                   }}
                 />
               }
