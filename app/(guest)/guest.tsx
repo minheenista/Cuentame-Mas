@@ -10,7 +10,6 @@ import {
   ScrollView,
   useColorScheme,
 } from "react-native";
-
 import { router } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NavBar from "@/components/NavBar";
@@ -63,9 +62,10 @@ export default function guestScreen() {
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
-  }
+  // TODO: Configurar Micro en movil
+  /* if (!browserSupportsSpeechRecognition) {
+    return <Text>Browser doesn't support speech recognition.</Text>;
+  } */
 
   useEffect(() => {
     setInputValue(transcript);

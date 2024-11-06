@@ -8,7 +8,8 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
+import { Audio } from "expo-av";
+import { requestPermissionsAsync } from "expo-av/build/Audio";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Dimensions } from "react-native";
 import { ApolloProvider } from "@apollo/client";
@@ -37,6 +38,17 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+      const getPermission = async () => {
+        const audioStatus = await Audio.requestPermissionsAsync();
+        const recordingStatus = await requestPermissionsAsync();
+        if (
+          audioStatus.status !== "granted" ||
+          recordingStatus.status !== "granted"
+        ) {
+          alert("Se necesita permiso para usar el micrófono.");
+        }
+      };
+      getPermission();
     }
   }, [loaded]);
 
@@ -44,6 +56,20 @@ export default function RootLayout() {
     return null;
   }
 
+  /*   useEffect(() => {
+    const getPermission = async () => {
+      const audioStatus = await Audio.requestPermissionsAsync();
+      const recordingStatus = await requestPermissionsAsync();
+      if (
+        audioStatus.status !== "granted" ||
+        recordingStatus.status !== "granted"
+      ) {
+        alert("Se necesita permiso para usar el micrófono.");
+      }
+    };
+    getPermission();
+  }, []);
+ */
   return (
     <ApolloProvider client={client}>
       <PaperProvider>

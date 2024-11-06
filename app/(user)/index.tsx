@@ -70,7 +70,6 @@ export default function userScreen() {
   };
 
   // Microfono
-  // Microfono
   const [isListening, setIsListening] = useState(false);
 
   const {
@@ -80,9 +79,10 @@ export default function userScreen() {
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
-  }
+  // TODO: Configurar Micro en movil
+  /* if (!browserSupportsSpeechRecognition) {
+    return <Text>Browser doesn't support speech recognition.</Text>;
+  } */
 
   useEffect(() => {
     setInputValue(transcript);
