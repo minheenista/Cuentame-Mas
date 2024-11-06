@@ -154,6 +154,7 @@ const styles = (activeColors: any) =>
       padding: 20,
     },
     closeButton: {
+      marginTop: 20,
       textAlign: "right",
       fontSize: 18,
       fontWeight: "bold",

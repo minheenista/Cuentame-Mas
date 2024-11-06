@@ -148,6 +148,7 @@ const styles = (activeColors: any) =>
     },
     closeButton: {
       textAlign: "right",
+      marginTop: 20,
       fontSize: 18,
       fontWeight: "bold",
       fontFamily: "Poppins-Bold",

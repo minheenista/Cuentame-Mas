@@ -133,6 +133,7 @@ const styles = (activeColors: any) =>
     header: {
       flexDirection: "row",
       gap: 10,
+      marginTop: 20,
       alignItems: "center",
     },
     h6: {
