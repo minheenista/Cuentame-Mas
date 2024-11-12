@@ -27,12 +27,39 @@ import "regenerator-runtime/runtime";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 
-const chats = [
-  { id: "1", name: "Que son los puntos infonavit y como usarlos" },
-  { id: "2", name: "Chat 2" },
-  { id: "3", name: "Chat 3" },
-];
+const ME = gql`
+  query Me {
+    me {
+      _id
+      name
+      lastname
+      email
+      regimenFiscal
+      password
+      createdAt
+      updatedAt
+      reminders {
+        _id
+        userId
+        title
+        description
+        finishDate
+        createdAt
+        updatedAt
+      }
+      chats {
+        _id
+        userId
+        iamodelId
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 
 export default function userScreen() {
   const { width } = Dimensions.get("window");
@@ -58,7 +85,7 @@ export default function userScreen() {
   };
 
   const handleSelectChat = (chatId: any) => {
-    console.log("Selected Chat ID:", chatId);
+    console.log("Selected Chat ID:", chatId._id);
     // Navegar a la pantalla del chat con el ID correspondiente
   };
 
@@ -71,7 +98,6 @@ export default function userScreen() {
 
   // Microfono
   const [isListening, setIsListening] = useState(false);
-
   const {
     transcript,
     listening,
@@ -97,6 +123,22 @@ export default function userScreen() {
       setIsListening(true);
     }
   };
+
+  // OBTENER INFORMACION DEL USUARIO
+
+  const { data, loading, error } = useQuery(ME);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+
+  const { me } = data || {}; // Desestructuramos 'me' directamente
+
+  if (!me) {
+    return <Text>No user data available.</Text>;
+  }
+
+  const Chats = me.chats; // Accedemos directamente a los 'chats'
+  console.log("CHATS", Chats);
 
   return (
     <SafeAreaView style={styles(activeColors).safeArea}>
@@ -176,7 +218,7 @@ export default function userScreen() {
             </Text>
 
             <FlatList
-              data={chats}
+              data={Chats}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <ChatItem
@@ -196,8 +238,11 @@ export default function userScreen() {
                   minWidth: 240,
                 }}
               >
-                <Avatar.Text label="A" size={36}></Avatar.Text>
-                <Text style={styles(activeColors).body1}>Usuario</Text>
+                <Avatar.Text
+                  label={data.me.name.charAt(0).toUpperCase()}
+                  size={36}
+                ></Avatar.Text>
+                <Text style={styles(activeColors).body1}>{data.me.name}</Text>
               </View>
 
               <Pressable onPress={showModal}>
@@ -211,6 +256,7 @@ export default function userScreen() {
               <ConfigModal
                 isVisible={isModalVisible}
                 onClose={hideModal}
+                userInfo={data.me}
               ></ConfigModal>
             </View>
           </View>

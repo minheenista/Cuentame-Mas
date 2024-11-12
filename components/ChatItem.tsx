@@ -18,7 +18,7 @@ const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [newChatName, setNewChatName] = useState(chat.name);
+  const [newChatName, setNewChatName] = useState(chat.title);
 
   const showMenu = () => setMenuVisible(true);
   const hideMenu = () => setMenuVisible(false);
@@ -36,7 +36,7 @@ const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
 
   const handleCancelEdit = () => {
     setIsEditing(false);
-    setNewChatName(chat.name); // Revertir al nombre original si se cancela
+    setNewChatName(chat.title); // Revertir al nombre original si se cancela
   };
 
   return (
@@ -72,7 +72,7 @@ const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
             onPress={() => onSelectChat(chat.id)}
             style={styles(activeColors).chatItem}
           >
-            <Text style={styles(activeColors).chatName}>{chat.name}</Text>
+            <Text style={styles(activeColors).chatName}>{chat.title}</Text>
           </TouchableOpacity>
           <Menu
             visible={menuVisible}

@@ -19,7 +19,7 @@ import {
 import { Avatar, Divider } from "react-native-paper";
 import ChatItem from "./ChatItem";
 import ConfigModal from "./ConfigModal";
-//import ConfigModal from "./ConfigModal";
+import { gql, useQuery } from "@apollo/client";
 
 const chats = [
   { id: "1", name: "Que son los puntos infonavit y como usarlos?" },
@@ -27,6 +27,38 @@ const chats = [
   { id: "3", name: "Chat 3" },
   // Agrega más chats según sea necesario
 ];
+
+const ME = gql`
+  query Me {
+    me {
+      _id
+      name
+      lastname
+      email
+      regimenFiscal
+      password
+      createdAt
+      updatedAt
+      reminders {
+        _id
+        userId
+        title
+        description
+        finishDate
+        createdAt
+        updatedAt
+      }
+      chats {
+        _id
+        userId
+        iamodelId
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 
 const drawerWidth = 300;
 
@@ -60,9 +92,24 @@ const SidebarDrawer = ({
   const hideModal = () => setModalVisible(false);
 
   const handleSelectChat = (chatId: any) => {
-    console.log("Selected Chat ID:", chatId);
+    console.log("Selected Chat ID:", chatId._id);
     // Navegar a la pantalla del chat con el ID correspondiente
   };
+
+  // Info de usuario
+  const { data, loading, error } = useQuery(ME);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+
+  const { me } = data || {}; // Desestructuramos 'me' directamente
+
+  if (!me) {
+    return <Text>No user data available.</Text>;
+  }
+
+  const Chats = me.chats; // Accedemos directamente a los 'chats'
+  console.log(Chats);
 
   return (
     <Animated.View
@@ -103,7 +150,7 @@ const SidebarDrawer = ({
         Conversaciones anteriores
       </Text>
       <FlatList
-        data={chats}
+        data={Chats}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ChatItem chat={item} onSelectChat={handleSelectChat}></ChatItem>
@@ -112,8 +159,11 @@ const SidebarDrawer = ({
       <Divider />
       <View style={styles(activeColors).sidebarFooter}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-          <Avatar.Text label="A" size={36}></Avatar.Text>
-          <Text style={styles(activeColors).body1}>Usuario</Text>
+          <Avatar.Text
+            label={data.me.name.charAt(0).toUpperCase()}
+            size={36}
+          ></Avatar.Text>
+          <Text style={styles(activeColors).body1}>{data.me.name}</Text>
         </View>
 
         <Pressable onPress={showModal}>
@@ -124,7 +174,11 @@ const SidebarDrawer = ({
           ></MaterialCommunityIcons>
         </Pressable>
       </View>
-      <ConfigModal isVisible={isModalVisible} onClose={hideModal}></ConfigModal>
+      <ConfigModal
+        isVisible={isModalVisible}
+        onClose={hideModal}
+        userInfo={data.me}
+      ></ConfigModal>
     </Animated.View>
   );
 };
