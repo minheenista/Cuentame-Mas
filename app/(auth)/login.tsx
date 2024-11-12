@@ -67,16 +67,12 @@ export default function loginScreen() {
       const { accessToken, tokenType } = data.loginUser;
 
       //guardar token en localstorage
-
       if (accessToken) {
-        await AsyncStorage.setItem("token", `${tokenType} ${accessToken}`);
-        //console.log("Token guardado:", `${tokenType} ${accessToken}`);
+        await AsyncStorage.setItem("token", `${accessToken}`);
       } else {
         console.warn("No se obtuvo un token");
       }
-      //console.log(accessToken);
       setMessage("Usuario autenticado correctamente");
-      //redirigir a chats
       router.navigate("/(user)/");
     } catch (error: any) {
       setMessage(error.message);
