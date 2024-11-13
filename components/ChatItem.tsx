@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { gql, useMutation } from "@apollo/client";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
@@ -9,6 +10,19 @@ import {
   useColorScheme,
 } from "react-native";
 import { Menu, TextInput } from "react-native-paper";
+
+const EDIT_CHAT = gql`
+  mutation UpdateChat($input: UpdateChatInput!) {
+    updateChat(input: $input) {
+      _id
+      userId
+      iamodelId
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 const ChatItem = ({ chat, id }: { chat: any; id: any }) => {
   const colorScheme = useColorScheme();
@@ -28,9 +42,12 @@ const ChatItem = ({ chat, id }: { chat: any; id: any }) => {
     hideMenu();
   };
 
+  const [updateChat] = useMutation(EDIT_CHAT);
+
   const handleSave = () => {
     // Aquí puedes realizar la acción de guardar el nuevo nombre del chat
     console.log("Nuevo nombre del chat:", newChatName);
+
     setIsEditing(false);
   };
 

@@ -92,7 +92,7 @@ const SidebarDrawer = ({
   const hideModal = () => setModalVisible(false);
 
   const handleSelectChat = (chatId: any) => {
-    console.log("Selected Chat ID:", chatId._id);
+    console.log("Selected Chat ID:", chatId);
     // Navegar a la pantalla del chat con el ID correspondiente
   };
 
@@ -150,10 +150,11 @@ const SidebarDrawer = ({
       </Text>
       <FlatList
         data={Chats}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
+              console.log("Selected Chat ID desde drawer:", item._id);
               handleSelectChat(item._id);
             }}
           >
