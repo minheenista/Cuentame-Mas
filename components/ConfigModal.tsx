@@ -1,5 +1,5 @@
 // ModalWithTabs.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Dimensions,
   useColorScheme,
   ScrollView,
+  FlatList,
 } from "react-native";
 import Modal from "react-native-modal";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
@@ -19,6 +20,60 @@ import ReminderItem from "./ReminderItem";
 import IaMessageBookmark from "./IaMessageBookmark";
 import { Dropdown } from "react-native-element-dropdown";
 import { DatePickerInput } from "react-native-paper-dates";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { registerTranslation } from "react-native-paper-dates";
+registerTranslation("pl", {
+  save: "Save",
+  selectSingle: "Select date",
+  selectMultiple: "Select dates",
+  selectRange: "Select period",
+  notAccordingToDateFormat: (inputFormat) =>
+    `Date format must be ${inputFormat}`,
+  mustBeHigherThan: (date) => `Must be later then ${date}`,
+  mustBeLowerThan: (date) => `Must be earlier then ${date}`,
+  mustBeBetween: (startDate, endDate) =>
+    `Must be between ${startDate} - ${endDate}`,
+  dateIsDisabled: "Day is not allowed",
+  previous: "Previous",
+  next: "Next",
+  typeInDate: "Type in date",
+  pickDateFromCalendar: "Pick date from calendar",
+  close: "Close",
+  hour: "",
+  minute: "",
+});
+
+const ME = gql`
+  query Me {
+    me {
+      _id
+      name
+      lastname
+      email
+      regimenFiscal
+      password
+      createdAt
+      updatedAt
+      reminders {
+        _id
+        userId
+        title
+        description
+        finishDate
+        createdAt
+        updatedAt
+      }
+      chats {
+        _id
+        userId
+        iamodelId
+        title
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
 
 const FirstTab = () => {
   const width = Dimensions.get("window").width;
@@ -28,7 +83,7 @@ const FirstTab = () => {
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
   const isMobile = width < 900; // Ajusta el umbral según tus necesidades
-  const data = [
+  const datadiscales = [
     { label: "Item 1", value: "1" },
     { label: "Item 2", value: "2" },
     { label: "Item 3", value: "3" },
@@ -89,6 +144,26 @@ const FirstTab = () => {
     return null;
   };
 
+  // OBTENER INFORMACION DEL USUARIO
+
+  const { data, loading, error } = useQuery(ME);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+
+  const { me } = data || {}; // Desestructuramos 'me' directamente
+
+  if (!me) {
+    return <Text>No user data available.</Text>;
+  }
+
+  const User = me;
+  useEffect(() => {
+    if (User) {
+      setName(User.name);
+      setSurname(User.lastname);
+    }
+  }, [User]);
   return (
     <View style={styles(activeColors).tabContent}>
       <ScrollView>
@@ -175,7 +250,7 @@ const FirstTab = () => {
               }
             >
               <Text style={styles(activeColors).body}>Correo Electrónico</Text>
-              <Text style={styles(activeColors).body}>ejemplo@gmail.com</Text>
+              <Text style={styles(activeColors).body}>{User.email}</Text>
             </View>
             <View
               style={
@@ -299,7 +374,7 @@ const FirstTab = () => {
                   ]}
                   placeholderStyle={styles(activeColors).placeholderStyle}
                   selectedTextStyle={styles(activeColors).selectedTextStyle}
-                  data={data}
+                  data={datadiscales}
                   maxHeight={300}
                   labelField="label"
                   valueField="value"
@@ -322,13 +397,63 @@ const FirstTab = () => {
   );
 };
 
+const GET_ALL_REMINDERS = gql`
+  query GetAllReminders(
+    $orderBy: String!
+    $limit: Int!
+    $offset: Int!
+    $desc: Boolean!
+  ) {
+    getAllReminders(
+      orderBy: $orderBy
+      limit: $limit
+      offset: $offset
+      desc: $desc
+    ) {
+      items {
+        _id
+        userId
+        title
+        description
+        finishDate
+        createdAt
+        updatedAt
+      }
+      totalItemsCount
+    }
+  }
+`;
+
+const CREATE_REMINDER = gql`
+  mutation CreateReminder($input: CreateReminderInput!) {
+    createReminder(input: $input) {
+      _id
+      userId
+      title
+      description
+      finishDate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 const SecondTab = () => {
+  const width = Dimensions.get("window").width;
+  const isMobile = width < 900;
+
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
+  const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
+  // Notificaciones
   const [isPushOn, setIsPushOn] = React.useState(false);
   const onToggleSwitchPush = () => setIsPushOn(!isPushOn);
 
   const [isEmailOn, setIsEmailOn] = React.useState(false);
   const onToggleSwitchEmail = () => setIsEmailOn(!isEmailOn);
 
+  // Modal Crear Recordatorio ==================================================
   const [isSmallModalVisible, setIsSmallModalVisible] = useState(false);
 
   const openSmallModal = () => setIsSmallModalVisible(true);
@@ -337,136 +462,184 @@ const SecondTab = () => {
   const [inputDate, setInputDate] = React.useState<Date | undefined>(
     new Date()
   );
+  const [inputTitleReminder, setInputTitleReminder] = useState("");
+  const [message, setMessage] = useState("");
 
-  const width = Dimensions.get("window").width;
-  const isMobile = width < 900; // Detecta si el dispositivo es móvil
+  // Crear Recordatorio =========================================================
+  const [createReminder] = useMutation(CREATE_REMINDER);
 
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
-  const activeColors = Colors[isDarkMode ? "dark" : "light"];
+  const { data, loading, error, refetch } = useQuery(ME);
+  const reminders = data.me.reminders;
+  console.log(reminders);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+
+  const handleCreateReminder = async () => {
+    if (inputDate == null || inputTitleReminder == "") {
+      setMessage("Todos los campos son obligatorios");
+      return;
+    } else {
+      setMessage("");
+      try {
+        const { data } = await createReminder({
+          variables: {
+            input: {
+              title: inputTitleReminder,
+              finishDate: inputDate,
+            },
+          },
+        });
+        console.log(data);
+        closeSmallModal();
+        refetch();
+        setInputTitleReminder("");
+      } catch (error: any) {
+        setMessage(error.message);
+      }
+    }
+  };
 
   return (
     <View style={styles(activeColors).tabContent}>
-      <View
-        style={[
-          isMobile
-            ? styles(activeColors).mobileColumn
-            : styles(activeColors).columnMini,
-          { justifyContent: "space-around" },
-        ]}
-      >
-        <View>
-          <View style={styles(activeColors).columnMini}>
-            <Text style={styles(activeColors).h6}>Recordatorios</Text>
-            <Pressable
-              style={styles(activeColors).buttonAdd}
-              onPress={openSmallModal}
-            >
-              <MaterialCommunityIcons
-                name="plus"
-                size={24}
-                color={activeColors.primary}
-              />
-              <Text
-                style={[
-                  styles(activeColors).body,
-                  styles(activeColors).primary,
-                ]}
+      <ScrollView>
+        <View
+          style={[
+            isMobile
+              ? styles(activeColors).mobileColumn
+              : styles(activeColors).columnMini,
+            { justifyContent: "space-around" },
+          ]}
+        >
+          <View>
+            <View style={styles(activeColors).columnMini}>
+              <Text style={styles(activeColors).h6}>Recordatorios</Text>
+              <Pressable
+                style={styles(activeColors).buttonAdd}
+                onPress={openSmallModal}
               >
-                Agregar
-              </Text>
-            </Pressable>
-          </View>
-          <ReminderItem
-            date={"24/12/24"}
-            id={2}
-            title={"Pagar tdc"}
-          ></ReminderItem>
-        </View>
-        <View>
-          <Text style={styles(activeColors).h6}>Notificaciones</Text>
-
-          <View style={styles(activeColors).notis}>
-            <Text style={styles(activeColors).body}>Notificaciones Push</Text>
-            <Switch
-              color={activeColors.primary}
-              value={isPushOn}
-              onValueChange={onToggleSwitchPush}
+                <MaterialCommunityIcons
+                  name="plus"
+                  size={24}
+                  color={activeColors.primary}
+                />
+                <Text
+                  style={[
+                    styles(activeColors).body,
+                    styles(activeColors).primary,
+                  ]}
+                >
+                  Agregar
+                </Text>
+              </Pressable>
+            </View>
+            <FlatList
+              data={reminders}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <ReminderItem
+                  date={item.finishDate}
+                  id={item._id}
+                  title={item.title}
+                ></ReminderItem>
+              )}
             />
           </View>
-          <View style={styles(activeColors).notis}>
-            <Text style={styles(activeColors).body}>
-              Notificaciones por email
-            </Text>
-            <Switch
-              color={activeColors.primary}
-              value={isEmailOn}
-              onValueChange={onToggleSwitchEmail}
-            />
-          </View>
-        </View>
-      </View>
+          <View>
+            <Text style={styles(activeColors).h6}>Notificaciones</Text>
 
-      {/* Modal Pequeño */}
-      <Modal isVisible={isSmallModalVisible} onBackdropPress={closeSmallModal}>
-        <View style={styles(activeColors).smallModalContainer}>
-          <View style={styles(activeColors).row}>
-            <Text style={styles(activeColors).smallModalTitle}>
-              Agregar Recordatorio
-            </Text>
-            <Pressable
-              style={styles(activeColors).modalButton}
-              onPress={closeSmallModal}
-            >
-              <MaterialCommunityIcons
-                name="close"
-                size={24}
+            <View style={styles(activeColors).notis}>
+              <Text style={styles(activeColors).body}>Notificaciones Push</Text>
+              <Switch
                 color={activeColors.primary}
-              ></MaterialCommunityIcons>
-            </Pressable>
-          </View>
-          <View style={styles(activeColors).row}>
-            <Text style={styles(activeColors).body}>Nombre</Text>
-            <TextInput
-              placeholder="Nombre"
-              mode="outlined"
-              outlineColor={activeColors.primary}
-              activeOutlineColor={activeColors.primary}
-              style={
-                isMobile ? { maxHeight: 50, width: "70%" } : { maxHeight: 50 }
-              }
-            ></TextInput>
-          </View>
-          <View style={styles(activeColors).row}>
-            <Text style={styles(activeColors).body}>Fecha</Text>
-            <View
-              style={{
-                justifyContent: "center",
-                flex: 1,
-                alignItems: "center",
-              }}
-            >
-              <DatePickerInput
-                locale="es"
-                label="Fecha"
-                value={inputDate}
-                onChange={(d) => setInputDate(d)}
-                inputMode="end"
-                style={{ width: 200 }}
-                mode="outlined"
-                outlineColor={activeColors.primary}
-                activeOutlineColor={activeColors.primary}
+                value={isPushOn}
+                onValueChange={onToggleSwitchPush}
+              />
+            </View>
+            <View style={styles(activeColors).notis}>
+              <Text style={styles(activeColors).body}>
+                Notificaciones por email
+              </Text>
+              <Switch
+                color={activeColors.primary}
+                value={isEmailOn}
+                onValueChange={onToggleSwitchEmail}
               />
             </View>
           </View>
-          <Pressable
-            style={styles(activeColors).pinkButton}
-            onPress={closeSmallModal}
-          >
-            <Text style={styles(activeColors).modalButtonText}>Guardar</Text>
-          </Pressable>
         </View>
-      </Modal>
+
+        {/* Modal Pequeño CREAR RECORDATORIO*/}
+        <Modal
+          isVisible={isSmallModalVisible}
+          onBackdropPress={closeSmallModal}
+        >
+          <View style={styles(activeColors).smallModalContainer}>
+            <View style={styles(activeColors).row}>
+              <Text style={styles(activeColors).smallModalTitle}>
+                Agregar Recordatorio
+              </Text>
+              <Pressable
+                style={styles(activeColors).modalButton}
+                onPress={closeSmallModal}
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={24}
+                  color={activeColors.primary}
+                ></MaterialCommunityIcons>
+              </Pressable>
+            </View>
+            <View style={styles(activeColors).row}>
+              <Text style={styles(activeColors).body}>Nombre</Text>
+              <TextInput
+                placeholder="Nombre"
+                mode="outlined"
+                onChangeText={(text) => setInputTitleReminder(text)}
+                value={inputTitleReminder}
+                outlineColor={activeColors.primary}
+                activeOutlineColor={activeColors.primary}
+                style={
+                  isMobile ? { maxHeight: 50, width: "70%" } : { maxHeight: 50 }
+                }
+              ></TextInput>
+            </View>
+            <View style={styles(activeColors).row}>
+              <Text style={styles(activeColors).body}>Fecha</Text>
+              <View
+                style={{
+                  justifyContent: "center",
+                  flex: 1,
+                  alignItems: "center",
+                }}
+              >
+                <DatePickerInput
+                  locale="es"
+                  validRange={{ startDate: new Date() }}
+                  label="Fecha"
+                  value={inputDate}
+                  onChange={(d) => setInputDate(d)}
+                  inputMode="end"
+                  style={{ width: 200 }}
+                  mode="outlined"
+                  outlineColor={activeColors.primary}
+                  activeOutlineColor={activeColors.primary}
+                />
+              </View>
+            </View>
+            <Text style={styles(activeColors).errorText}>{message}</Text>
+
+            <Pressable
+              style={styles(activeColors).pinkButton}
+              onPress={() => {
+                handleCreateReminder();
+              }}
+            >
+              <Text style={styles(activeColors).modalButtonText}>Guardar</Text>
+            </Pressable>
+          </View>
+        </Modal>
+      </ScrollView>
     </View>
   );
 };
@@ -475,6 +648,25 @@ const ThirdTab = () => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
+  const { data, loading, error } = useQuery(ME);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error: {error.message}</Text>;
+
+  //  const { bookmarks } = data.me. || {}; // Desestructuramos 'me' directamente
+
+  /* if (!me) {
+    return <Text>No user data available.</Text>;
+  }
+
+  const User = me;
+  useEffect(() => {
+    if (User) {
+
+    }
+  }, [User]); */
+
   return (
     <View style={styles(activeColors).tabContent}>
       <ScrollView>
@@ -491,11 +683,13 @@ const ThirdTab = () => {
 interface ModalWithTabsProps {
   isVisible: boolean;
   onClose: () => void;
+  userInfo: any;
 }
 
 const ModalWithTabs: React.FC<ModalWithTabsProps> = ({
   isVisible,
   onClose,
+  userInfo,
 }) => {
   const [index, setIndex] = React.useState(0);
   const layout = useWindowDimensions();
@@ -604,12 +798,12 @@ const styles = (activeColors: any) =>
     columnMini: {
       flexDirection: "row",
       gap: 20,
-      alignItems: "center",
+      //alignItems: "center",
     },
     mobileColumn: {
       flexDirection: "column",
       gap: 20,
-      verticalAlign: "middle",
+      //verticalAlign: "middle",
     },
     row: {
       gap: 20,
@@ -726,6 +920,14 @@ const styles = (activeColors: any) =>
     cancel: {
       color: Colors.light.danger,
       fontFamily: "Poppins-Regular",
+    },
+    errorText: {
+      marginTop: 10,
+      marginHorizontal: 20,
+      color: activeColors.danger,
+      fontFamily: "Poppins-Regular",
+      fontSize: 16,
+      textAlign: "center",
     },
   });
 
