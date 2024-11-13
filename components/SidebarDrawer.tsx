@@ -109,7 +109,6 @@ const SidebarDrawer = ({
   }
 
   const Chats = me.chats; // Accedemos directamente a los 'chats'
-  console.log(Chats);
 
   return (
     <Animated.View
@@ -153,7 +152,13 @@ const SidebarDrawer = ({
         data={Chats}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ChatItem chat={item} onSelectChat={handleSelectChat}></ChatItem>
+          <TouchableOpacity
+            onPress={() => {
+              handleSelectChat(item._id);
+            }}
+          >
+            <ChatItem chat={item} id={item._id}></ChatItem>
+          </TouchableOpacity>
         )}
       />
       <Divider />

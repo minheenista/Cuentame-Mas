@@ -152,7 +152,6 @@ export const ReminderItem = ({
   const [deleteReminder] = useMutation(DELETE_REMINDER);
 
   const handleDeleteReminder = async (id: any) => {
-    console.log("Delete reminder with id: ", id);
     try {
       const { data } = await deleteReminder({
         variables: { id },

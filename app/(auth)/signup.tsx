@@ -54,7 +54,6 @@ export default function signupScreen() {
     if (name === "" || lastname === "" || email === "" || password === "") {
       // mostrar un error
       saveMessage("Todos los campos son obligatorios");
-      console.log("Todos los campos son obligatorios");
       return;
     } else {
       saveMessage("");
@@ -63,7 +62,6 @@ export default function signupScreen() {
     // password minimo de 6 caracteres
     if (password.length < 8) {
       saveMessage("La contraseña debe ser de al menos 8 caracteres");
-      console.log("La contraseña debe ser de al menos 8 caracteres");
       return;
     } else {
       saveMessage("");
@@ -81,10 +79,8 @@ export default function signupScreen() {
           },
         },
       });
-      console.log(data);
       router.replace("/login");
     } catch (error: any) {
-      console.log(error);
       saveMessage(error.message);
     }
   };

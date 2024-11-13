@@ -68,11 +68,13 @@ export default function userScreen() {
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
+  // Modal COnfiguracion ==========================================================
   const [isModalVisible, setModalVisible] = useState(false);
 
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
+  // Drawer ========================================================================
   const [isLeftDrawerVisible, setLeftDrawerVisible] = useState(false);
   const [isRightDrawerVisible, setRightDrawerVisible] = useState(false);
 
@@ -84,19 +86,19 @@ export default function userScreen() {
     setRightDrawerVisible(!isRightDrawerVisible);
   };
 
+  // Chats Sidebar =================================================================
   const handleSelectChat = (chatId: any) => {
-    console.log("Selected Chat ID:", chatId._id);
-    // Navegar a la pantalla del chat con el ID correspondiente
+    console.log("Selected Chat ID desde index:", chatId);
   };
 
-  // Preguntas preguntadas
+  // Preguntas preguntadas =========================================================
   const [inputValue, setInputValue] = useState("");
 
   const handlePregunta = (texto: any) => {
     setInputValue(texto);
   };
 
-  // Microfono
+  // Microfono =====================================================================
   const [isListening, setIsListening] = useState(false);
   const {
     transcript,
@@ -124,21 +126,20 @@ export default function userScreen() {
     }
   };
 
-  // OBTENER INFORMACION DEL USUARIO
+  // OBTENER INFORMACION DEL USUARIO ==============================================
 
   const { data, loading, error } = useQuery(ME);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
 
-  const { me } = data || {}; // Desestructuramos 'me' directamente
+  const { me } = data || {};
 
   if (!me) {
     return <Text>No user data available.</Text>;
   }
 
-  const Chats = me.chats; // Accedemos directamente a los 'chats'
-  console.log("CHATS", Chats);
+  const Chats = me.chats;
 
   return (
     <SafeAreaView style={styles(activeColors).safeArea}>
@@ -219,12 +220,15 @@ export default function userScreen() {
 
             <FlatList
               data={Chats}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
-                <ChatItem
-                  chat={item}
-                  onSelectChat={handleSelectChat}
-                ></ChatItem>
+                <TouchableOpacity
+                  onPress={() => {
+                    handleSelectChat(item._id);
+                  }}
+                >
+                  <ChatItem chat={item} id={item._id}></ChatItem>
+                </TouchableOpacity>
               )}
             />
 

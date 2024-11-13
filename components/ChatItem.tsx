@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Menu, TextInput } from "react-native-paper";
 
-const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
+const ChatItem = ({ chat, id }: { chat: any; id: any }) => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
@@ -37,6 +37,11 @@ const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
   const handleCancelEdit = () => {
     setIsEditing(false);
     setNewChatName(chat.title); // Revertir al nombre original si se cancela
+  };
+
+  const handleSelectChat = (chatId: any) => {
+    console.log("Selected Chat ID:", chatId);
+    // Navegar a la pantalla del chat con el ID correspondiente
   };
 
   return (
@@ -68,12 +73,12 @@ const ChatItem = ({ chat, onSelectChat }: { chat: any; onSelectChat: any }) => {
         </View>
       ) : (
         <View style={styles(activeColors).chatItem}>
-          <TouchableOpacity
-            onPress={() => onSelectChat(chat.id)}
+          <View
+            // onPress={() => handleSelectChat(id)}
             style={styles(activeColors).chatItem}
           >
             <Text style={styles(activeColors).chatName}>{chat.title}</Text>
-          </TouchableOpacity>
+          </View>
           <Menu
             visible={menuVisible}
             onDismiss={hideMenu}

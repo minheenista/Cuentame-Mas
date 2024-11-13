@@ -443,7 +443,6 @@ const SecondTab = () => {
 
   const { data, loading, error, refetch } = useQuery(ME);
   const reminders = data.me.reminders;
-  console.log(reminders);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
@@ -463,7 +462,6 @@ const SecondTab = () => {
             },
           },
         });
-        console.log(data);
         closeSmallModal();
         refetch();
         setInputTitleReminder("");
@@ -650,6 +648,7 @@ const ThirdTab = () => {
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
+  // Bookmarks ===============================================================
   const { data, loading, error, refetch } = useQuery(BOOKMARKS, {
     variables: {
       orderBy: "createdAt",
@@ -661,7 +660,6 @@ const ThirdTab = () => {
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
-  console.log(data.getAllFavoriteMessages.items);
 
   const bookmarks = data.getAllFavoriteMessages.items;
   refetch();
