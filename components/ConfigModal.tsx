@@ -650,7 +650,7 @@ const ThirdTab = () => {
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
-  const { data, loading, error } = useQuery(BOOKMARKS, {
+  const { data, loading, error, refetch } = useQuery(BOOKMARKS, {
     variables: {
       orderBy: "createdAt",
       limit: 100,
@@ -664,6 +664,7 @@ const ThirdTab = () => {
   console.log(data.getAllFavoriteMessages.items);
 
   const bookmarks = data.getAllFavoriteMessages.items;
+  refetch();
 
   return (
     <View style={styles(activeColors).tabContent}>
@@ -672,7 +673,10 @@ const ThirdTab = () => {
           data={bookmarks}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <IaMessageBookmark message={item.content}></IaMessageBookmark>
+            <IaMessageBookmark
+              message={item.content}
+              id={item._id}
+            ></IaMessageBookmark>
           )}
         />
       </ScrollView>

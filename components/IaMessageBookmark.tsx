@@ -11,8 +11,24 @@ import {
 import { Avatar } from "react-native-paper";
 import * as Speech from "expo-speech";
 import { useState } from "react";
+import { gql, useMutation } from "@apollo/client";
 
-const IaMessageBookmark = ({ message }: any) => {
+const DELETE_BOOKMARK = gql`
+  mutation UpdateMessageData($input: UpdateMessageInput!) {
+    updateMessageData(input: $input) {
+      _id
+      chatId
+      role
+      content
+      bookmark
+      rated
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const IaMessageBookmark = ({ message, id }: any) => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
@@ -26,6 +42,24 @@ const IaMessageBookmark = ({ message }: any) => {
     } else {
       Speech.speak(message);
       setIsPlaying(true);
+    }
+  };
+
+  const [deleteBookmark] = useMutation(DELETE_BOOKMARK);
+
+  const handleDeleteBookmark = async (id: any) => {
+    try {
+      const { data } = await deleteBookmark({
+        variables: {
+          input: {
+            userMessageId: id,
+            bookmark: false,
+          },
+        },
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -49,7 +83,7 @@ const IaMessageBookmark = ({ message }: any) => {
 
         <Pressable
           onPress={() => {
-            console.log("Guardar");
+            handleDeleteBookmark(id);
           }}
         >
           <MaterialCommunityIcons
