@@ -397,33 +397,6 @@ const FirstTab = () => {
   );
 };
 
-const GET_ALL_REMINDERS = gql`
-  query GetAllReminders(
-    $orderBy: String!
-    $limit: Int!
-    $offset: Int!
-    $desc: Boolean!
-  ) {
-    getAllReminders(
-      orderBy: $orderBy
-      limit: $limit
-      offset: $offset
-      desc: $desc
-    ) {
-      items {
-        _id
-        userId
-        title
-        description
-        finishDate
-        createdAt
-        updatedAt
-      }
-      totalItemsCount
-    }
-  }
-`;
-
 const CREATE_REMINDER = gql`
   mutation CreateReminder($input: CreateReminderInput!) {
     createReminder(input: $input) {
@@ -644,37 +617,64 @@ const SecondTab = () => {
   );
 };
 
+const BOOKMARKS = gql`
+  query GetAllFavoriteMessages(
+    $orderBy: String!
+    $limit: Int!
+    $offset: Int!
+    $desc: Boolean!
+  ) {
+    getAllFavoriteMessages(
+      orderBy: $orderBy
+      limit: $limit
+      offset: $offset
+      desc: $desc
+    ) {
+      items {
+        _id
+        chatId
+        role
+        content
+        bookmark
+        rated
+        createdAt
+        updatedAt
+      }
+      totalItemsCount
+    }
+  }
+`;
+
 const ThirdTab = () => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
-  const { data, loading, error } = useQuery(ME);
+  const { data, loading, error } = useQuery(BOOKMARKS, {
+    variables: {
+      orderBy: "createdAt",
+      limit: 100,
+      offset: 0,
+      desc: true,
+    },
+  });
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
+  console.log(data.getAllFavoriteMessages.items);
 
-  //  const { bookmarks } = data.me. || {}; // Desestructuramos 'me' directamente
-
-  /* if (!me) {
-    return <Text>No user data available.</Text>;
-  }
-
-  const User = me;
-  useEffect(() => {
-    if (User) {
-
-    }
-  }, [User]); */
+  const bookmarks = data.getAllFavoriteMessages.items;
 
   return (
     <View style={styles(activeColors).tabContent}>
       <ScrollView>
-        <IaMessageBookmark
-          message={
-            "La e.firma es una herramienta digital que sirve para validar tu identidad en línea y así poder realizar cualquier trámite de forma segura en México, contando con la misma validez que de una firma autógrafa. La firma electrónica avanzada tiene como función principal validar tu identidad de forma digital al utilizar 3 componentes únicos y a los cuales solo tú tienes acceso."
-          }
-        ></IaMessageBookmark>
+        <FlatList
+          data={bookmarks}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <IaMessageBookmark message={item.content}></IaMessageBookmark>
+          )}
+        />
       </ScrollView>
     </View>
   );
