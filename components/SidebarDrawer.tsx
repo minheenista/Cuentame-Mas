@@ -93,7 +93,6 @@ const SidebarDrawer = ({
 
   const handleSelectChat = (chatId: any) => {
     console.log("Selected Chat ID:", chatId);
-    // Navegar a la pantalla del chat con el ID correspondiente
   };
 
   // Info de usuario
@@ -102,13 +101,13 @@ const SidebarDrawer = ({
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
 
-  const { me } = data || {}; // Desestructuramos 'me' directamente
+  const { me } = data || {};
 
   if (!me) {
     return <Text>No user data available.</Text>;
   }
 
-  const Chats = me.chats; // Accedemos directamente a los 'chats'
+  const Chats = me.chats;
 
   return (
     <Animated.View
@@ -154,7 +153,6 @@ const SidebarDrawer = ({
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
-              console.log("Selected Chat ID desde drawer:", item._id);
               handleSelectChat(item._id);
             }}
           >
