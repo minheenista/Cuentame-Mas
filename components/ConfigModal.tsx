@@ -22,6 +22,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import { DatePickerInput } from "react-native-paper-dates";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { registerTranslation } from "react-native-paper-dates";
+import PinkButton from "./PinkButton";
 registerTranslation("pl", {
   save: "Save",
   selectSingle: "Select date",
@@ -75,14 +76,31 @@ const ME = gql`
   }
 `;
 
+const UPDATE_USER = gql`
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      _id
+      name
+      lastname
+      email
+      regimenFiscal
+      password
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 const FirstTab = () => {
   const width = Dimensions.get("window").width;
+  const isMobile = width < 900; // Ajusta el umbral según tus necesidades
 
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
-  const isMobile = width < 900; // Ajusta el umbral según tus necesidades
+  // Regimen Fiscal Dropdown ===========================================================
+
   const datadiscales = [
     { label: "Item 1", value: "1" },
     { label: "Item 2", value: "2" },
@@ -96,37 +114,6 @@ const FirstTab = () => {
 
   const [value, setValue] = useState<string | null>(null);
   const [isFocus, setIsFocus] = useState(false);
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [regimenFiscal, setRegimenFiscal] = useState<string | null>(null);
-  // const [isFocus, setIsFocus] = useState(false); // Para el dropdown
-  const [secureText, setSecureText] = useState(true);
-  const [secureTextConfirm, setSecureTextConfirm] = useState(true);
-  const [secureTextOld, setSecureTextOld] = useState(true);
-
-  const toggleSecureText = () => {
-    setSecureText(!secureText);
-  };
-  const toggleSecureTextConfirm = () => {
-    setSecureTextConfirm(!secureTextConfirm);
-  };
-  const toggleSecureTextOld = () => {
-    setSecureTextOld(!secureTextOld);
-  };
-
-  const toggleEdit = () => setIsEditing(!isEditing);
-
-  // Volver al estado inicial
-  const cancelEdit = () => {
-    setIsEditing(false);
-    setNewPassword("");
-    setConfirmPassword("");
-  };
 
   const renderLabel = () => {
     if (value || isFocus) {
@@ -144,7 +131,38 @@ const FirstTab = () => {
     return null;
   };
 
-  // OBTENER INFORMACION DEL USUARIO
+  // Estados para la edición del perfil ===============================================
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [regimenFiscal, setRegimenFiscal] = useState<string | null>(null);
+  const [secureText, setSecureText] = useState(true);
+  const [secureTextConfirm, setSecureTextConfirm] = useState(true);
+  const [secureTextOld, setSecureTextOld] = useState(true);
+
+  const toggleSecureText = () => {
+    setSecureText(!secureText);
+  };
+  const toggleSecureTextConfirm = () => {
+    setSecureTextConfirm(!secureTextConfirm);
+  };
+  const toggleSecureTextOld = () => {
+    setSecureTextOld(!secureTextOld);
+  };
+
+  const toggleEdit = () => setIsEditing(!isEditing);
+
+  // Volver al estado inicial ===============================================
+  const cancelEdit = () => {
+    setIsEditing(false);
+    setNewPassword("");
+    setConfirmPassword("");
+  };
+
+  // OBTENER INFORMACION DEL USUARIO ===============================================
 
   const { data, loading, error } = useQuery(ME);
 
@@ -164,6 +182,55 @@ const FirstTab = () => {
       setSurname(User.lastname);
     }
   }, [User]);
+
+  // ACTUALIZAR INFORMACION DEL USUARIO ===============================================
+  const [updateUser] = useMutation(UPDATE_USER);
+  const [message, setMessage] = useState("");
+
+  const handleUpdateUser = async () => {
+    if (currentPassword || newPassword || confirmPassword) {
+      if (!currentPassword) {
+        setMessage("Por favor ingrese su contraseña actual"); //TODO: la contraseña actual se debe checar en el backend
+        return;
+      }
+      if (newPassword !== confirmPassword) {
+        setMessage("Las contraseñas no coinciden");
+        return;
+      }
+      if (newPassword === currentPassword) {
+        setMessage("La nueva contraseña no puede ser igual a la actual");
+        return;
+      }
+    }
+
+    const input: {
+      name?: string;
+      lastname?: string;
+      regimenFiscal?: string;
+      password?: string;
+    } = {};
+    if (name && name !== User.name) input.name = name;
+    if (surname && surname !== User.lastname) input.lastname = surname;
+    if (regimenFiscal && regimenFiscal !== User.regimenFiscal)
+      input.regimenFiscal = regimenFiscal;
+    if (newPassword) input.password = newPassword;
+
+    try {
+      const { data } = await updateUser({
+        variables: { input },
+      });
+      if (data) {
+        setIsEditing(false);
+        setConfirmPassword("");
+        setCurrentPassword("");
+        setNewPassword("");
+        setMessage("Perfil actualizado exitosamente");
+      }
+    } catch (error) {
+      setMessage("Error al actualizar el perfil");
+    }
+  };
+
   return (
     <View style={styles(activeColors).tabContent}>
       <ScrollView>
@@ -392,6 +459,18 @@ const FirstTab = () => {
             </View>
           </View>
         </View>
+        {isEditing ? (
+          <View style={{ alignItems: "center" }}>
+            <Text style={styles(activeColors).errorText}>{message}</Text>
+            <PinkButton
+              handlePress={() => {
+                handleUpdateUser();
+              }}
+              title="Guardar Cambios"
+              isLoading={false}
+            ></PinkButton>
+          </View>
+        ) : null}
       </ScrollView>
     </View>
   );
