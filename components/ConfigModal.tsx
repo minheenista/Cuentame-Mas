@@ -505,7 +505,10 @@ const SecondTab = () => {
               </Pressable>
             </View>
             <FlatList
-              data={reminders}
+              data={reminders.filter(
+                (item: { finishDate: string | number | Date }) =>
+                  new Date(item.finishDate) > new Date()
+              )}
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <ReminderItem
@@ -539,78 +542,75 @@ const SecondTab = () => {
             </View>
           </View>
         </View>
+      </ScrollView>
 
-        {/* Modal Pequeño CREAR RECORDATORIO*/}
-        <Modal
-          isVisible={isSmallModalVisible}
-          onBackdropPress={closeSmallModal}
-        >
-          <View style={styles(activeColors).smallModalContainer}>
-            <View style={styles(activeColors).row}>
-              <Text style={styles(activeColors).smallModalTitle}>
-                Agregar Recordatorio
-              </Text>
-              <Pressable
-                style={styles(activeColors).modalButton}
-                onPress={closeSmallModal}
-              >
-                <MaterialCommunityIcons
-                  name="close"
-                  size={24}
-                  color={activeColors.primary}
-                ></MaterialCommunityIcons>
-              </Pressable>
-            </View>
-            <View style={styles(activeColors).row}>
-              <Text style={styles(activeColors).body}>Nombre</Text>
-              <TextInput
-                placeholder="Nombre"
-                mode="outlined"
-                onChangeText={(text) => setInputTitleReminder(text)}
-                value={inputTitleReminder}
-                outlineColor={activeColors.primary}
-                activeOutlineColor={activeColors.primary}
-                style={
-                  isMobile ? { maxHeight: 50, width: "70%" } : { maxHeight: 50 }
-                }
-              ></TextInput>
-            </View>
-            <View style={styles(activeColors).row}>
-              <Text style={styles(activeColors).body}>Fecha</Text>
-              <View
-                style={{
-                  justifyContent: "center",
-                  flex: 1,
-                  alignItems: "center",
-                }}
-              >
-                <DatePickerInput
-                  locale="es"
-                  validRange={{ startDate: new Date() }}
-                  label="Fecha"
-                  value={inputDate}
-                  onChange={(d) => setInputDate(d)}
-                  inputMode="end"
-                  style={{ width: 200 }}
-                  mode="outlined"
-                  outlineColor={activeColors.primary}
-                  activeOutlineColor={activeColors.primary}
-                />
-              </View>
-            </View>
-            <Text style={styles(activeColors).errorText}>{message}</Text>
-
+      {/* Modal Pequeño CREAR RECORDATORIO*/}
+      <Modal isVisible={isSmallModalVisible} onBackdropPress={closeSmallModal}>
+        <View style={styles(activeColors).smallModalContainer}>
+          <View style={styles(activeColors).row}>
+            <Text style={styles(activeColors).smallModalTitle}>
+              Agregar Recordatorio
+            </Text>
             <Pressable
-              style={styles(activeColors).pinkButton}
-              onPress={() => {
-                handleCreateReminder();
-              }}
+              style={styles(activeColors).modalButton}
+              onPress={closeSmallModal}
             >
-              <Text style={styles(activeColors).modalButtonText}>Guardar</Text>
+              <MaterialCommunityIcons
+                name="close"
+                size={24}
+                color={activeColors.primary}
+              ></MaterialCommunityIcons>
             </Pressable>
           </View>
-        </Modal>
-      </ScrollView>
+          <View style={styles(activeColors).row}>
+            <Text style={styles(activeColors).body}>Nombre</Text>
+            <TextInput
+              placeholder="Nombre"
+              mode="outlined"
+              onChangeText={(text) => setInputTitleReminder(text)}
+              value={inputTitleReminder}
+              outlineColor={activeColors.primary}
+              activeOutlineColor={activeColors.primary}
+              style={
+                isMobile ? { maxHeight: 50, width: "70%" } : { maxHeight: 50 }
+              }
+            ></TextInput>
+          </View>
+          <View style={styles(activeColors).row}>
+            <Text style={styles(activeColors).body}>Fecha</Text>
+            <View
+              style={{
+                justifyContent: "center",
+                flex: 1,
+                alignItems: "center",
+              }}
+            >
+              <DatePickerInput
+                locale="es"
+                validRange={{ startDate: new Date() }}
+                label="Fecha"
+                value={inputDate}
+                onChange={(d) => setInputDate(d)}
+                inputMode="end"
+                style={{ width: 200 }}
+                mode="outlined"
+                outlineColor={activeColors.primary}
+                activeOutlineColor={activeColors.primary}
+              />
+            </View>
+          </View>
+          <Text style={styles(activeColors).errorText}>{message}</Text>
+
+          <Pressable
+            style={styles(activeColors).pinkButton}
+            onPress={() => {
+              handleCreateReminder();
+            }}
+          >
+            <Text style={styles(activeColors).modalButtonText}>Guardar</Text>
+          </Pressable>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -666,18 +666,16 @@ const ThirdTab = () => {
 
   return (
     <View style={styles(activeColors).tabContent}>
-      <ScrollView>
-        <FlatList
-          data={bookmarks}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <IaMessageBookmark
-              message={item.content}
-              id={item._id}
-            ></IaMessageBookmark>
-          )}
-        />
-      </ScrollView>
+      <FlatList
+        data={bookmarks}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <IaMessageBookmark
+            message={item.content}
+            id={item._id}
+          ></IaMessageBookmark>
+        )}
+      />
     </View>
   );
 };
