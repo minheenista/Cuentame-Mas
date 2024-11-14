@@ -500,7 +500,10 @@ const SecondTab = () => {
               </View>
             </View>
           }
-          data={reminders}
+          data={reminders.filter(
+            (item: { finishDate: string | number | Date }) =>
+              new Date(item.finishDate) > new Date()
+          )}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <ReminderItem
@@ -568,7 +571,10 @@ const SecondTab = () => {
                 </Pressable>
               </View>
               <FlatList
-                data={reminders}
+                data={reminders.filter(
+                  (item: { finishDate: string | number | Date }) =>
+                    new Date(item.finishDate) > new Date()
+                )}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
                   <ReminderItem
