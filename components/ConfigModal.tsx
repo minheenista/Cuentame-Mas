@@ -676,6 +676,16 @@ const ThirdTab = () => {
           ></IaMessageBookmark>
         )}
       />
+      <FlatList
+        data={bookmarks}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <IaMessageBookmark
+            message={item.content}
+            id={item._id}
+          ></IaMessageBookmark>
+        )}
+      />
     </View>
   );
 };
