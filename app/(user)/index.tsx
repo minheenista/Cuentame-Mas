@@ -56,6 +56,16 @@ const ME = gql`
         title
         createdAt
         updatedAt
+        messages {
+          _id
+          chatId
+          role
+          content
+          bookmark
+          rated
+          createdAt
+          updatedAt
+        }
       }
     }
   }
@@ -86,9 +96,22 @@ export default function userScreen() {
     setRightDrawerVisible(!isRightDrawerVisible);
   };
 
-  // Chats Sidebar =================================================================
+  // Chats Sidebar y Mensajes =================================================================
+  interface Message {
+    id: string;
+    role: string;
+    content: string;
+  }
+
+  const [selectedChatMessages, setSelectedChatMessages] = useState<Message[]>(
+    []
+  );
   const handleSelectChat = (chatId: any) => {
     console.log("Selected Chat ID desde index:", chatId);
+    const selectedChat = Chats.find((chat: any) => chat._id === chatId);
+    if (selectedChat) {
+      setSelectedChatMessages(selectedChat.messages || []);
+    }
   };
 
   // Preguntas preguntadas =========================================================
@@ -283,12 +306,36 @@ export default function userScreen() {
             ) : null}
             <View style={styles(activeColors).card}>
               <ScrollView style={{ gap: 20 }}>
+                {selectedChatMessages.length > 0 ? (
+                  selectedChatMessages.map((message) => {
+                    if (message.role === "USER") {
+                      return (
+                        <UserMessage
+                          key={message.id}
+                          message={message.content}
+                          label={data.me.name.charAt(0).toUpperCase()}
+                        />
+                      );
+                    } else if (message.role === "IA") {
+                      return (
+                        <IaMessage key={message.id} message={message.content} />
+                      );
+                    }
+                    return null;
+                  })
+                ) : (
+                  <PreguntasPreguntadas
+                    onPressPregunta={handlePregunta}
+                  ></PreguntasPreguntadas>
+                )}
+              </ScrollView>
+              {/* <ScrollView style={{ gap: 20 }}>
                 <UserMessage message="Que es el RFC?" />
                 <IaMessage message="El RFC es una clave única de registro utilizada en México para identificar a las personas físicas y morales que realizan actividades económicas y deben contribuir con el gasto público ante el SAT (Servicio de Administración Tributaria). Esta clave se compone de 13 caracteres alfanuméricos, formados por las iniciales del nombre de la persona física o moral, seguido de la fecha de nacimiento o constitución y 3 caracteres más llamados homoclave que el SAT otorga para que el RFC sea una clave única e irrepetible entre todos los contribuyentes del país" />
-                {/* <PreguntasPreguntadas
+                <PreguntasPreguntadas
                   onPressPregunta={handlePregunta}
-                ></PreguntasPreguntadas> */}
-              </ScrollView>
+                ></PreguntasPreguntadas>
+              </ScrollView> */}
             </View>
           </View>
 

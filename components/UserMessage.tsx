@@ -2,14 +2,14 @@ import { Colors } from "@/constants/Colors";
 import { View, Text, StyleSheet, useColorScheme } from "react-native";
 import { Avatar } from "react-native-paper";
 
-const UserMessage = ({ message }: any) => {
+const UserMessage = ({ message, label }: any) => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
   return (
     <View style={styles(activeColors).container}>
-      <Avatar.Text size={24} label="M" />
+      <Avatar.Text size={24} label={label} />
       <Text style={styles(activeColors).text}>{message}</Text>
     </View>
   );
