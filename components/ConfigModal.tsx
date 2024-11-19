@@ -101,15 +101,54 @@ const FirstTab = () => {
 
   // Regimen Fiscal Dropdown ===========================================================
 
-  const datadiscales = [
-    { label: "Item 1", value: "1" },
-    { label: "Item 2", value: "2" },
-    { label: "Item 3", value: "3" },
-    { label: "Item 4", value: "4" },
-    { label: "Item 5", value: "5" },
-    { label: "Item 6", value: "6" },
-    { label: "Item 7", value: "7" },
-    { label: "Item 8", value: "8" },
+  const regimenesFiscales = [
+    { label: "No Definido", value: "NO_DEFINIDO" },
+    { label: "Arrendamiento", value: "ARRENDAMIENTO" },
+    {
+      label: "Sueldos Y Salarios E Ingresos A Salarios",
+      value: "SUELDOS_Y_SALARIOS_E_INGRESOS_A_SALARIOS",
+    },
+    { label: "Demas Ingresos", value: "DEMAS_INGRESOS" },
+    {
+      label: "Personas Fisicas Con Actividades Empresariales Y Profesionales",
+      value: "PERSONAS_FISICAS_CON_ACTIVIDADES_EMPRESARIALES_Y_PROFESIONALES",
+    },
+    { label: "Ingresos Por Dividendos", value: "INGRESOS_POR_DIVIDENDOS" },
+    { label: "Ingresos Por Intereses", value: "INGRESOS_POR_INTERESES" },
+    {
+      label: "Regimen De Los Ingresos Por Obtencion De Premios",
+      value: "REGIMEN_DE_LOS_INGRESOS_POR_OBTENCION_DE_PREMIOS",
+    },
+    { label: "Sin Obligaciones Fiscales", value: "SIN_OBLIGACIONES_FISCALES" },
+    { label: "Incorporacion Fiscal", value: "INCORPORACION_FISCAL" },
+    { label: "Actividades Agsp", value: "ACTIVIDADES_AGSP" },
+    { label: "Resico", value: "RESICO" },
+    { label: "Dlrfpydlem", value: "DLRFPYDLEM" },
+    {
+      label: "Enajenacion De Acciones En Bolsa De Valores",
+      value: "ENAJENACION_DE_ACCIONES_EN_BOLSA_DE_VALORES",
+    },
+    { label: "Rdaeciatdpt", value: "RDAECIATDPT" },
+    {
+      label: "General De Ley Personas Morales",
+      value: "GENERAL_DE_LEY_PERSONAS_MORALES",
+    },
+    {
+      label: "Personas Morales Con Fines No Lucrativos",
+      value: "PERSONAS_MORALES_CON_FINES_NO_LUCRATIVOS",
+    },
+    { label: "Rdeoadb", value: "RDEOADB" },
+    { label: "Consolidacion", value: "CONSOLIDACION" },
+    {
+      label: "Sociedades Cooperativas De Produccion",
+      value: "SOCIEDADES_COOPERATIVAS_DE_PRODUCCION",
+    },
+    {
+      label: "Opcional Para Grupos De Sociedades",
+      value: "OPCIONAL_PARA_GRUPOS_DE_SOCIEDADES",
+    },
+    { label: "Coordinados", value: "COORDINADOS" },
+    { label: "Hidrocarburos", value: "HIDROCARBUROS" },
   ];
 
   const [value, setValue] = useState<string | null>(null);
@@ -225,6 +264,7 @@ const FirstTab = () => {
         setCurrentPassword("");
         setNewPassword("");
         setMessage("Perfil actualizado exitosamente");
+        console.log(data);
       }
     } catch (error) {
       setMessage("Error al actualizar el perfil");
@@ -441,7 +481,7 @@ const FirstTab = () => {
                   ]}
                   placeholderStyle={styles(activeColors).placeholderStyle}
                   selectedTextStyle={styles(activeColors).selectedTextStyle}
-                  data={datadiscales}
+                  data={regimenesFiscales}
                   maxHeight={300}
                   labelField="label"
                   valueField="value"
