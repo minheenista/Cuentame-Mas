@@ -219,6 +219,7 @@ const FirstTab = () => {
     if (User) {
       setName(User.name);
       setSurname(User.lastname);
+      setRegimenFiscal(User.regimenFiscal);
     }
   }, [User]);
 
@@ -478,9 +479,16 @@ const FirstTab = () => {
                   style={[
                     styles(activeColors).dropdown,
                     isFocus && { borderColor: activeColors.primary },
+                    { maxWidth: 270 },
                   ]}
-                  placeholderStyle={styles(activeColors).placeholderStyle}
-                  selectedTextStyle={styles(activeColors).selectedTextStyle}
+                  placeholderStyle={[
+                    styles(activeColors).placeholderStyle,
+                    !isEditing && { color: activeColors.textHint },
+                  ]}
+                  selectedTextStyle={[
+                    styles(activeColors).selectedTextStyle,
+                    !isEditing && { color: activeColors.textHint },
+                  ]}
                   data={regimenesFiscales}
                   maxHeight={300}
                   labelField="label"
