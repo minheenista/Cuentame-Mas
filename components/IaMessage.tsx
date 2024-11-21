@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Avatar } from "react-native-paper";
 import * as Speech from "expo-speech";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
 const UPDATE_MESSAGE = gql`
@@ -64,8 +64,6 @@ const IaMessage = ({ message }: any) => {
     } //TODO: IMplementar que se cambie el icono al terminar de leer
   };
 
-  //const { refetch } = useQuery(ME);
-
   // Bookmark a message ======================================================
   const [isBookmarked, setIsBookmarked] = useState(message.bookmark);
 
@@ -84,6 +82,53 @@ const IaMessage = ({ message }: any) => {
       if (data) {
         console.log("Mensaje actualizado");
         setIsBookmarked(!isBookmarked);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // rate a message ==========================================================
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
+
+  useEffect(() => {
+    if (message.rated === "GOOD") {
+      setIsLiked(true);
+      setIsDisliked(false);
+    } else if (message.rated === "BAD") {
+      setIsLiked(false);
+      setIsDisliked(true);
+    }
+  }, [message.rated]);
+
+  const handleRate = async (rate: string) => {
+    const newRate =
+      (rate === "GOOD" && isLiked) || (rate === "BAD" && isDisliked)
+        ? "EMPTY" // Si ya estaba seleccionado, se alterna a "EMPTY"
+        : rate;
+
+    try {
+      const { data } = await updateMessage({
+        variables: {
+          input: {
+            messageId: message._id,
+            rated: newRate,
+          },
+        },
+      });
+      if (data) {
+        rate = data.updateMessageData.rated;
+        if (rate === "GOOD") {
+          setIsLiked(true);
+          setIsDisliked(false);
+        } else if (rate === "BAD") {
+          setIsLiked(false);
+          setIsDisliked(true);
+        } else if (rate === "EMPTY") {
+          setIsLiked(false);
+          setIsDisliked(false);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -109,22 +154,22 @@ const IaMessage = ({ message }: any) => {
         </Pressable>
         <Pressable
           onPress={() => {
-            console.log("like");
+            handleRate("GOOD");
           }}
         >
           <MaterialCommunityIcons
-            name="thumb-up-outline"
+            name={isLiked ? "thumb-up" : "thumb-up-outline"}
             size={24}
             color={activeColors.textSecondary}
           ></MaterialCommunityIcons>
         </Pressable>
         <Pressable
           onPress={() => {
-            console.log("dislike");
+            handleRate("BAD");
           }}
         >
           <MaterialCommunityIcons
-            name="thumb-down-outline"
+            name={isDisliked ? "thumb-down" : "thumb-down-outline"}
             size={24}
             color={activeColors.textSecondary}
           ></MaterialCommunityIcons>
