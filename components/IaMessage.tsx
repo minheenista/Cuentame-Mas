@@ -26,7 +26,7 @@ const IaMessage = ({ message }: any) => {
     } else {
       Speech.speak(message);
       setIsPlaying(true);
-    }
+    } //TODO: IMplementar que se cambie el icono al terminar de leer
   };
 
   return (

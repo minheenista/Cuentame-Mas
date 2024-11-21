@@ -55,6 +55,16 @@ const ME = gql`
         title
         createdAt
         updatedAt
+        messages {
+          _id
+          chatId
+          role
+          content
+          bookmark
+          rated
+          createdAt
+          updatedAt
+        }
       }
     }
   }
@@ -65,9 +75,11 @@ const drawerWidth = 300;
 const SidebarDrawer = ({
   isVisible,
   toggleDrawer,
+  onChatSelect,
 }: {
   isVisible: any;
   toggleDrawer: any;
+  onChatSelect: (chat: any) => void; // Función para notificar al padre
 }) => {
   const animatedValue = useRef(
     new Animated.Value(isVisible ? 0 : -drawerWidth)
@@ -76,8 +88,8 @@ const SidebarDrawer = ({
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: isVisible ? 0 : -drawerWidth,
-      duration: 300, // Duración más corta para una animación rápida
-      easing: Easing.out(Easing.circle), // Efecto de suavizado
+      duration: 300,
+      easing: Easing.out(Easing.circle),
       useNativeDriver: true,
     }).start();
   }, [isVisible]);
@@ -86,16 +98,40 @@ const SidebarDrawer = ({
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
+  // Modal de configuracion ===================================================================
   const [isModalVisible, setModalVisible] = useState(false);
 
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
-  const handleSelectChat = (chatId: any) => {
+  // Seleccionar chat ========================================================================
+  interface Message {
+    id: string;
+    role: string;
+    content: string;
+  }
+
+  const [selectedChatMessages, setSelectedChatMessages] = useState<Message[]>(
+    []
+  );
+  /* const handleSelectChat = (chatId: any) => {
     console.log("Selected Chat ID:", chatId);
+    const selectedChat = Chats.find((chat: any) => chat._id === chatId);
+    if (selectedChat) {
+      setSelectedChatMessages(selectedChat.messages || []);
+    }
+  }; */
+
+  const handleSelectChat = (chatId: string) => {
+    console.log("Selected Chat ID:", chatId);
+
+    const selectedChat = Chats.find((chat: any) => chat._id === chatId);
+    if (selectedChat) {
+      onChatSelect(selectedChat); // Notificar al padre
+    }
   };
 
-  // Info de usuario
+  // Info de usuario =========================================================================
   const { data, loading, error } = useQuery(ME);
 
   if (loading) return <Text>Loading...</Text>;

@@ -8,7 +8,7 @@ import UserMessage from "@/components/UserMessage";
 import { Colors } from "@/constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -97,6 +97,8 @@ export default function userScreen() {
   };
 
   // Chats Sidebar y Mensajes =================================================================
+  const scrollViewRef = useRef<ScrollView>(null);
+
   interface Message {
     id: string;
     role: string;
@@ -106,12 +108,30 @@ export default function userScreen() {
   const [selectedChatMessages, setSelectedChatMessages] = useState<Message[]>(
     []
   );
+
   const handleSelectChat = (chatId: any) => {
     console.log("Selected Chat ID desde index:", chatId);
     const selectedChat = Chats.find((chat: any) => chat._id === chatId);
     if (selectedChat) {
       setSelectedChatMessages(selectedChat.messages || []);
+      /* if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    } */
     }
+  };
+
+  useEffect(() => {
+    // Mueve el scroll al final cada vez que cambien los mensajes
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  }, [selectedChatMessages]);
+
+  //  const [selectedChat, setSelectedChat] = useState(null);
+
+  const handleChatSelection = (chat: any) => {
+    setSelectedChatMessages(chat.messages); // Actualiza el chat seleccionado
+    toggleLeftDrawer();
   };
 
   // Preguntas preguntadas =========================================================
@@ -169,6 +189,7 @@ export default function userScreen() {
       <SidebarDrawer
         isVisible={isLeftDrawerVisible}
         toggleDrawer={toggleLeftDrawer}
+        onChatSelect={handleChatSelection}
       />
       <ReferencesDrawer
         isVisible={isRightDrawerVisible}
@@ -192,13 +213,15 @@ export default function userScreen() {
 
             <Text style={styles(activeColors).titleHeader}>Cuentame +</Text>
           </View>
-          <TouchableOpacity onPress={toggleRightDrawer}>
-            <MaterialCommunityIcons
-              name="text-search"
-              size={24}
-              color={activeColors.text}
-            ></MaterialCommunityIcons>
-          </TouchableOpacity>
+          {selectedChatMessages.length > 0 ? (
+            <TouchableOpacity onPress={toggleRightDrawer}>
+              <MaterialCommunityIcons
+                name="text-search"
+                size={24}
+                color={activeColors.text}
+              ></MaterialCommunityIcons>
+            </TouchableOpacity>
+          ) : null}
         </View>
       ) : null}
 
@@ -292,7 +315,7 @@ export default function userScreen() {
         {/* ===============================   CHATS ================================= */}
         <View style={styles(activeColors).cardContainer}>
           <View style={{ flexDirection: "row-reverse", flex: 1 }}>
-            {width > 880 ? (
+            {width > 880 && selectedChatMessages.length > 0 ? (
               <TouchableOpacity
                 onPress={toggleRightDrawer}
                 style={{ maxWidth: 24, width: 24, margin: 10, flex: 1 }}
@@ -305,7 +328,7 @@ export default function userScreen() {
               </TouchableOpacity>
             ) : null}
             <View style={styles(activeColors).card}>
-              <ScrollView style={{ gap: 20 }}>
+              <ScrollView style={{ gap: 20 }} ref={scrollViewRef}>
                 {selectedChatMessages.length > 0 ? (
                   selectedChatMessages.map((message) => {
                     if (message.role === "USER") {
@@ -329,13 +352,6 @@ export default function userScreen() {
                   ></PreguntasPreguntadas>
                 )}
               </ScrollView>
-              {/* <ScrollView style={{ gap: 20 }}>
-                <UserMessage message="Que es el RFC?" />
-                <IaMessage message="El RFC es una clave única de registro utilizada en México para identificar a las personas físicas y morales que realizan actividades económicas y deben contribuir con el gasto público ante el SAT (Servicio de Administración Tributaria). Esta clave se compone de 13 caracteres alfanuméricos, formados por las iniciales del nombre de la persona física o moral, seguido de la fecha de nacimiento o constitución y 3 caracteres más llamados homoclave que el SAT otorga para que el RFC sea una clave única e irrepetible entre todos los contribuyentes del país" />
-                <PreguntasPreguntadas
-                  onPressPregunta={handlePregunta}
-                ></PreguntasPreguntadas>
-              </ScrollView> */}
             </View>
           </View>
 
@@ -413,6 +429,7 @@ const styles = (activeColors: any) =>
       alignItems: "center",
       padding: 10,
       gap: 10,
+      paddingTop: 25,
       backgroundColor: activeColors.primary,
     },
     headerMobile2: {
@@ -469,7 +486,7 @@ const styles = (activeColors: any) =>
     },
     titleHeader: {
       fontFamily: "Poppins-Bold",
-      color: activeColors.lightTitle,
+      color: Colors.light.onPrimary,
       fontSize: 28,
     },
     logo: {

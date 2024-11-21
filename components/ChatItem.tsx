@@ -40,6 +40,16 @@ const ME = gql`
         title
         createdAt
         updatedAt
+        messages {
+          _id
+          chatId
+          role
+          content
+          bookmark
+          rated
+          createdAt
+          updatedAt
+        }
       }
     }
   }
