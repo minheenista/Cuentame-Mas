@@ -52,11 +52,14 @@ const IaMessageBookmark = ({ message, id }: any) => {
       const { data } = await deleteBookmark({
         variables: {
           input: {
-            userMessageId: id,
+            messageId: id,
             bookmark: false,
           },
         },
       });
+      if (data) {
+        console.log("Bookmark deleted");
+      }
     } catch (error) {
       console.log(error);
     }

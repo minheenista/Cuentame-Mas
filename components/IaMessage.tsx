@@ -11,11 +11,46 @@ import {
 import { Avatar } from "react-native-paper";
 import * as Speech from "expo-speech";
 import { useState } from "react";
+import { gql, useMutation, useQuery } from "@apollo/client";
+
+const UPDATE_MESSAGE = gql`
+  mutation UpdateMessage($input: UpdateMessageInput!) {
+    updateMessageData(input: $input) {
+      _id
+      chatId
+      role
+      content
+      bookmark
+      rated
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const ME = gql`
+  query Me {
+    me {
+      chats {
+        _id
+        messages {
+          _id
+          chatId
+          content
+          bookmark
+          rated
+        }
+      }
+    }
+  }
+`;
 
 const IaMessage = ({ message }: any) => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
+  // Speech implementation ==================================================
 
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -29,6 +64,32 @@ const IaMessage = ({ message }: any) => {
     } //TODO: IMplementar que se cambie el icono al terminar de leer
   };
 
+  //const { refetch } = useQuery(ME);
+
+  // Bookmark a message ======================================================
+  const [isBookmarked, setIsBookmarked] = useState(message.bookmark);
+
+  const [updateMessage] = useMutation(UPDATE_MESSAGE);
+
+  const handleBookmark = async () => {
+    try {
+      const { data } = await updateMessage({
+        variables: {
+          input: {
+            messageId: message._id,
+            bookmark: !isBookmarked,
+          },
+        },
+      });
+      if (data) {
+        console.log("Mensaje actualizado");
+        setIsBookmarked(!isBookmarked);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles(activeColors).iaMessage}>
       <View style={styles(activeColors).container}>
@@ -36,7 +97,7 @@ const IaMessage = ({ message }: any) => {
           source={require("../assets/images/logojpg.png")}
           size={32}
         />
-        <Text style={styles(activeColors).text}>{message}</Text>
+        <Text style={styles(activeColors).text}>{message.content}</Text>
       </View>
       <View style={styles(activeColors).buttons}>
         <Pressable onPress={toggleSpeech}>
@@ -70,11 +131,11 @@ const IaMessage = ({ message }: any) => {
         </Pressable>
         <Pressable
           onPress={() => {
-            console.log("Guardar");
+            handleBookmark();
           }}
         >
           <MaterialCommunityIcons
-            name="bookmark-outline"
+            name={isBookmarked ? "bookmark" : "bookmark-outline"}
             size={24}
             color={activeColors.textSecondary}
           ></MaterialCommunityIcons>
