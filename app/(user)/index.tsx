@@ -103,6 +103,45 @@ export default function userScreen() {
     setInputValue(texto);
   };
 
+  // Chats Sidebar y Mensajes =================================================================
+
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  interface Message {
+    id: string;
+    role: string;
+    content: string;
+  }
+
+  const [selectedChatMessages, setSelectedChatMessages] = useState<Message[]>(
+    []
+  );
+
+  const handleSelectChat = (chatId: any) => {
+    refetch();
+    console.log("Selected Chat ID desde index:", chatId);
+    const selectedChat = Chats.find((chat: any) => chat._id === chatId);
+    if (selectedChat) {
+      setSelectedChatMessages(selectedChat.messages || []);
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollToEnd({ animated: true });
+      }
+    }
+  };
+
+  /* useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  }, [selectedChatMessages]); */
+
+  // const [selectedChat, setSelectedChat] = useState(null);
+
+  const handleChatSelection = (chat: any) => {
+    setSelectedChatMessages(chat.messages); // Actualiza el chat seleccionado
+    toggleLeftDrawer();
+  };
+
   // Microfono =====================================================================
   const [isListening, setIsListening] = useState(false);
   const {
@@ -140,50 +179,11 @@ export default function userScreen() {
 
   const { me } = data || {};
 
-  if (!me) {
+  /* if (!me) {
     return <Text>No user data available.</Text>;
-  }
+  } */
 
   const Chats = me.chats;
-
-  // Chats Sidebar y Mensajes =================================================================
-  const scrollViewRef = useRef<ScrollView>(null);
-
-  interface Message {
-    id: string;
-    role: string;
-    content: string;
-  }
-
-  const [selectedChatMessages, setSelectedChatMessages] = useState<Message[]>(
-    []
-  );
-
-  const handleSelectChat = (chatId: any) => {
-    refetch();
-    console.log("Selected Chat ID desde index:", chatId);
-    const selectedChat = Chats.find((chat: any) => chat._id === chatId);
-    if (selectedChat) {
-      setSelectedChatMessages(selectedChat.messages || []);
-      /* if (scrollViewRef.current) {
-       scrollViewRef.current.scrollToEnd({ animated: true });
-     } */
-    }
-  };
-
-  useEffect(() => {
-    // Mueve el scroll al final cada vez que cambien los mensajes
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
-    }
-  }, [selectedChatMessages]);
-
-  //  const [selectedChat, setSelectedChat] = useState(null);
-
-  const handleChatSelection = (chat: any) => {
-    setSelectedChatMessages(chat.messages); // Actualiza el chat seleccionado
-    toggleLeftDrawer();
-  };
 
   return (
     <SafeAreaView style={styles(activeColors).safeArea}>
@@ -267,6 +267,7 @@ export default function userScreen() {
 
             <FlatList
               data={Chats}
+              key={Chats._id}
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <TouchableOpacity
