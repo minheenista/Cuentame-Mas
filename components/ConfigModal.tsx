@@ -103,49 +103,63 @@ const FirstTab = () => {
 
   const regimenesFiscales = [
     { label: "No Definido", value: "NO_DEFINIDO" },
-    { label: "Arrendamiento", value: "ARRENDAMIENTO" },
+    { label: "Arrendamientos", value: "ARRENDAMIENTO" },
     {
-      label: "Sueldos Y Salarios E Ingresos A Salarios",
-      value: "SUELDOS_Y_SALARIOS_E_INGRESOS_A_SALARIOS",
+      label: "Sueldos Y Salarios E Ingresos Asimmilados A Salarios",
+      value: "SUELDOS_Y_SALARIOS",
     },
-    { label: "Demas Ingresos", value: "DEMAS_INGRESOS" },
+    { label: "Demás Ingresos", value: "DEMAS_INGRESOS" },
     {
-      label: "Personas Fisicas Con Actividades Empresariales Y Profesionales",
-      value: "PERSONAS_FISICAS_CON_ACTIVIDADES_EMPRESARIALES_Y_PROFESIONALES",
+      label: "Personas físicas con actividades empresariales y profesionales",
+      value: "ACTIVIDADES_EMPRESARIALES",
     },
-    { label: "Ingresos Por Dividendos", value: "INGRESOS_POR_DIVIDENDOS" },
-    { label: "Ingresos Por Intereses", value: "INGRESOS_POR_INTERESES" },
+    { label: "Ingresos por Dividendos", value: "DIVIDENDOS" },
+    { label: "Ingresos por Intereses", value: "INTERESES" },
     {
-      label: "Regimen De Los Ingresos Por Obtencion De Premios",
-      value: "REGIMEN_DE_LOS_INGRESOS_POR_OBTENCION_DE_PREMIOS",
+      label: "Régimen de los ingresos por obtencion de premios",
+      value: "PREMIOS",
     },
-    { label: "Sin Obligaciones Fiscales", value: "SIN_OBLIGACIONES_FISCALES" },
-    { label: "Incorporacion Fiscal", value: "INCORPORACION_FISCAL" },
-    { label: "Actividades Agsp", value: "ACTIVIDADES_AGSP" },
-    { label: "Resico", value: "RESICO" },
-    { label: "Dlrfpydlem", value: "DLRFPYDLEM" },
+    { label: "Sin Obligaciones Fiscales", value: "SIN_OBLIGACIONES" },
+    { label: "Incorporación Fiscal", value: "INCORPORACION_FISCAL" },
     {
-      label: "Enajenacion De Acciones En Bolsa De Valores",
-      value: "ENAJENACION_DE_ACCIONES_EN_BOLSA_DE_VALORES",
+      label: "Actividades Agrícolas, Silvícolas, Pesqueras y similares",
+      value: "ACTIVIDADES_AGSP",
     },
-    { label: "Rdaeciatdpt", value: "RDAECIATDPT" },
+    { label: "Régimen Simplificado de Confianza", value: "RESICO" },
     {
-      label: "General De Ley Personas Morales",
-      value: "GENERAL_DE_LEY_PERSONAS_MORALES",
+      label:
+        "De los Regímenes Fiscales Preferentes y de las Empresas Multinacionales",
+      value: "REGIMENES_PREFERENTES",
     },
     {
-      label: "Personas Morales Con Fines No Lucrativos",
-      value: "PERSONAS_MORALES_CON_FINES_NO_LUCRATIVOS",
-    },
-    { label: "Rdeoadb", value: "RDEOADB" },
-    { label: "Consolidacion", value: "CONSOLIDACION" },
-    {
-      label: "Sociedades Cooperativas De Produccion",
-      value: "SOCIEDADES_COOPERATIVAS_DE_PRODUCCION",
+      label: "Enajenación de Acciones en Bolsa de Valores",
+      value: "ENAJENACION_ACCIONES",
     },
     {
-      label: "Opcional Para Grupos De Sociedades",
-      value: "OPCIONAL_PARA_GRUPOS_DE_SOCIEDADES",
+      label:
+        "Régimen de Actividades Empresariales con Ingresos a Través de Plataformas Tecnológicas",
+      value: "PLATAFORMAS_TECNOLOGICAS",
+    },
+    {
+      label: "General de Ley Personas Morales",
+      value: "PERSONAS_MORALES",
+    },
+    {
+      label: "Personas Morales con Fines no Lucrativos",
+      value: "SIN_FINES_LUCRO",
+    },
+    {
+      label: "Régimen de enajenación o adquisición de bienes",
+      value: "ENAJENACION_BIENES",
+    },
+    { label: "Consolidación", value: "CONSOLIDACION" },
+    {
+      label: "Sociedades Cooperativas de Producción",
+      value: "COOPERATIVAS",
+    },
+    {
+      label: "Opcional para Grupos de Sociedades",
+      value: "GRUPOS_SOCIEDADES",
     },
     { label: "Coordinados", value: "COORDINADOS" },
     { label: "Hidrocarburos", value: "HIDROCARBUROS" },
@@ -203,6 +217,13 @@ const FirstTab = () => {
 
   // OBTENER INFORMACION DEL USUARIO ===============================================
 
+  const findRegimenFiscal = (backendValue: string): string => {
+    const match = regimenesFiscales.find(
+      (regimen) => regimen.label === backendValue
+    );
+    return match!.value;
+  };
+
   const { data, loading, error } = useQuery(ME);
 
   if (loading) return <Text>Loading...</Text>;
@@ -219,7 +240,8 @@ const FirstTab = () => {
     if (User) {
       setName(User.name);
       setSurname(User.lastname);
-      setRegimenFiscal(User.regimenFiscal);
+      const regimenFiscalDynamic = findRegimenFiscal(User.regimenFiscal);
+      setRegimenFiscal(regimenFiscalDynamic ?? null);
     }
   }, [User]);
 
@@ -247,13 +269,15 @@ const FirstTab = () => {
       name?: string;
       lastname?: string;
       regimenFiscal?: string;
-      password?: string;
+      newPassword?: string;
+      oldPassword?: string;
     } = {};
     if (name && name !== User.name) input.name = name;
     if (surname && surname !== User.lastname) input.lastname = surname;
     if (regimenFiscal && regimenFiscal !== User.regimenFiscal)
       input.regimenFiscal = regimenFiscal;
-    if (newPassword) input.password = newPassword;
+    if (currentPassword) input.oldPassword = currentPassword;
+    if (newPassword) input.newPassword = newPassword;
 
     try {
       const { data } = await updateUser({
@@ -269,6 +293,7 @@ const FirstTab = () => {
       }
     } catch (error) {
       setMessage("Error al actualizar el perfil");
+      console.log(error);
     }
   };
 
