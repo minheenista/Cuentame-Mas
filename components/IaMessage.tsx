@@ -54,14 +54,31 @@ const IaMessage = ({ message }: any) => {
 
   const [isPlaying, setIsPlaying] = useState(false);
 
+  /* useEffect(() => {
+    if (!isPlaying) {
+      console.log("Lectura pausada o terminada");
+    } else {
+      console.log("Lectura iniciada");
+    }
+  }, [isPlaying]); */
+
   const toggleSpeech = () => {
     if (isPlaying) {
       Speech.stop();
       setIsPlaying(false);
     } else {
-      Speech.speak(message);
       setIsPlaying(true);
-    } //TODO: IMplementar que se cambie el icono al terminar de leer
+      Speech.speak(message.content, {
+        onDone: () => {
+          console.log("Lectura terminada");
+          setIsPlaying(false);
+        },
+        onStopped: () => {
+          console.log("Lectura detenida");
+          setIsPlaying(false);
+        },
+      });
+    }
   };
 
   // Bookmark a message ======================================================

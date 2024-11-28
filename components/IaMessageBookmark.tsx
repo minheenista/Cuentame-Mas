@@ -40,8 +40,17 @@ const IaMessageBookmark = ({ message, id }: any) => {
       Speech.stop();
       setIsPlaying(false);
     } else {
-      Speech.speak(message);
       setIsPlaying(true);
+      Speech.speak(message, {
+        onDone: () => {
+          console.log("Lectura terminada");
+          setIsPlaying(false);
+        },
+        onStopped: () => {
+          console.log("Lectura detenida");
+          setIsPlaying(false);
+        },
+      });
     }
   };
 
