@@ -19,7 +19,7 @@ import {
 import { Avatar, Divider } from "react-native-paper";
 import ChatItem from "./ChatItem";
 import ConfigModal from "./ConfigModal";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 const chats = [
   { id: "1", name: "Que son los puntos infonavit y como usarlos?" },
@@ -70,16 +70,41 @@ const ME = gql`
   }
 `;
 
+const CREATE_CHAT = gql`
+  mutation CreateChat($input: CreateChatInput!) {
+    createChat(input: $input) {
+      _id
+      userId
+      iamodelId
+      title
+      createdAt
+      updatedAt
+      messages {
+        _id
+        chatId
+        role
+        content
+        bookmark
+        rated
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
 const drawerWidth = 300;
 
 const SidebarDrawer = ({
   isVisible,
   toggleDrawer,
   onChatSelect,
+  onChatSelectId,
 }: {
   isVisible: any;
   toggleDrawer: any;
   onChatSelect: (chat: any) => void; // Función para notificar al padre
+  onChatSelectId: (chatId: string) => void; // Función para notificar al padre
 }) => {
   const animatedValue = useRef(
     new Animated.Value(isVisible ? 0 : -drawerWidth)
@@ -110,29 +135,76 @@ const SidebarDrawer = ({
     role: string;
     content: string;
   }
-
   const [selectedChatMessages, setSelectedChatMessages] = useState<Message[]>(
     []
   );
-  /* const handleSelectChat = (chatId: any) => {
-    console.log("Selected Chat ID:", chatId);
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+
+  const handleSelectChat = (chatId: any) => {
+    console.log("Selected Chat ID drawer 1:", chatId);
     const selectedChat = Chats.find((chat: any) => chat._id === chatId);
     if (selectedChat) {
       setSelectedChatMessages(selectedChat.messages || []);
+      onChatSelect(selectedChat); // Notificar al padre
+      onChatSelectId(chatId); // Notificar al padre
     }
-  }; */
+  };
 
-  const handleSelectChat = (chatId: string) => {
+  /* const handleSelectChat = (chatId: string) => {
     console.log("Selected Chat ID:", chatId);
+    setSelectedChatId(chatId); // Actualiza el estado
 
     const selectedChat = Chats.find((chat: any) => chat._id === chatId);
     if (selectedChat) {
       onChatSelect(selectedChat); // Notificar al padre
+      onChatSelectId(chatId); // Notificar al padre
+    }
+  }; */
+
+  // Crear Chat ====================================================================
+  const [createChat] = useMutation(CREATE_CHAT);
+
+  const handleCreateChat = async () => {
+    try {
+      const createChatData = await createChat({
+        variables: {
+          input: {
+            title: "",
+          },
+        },
+      });
+      if (createChatData) {
+        console.log("Chat creado", createChatData);
+        hideModal(); // Cierra el modal
+        /* setModalVisible(false);
+        const newChatId = createChatData.data.createChat._id;
+        // Actualiza el estado y selecciona el chat
+        //setSelectedChatId(newChatId);
+        handleSelectChat(newChatId);
+        refetch();
+        // Notifica al padre del nuevo chat
+        onChatSelectId(newChatId); */
+
+        const newChat = createChatData.data.createChat;
+        const newChatId = newChat._id;
+
+        // Actualiza el estado y selecciona el chat
+        onChatSelect(newChat); // Notifica al padre con el nuevo chat
+        onChatSelectId(newChatId); // Notifica al padre con el ID del chat
+
+        setSelectedChatId(newChatId); // Actualiza el estado local
+        setSelectedChatMessages(newChat.messages || []); // Actualiza los mensajes
+
+        toggleDrawer(); // Cierra el drawer
+        refetch(); // Refresca la lista de chats en la consulta
+      }
+    } catch (error) {
+      console.log("Error al crear chat", error);
     }
   };
 
   // Info de usuario =========================================================================
-  const { data, loading, error } = useQuery(ME);
+  const { data, loading, error, refetch } = useQuery(ME);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
@@ -144,6 +216,7 @@ const SidebarDrawer = ({
   }
 
   const Chats = me.chats;
+  const filteredChats = Chats.filter((chat: any) => chat.messages.length > 0);
 
   return (
     <Animated.View
@@ -168,7 +241,7 @@ const SidebarDrawer = ({
       <TouchableOpacity
         style={styles(activeColors).buttonCreate}
         onPress={function (): void {
-          throw new Error("Function not implemented.");
+          handleCreateChat();
         }}
       >
         <MaterialCommunityIcons
@@ -184,7 +257,8 @@ const SidebarDrawer = ({
         Conversaciones anteriores
       </Text>
       <FlatList
-        data={Chats}
+        data={filteredChats}
+        key={filteredChats._id}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <TouchableOpacity

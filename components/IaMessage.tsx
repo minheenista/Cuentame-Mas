@@ -135,6 +135,17 @@ const IaMessage = ({ message }: any) => {
     }
   };
 
+  if (message.id === "loading") {
+    return (
+      <View style={styles(activeColors).loadingContainer}>
+        <Image
+          source={require("./../assets/images/writing.gif")}
+          style={styles(activeColors).loadingGif}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={styles(activeColors).iaMessage}>
       <View style={styles(activeColors).container}>
@@ -224,6 +235,15 @@ const styles = (activeColors: any) =>
       flexDirection: "row",
       justifyContent: "flex-end",
       padding: 10,
+    },
+    loadingContainer: {
+      alignItems: "center",
+      justifyContent: "center",
+      marginVertical: 10,
+    },
+    loadingGif: {
+      width: 150,
+      height: 150,
     },
   });
 

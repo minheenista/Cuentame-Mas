@@ -38,6 +38,8 @@ const styles = (activeColors: any) =>
     text: {
       fontFamily: "Poppins-Regular",
       fontSize: 16,
+      paddingLeft: 10,
+      flexWrap: "wrap",
     },
   });
 

@@ -27,7 +27,8 @@ import "regenerator-runtime/runtime";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { id } from "react-native-paper-dates";
 
 const ME = gql`
   query Me {
@@ -67,6 +68,57 @@ const ME = gql`
           updatedAt
         }
       }
+    }
+  }
+`;
+
+const CREATE_CHAT = gql`
+  mutation CreateChat($input: CreateChatInput!) {
+    createChat(input: $input) {
+      _id
+      userId
+      iamodelId
+      title
+      createdAt
+      updatedAt
+      messages {
+        _id
+        chatId
+        role
+        content
+        bookmark
+        rated
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+const CREATE_MESSAGE = gql`
+  mutation CreateMessage($input: CreateMessageInput!) {
+    createMessage(input: $input) {
+      _id
+      chatId
+      role
+      content
+      bookmark
+      rated
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const EDIT_CHAT = gql`
+  mutation UpdateChat($input: UpdateChatInput!) {
+    updateChat(input: $input) {
+      _id
+      userId
+      iamodelId
+      title
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -116,30 +168,37 @@ export default function userScreen() {
   const [selectedChatMessages, setSelectedChatMessages] = useState<Message[]>(
     []
   );
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
 
   const handleSelectChat = (chatId: any) => {
     refetch();
     console.log("Selected Chat ID desde index:", chatId);
     const selectedChat = Chats.find((chat: any) => chat._id === chatId);
+    setSelectedChatId(chatId); // Actualiza el estado
     if (selectedChat) {
       setSelectedChatMessages(selectedChat.messages || []);
       if (scrollViewRef.current) {
         scrollViewRef.current.scrollToEnd({ animated: true });
       }
     }
+    if (isLeftDrawerVisible) {
+      toggleLeftDrawer();
+    }
   };
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
-  }, [selectedChatMessages]); */
+  }, [selectedChatMessages]);
 
-  // const [selectedChat, setSelectedChat] = useState(null);
-
+  // Seleccionar chat desde el drawer ========================================================================
   const handleChatSelection = (chat: any) => {
     setSelectedChatMessages(chat.messages); // Actualiza el chat seleccionado
-    toggleLeftDrawer();
+    setSelectedChatId(chat._id); // Actualiza el chat seleccionado
+    if (isLeftDrawerVisible) {
+      toggleLeftDrawer();
+    }
   };
 
   // Microfono =====================================================================
@@ -170,6 +229,125 @@ export default function userScreen() {
     }
   };
 
+  // Crear Chat ====================================================================
+  const [createChat] = useMutation(CREATE_CHAT);
+
+  const handleCreateChat = async () => {
+    try {
+      const createChatData = await createChat({
+        variables: {
+          input: {
+            title: "",
+          },
+        },
+      });
+      if (createChatData) {
+        console.log("Chat creado", createChatData);
+        refetch(); // Refrescar los datos del usuario
+        const newChatId = createChatData.data.createChat._id;
+        setSelectedChatId(newChatId); // Actualiza el estado con el nuevo ID
+        handleSelectChat(newChatId);
+        setSelectedChatMessages(createChatData.data.createChat.messages);
+      }
+    } catch (error) {
+      console.log("Error al crear chat", error);
+    }
+  };
+
+  // Editar Chat ===================================================================
+  const [updateChat] = useMutation(EDIT_CHAT);
+
+  // Crear mensaje ================================================================
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [createMessage] = useMutation(CREATE_MESSAGE);
+
+  const handleCreateMessage = async () => {
+    if (!inputValue) return;
+    if (!selectedChatId) {
+      console.log("No hay un chat seleccionado");
+      return;
+    }
+    console.log("Selected Chat ID desde mensaje:", selectedChatId);
+    console.log("Input Value:", inputValue);
+
+    const userMessage = {
+      id: Date.now().toString(), // ID temporal
+      role: "USER",
+      content: inputValue,
+    };
+    setSelectedChatMessages((prevMessages) => [...prevMessages, userMessage]);
+
+    // Limpia el input
+    setInputValue("");
+
+    // Añade un mensaje de carga
+    const loadingMessage = {
+      id: "loading",
+      role: "IA",
+      content: "Cargando respuesta...",
+    };
+    setSelectedChatMessages((prevMessages) => [
+      ...prevMessages,
+      loadingMessage,
+    ]);
+
+    // Muestra la animación de carga
+    setIsLoading(true);
+
+    try {
+      const createdMessage = await createMessage({
+        variables: {
+          input: {
+            chatId: selectedChatId,
+            content: inputValue,
+            role: "USER",
+          },
+        },
+      });
+      if (createdMessage) {
+        if (selectedChatId) {
+          const selectedChat = Chats.find(
+            (chat: any) => chat._id === selectedChatId
+          );
+          if (selectedChat && selectedChat.title === "") {
+            await updateChat({
+              variables: {
+                input: {
+                  id: selectedChatId,
+                  title: inputValue,
+                },
+              },
+            });
+          }
+        }
+
+        const responseMessage = {
+          id: createdMessage.data.createMessage[1].id,
+          role: "IA",
+          content: createdMessage.data.createMessage[1].content,
+        };
+
+        setSelectedChatMessages((prevMessages) =>
+          prevMessages.map((msg) =>
+            msg.id === "loading" ? responseMessage : msg
+          )
+        );
+
+        console.log(createdMessage.data);
+        // setInputValue("");
+        refetch();
+      }
+    } catch (error) {
+      console.log(error);
+      setSelectedChatMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg.id !== "loading")
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // OBTENER INFORMACION DEL USUARIO ==============================================
 
   const { data, loading, error, refetch } = useQuery(ME);
@@ -184,13 +362,18 @@ export default function userScreen() {
   } */
 
   const Chats = me.chats;
-
+  const filteredChats = Chats.filter((chat: any) => chat.messages.length > 0);
+  const orderedChats = filteredChats.sort(
+    (a: any, b: any) =>
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  );
   return (
     <SafeAreaView style={styles(activeColors).safeArea}>
       <SidebarDrawer
         isVisible={isLeftDrawerVisible}
         toggleDrawer={toggleLeftDrawer}
         onChatSelect={handleChatSelection}
+        onChatSelectId={handleSelectChat}
       />
       <ReferencesDrawer
         isVisible={isRightDrawerVisible}
@@ -245,7 +428,7 @@ export default function userScreen() {
             <TouchableOpacity
               style={styles(activeColors).buttonCreate}
               onPress={function (): void {
-                throw new Error("Function not implemented.");
+                handleCreateChat();
               }}
             >
               <MaterialCommunityIcons
@@ -266,8 +449,8 @@ export default function userScreen() {
             </Text>
 
             <FlatList
-              data={Chats}
-              key={Chats._id}
+              data={filteredChats}
+              key={filteredChats._id}
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <TouchableOpacity
@@ -361,6 +544,7 @@ export default function userScreen() {
               style={{ flex: 1, height: 50, flexShrink: 0 }}
               mode="outlined"
               value={inputValue}
+              disabled={isLoading}
               onChangeText={setInputValue}
               label={"Ingresa tu pregunta"}
               outlineColor={activeColors.secondaryDark}
@@ -389,6 +573,7 @@ export default function userScreen() {
                 <TextInput.Icon
                   icon={isListening ? "microphone-off" : "microphone"}
                   color={activeColors.textSecondary}
+                  disabled={isLoading}
                   onPress={() => {
                     toggleSpeech();
                   }}
@@ -399,8 +584,9 @@ export default function userScreen() {
             {/* =================== SEND BUTTON =================== */}
             <View style={styles(activeColors).sendButton}>
               <TouchableOpacity
+                disabled={isLoading}
                 onPress={() => {
-                  throw new Error("Envianding.");
+                  handleCreateMessage();
                 }}
               >
                 <MaterialCommunityIcons
