@@ -77,6 +77,7 @@ const IaMessage = ({ message }: any) => {
           console.log("Lectura detenida");
           setIsPlaying(false);
         },
+        language: "es-ES",
       });
     }
   };
