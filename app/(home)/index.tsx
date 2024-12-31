@@ -16,6 +16,27 @@ import { useColorScheme } from "react-native";
 import BlackButton from "@/components/BlackButton";
 import OutlinedBlackButton from "@/components/OutlinedBlackButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { gql, useMutation } from "@apollo/client";
+
+const CREATE_GUEST_SESSION = gql`
+  mutation CreateGuestSession {
+    createGuestSession {
+      _id
+      sessionId
+      createdAt
+      chatId {
+        _id
+        userId
+        sessionId
+        iamodelId
+        title
+        createdAt
+        updatedAt
+      }
+      status
+    }
+  }
+`;
 
 export default function HomeScreen() {
   const { width } = Dimensions.get("window");
@@ -24,6 +45,22 @@ export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
+  const [createGuestSession] = useMutation(CREATE_GUEST_SESSION);
+
+  // Crear sesion de invitado
+  const handleGuest = async () => {
+    try {
+      const { data } = await createGuestSession();
+      const sessionId = data.createGuestSession.sessionId;
+      const chatId = data.createGuestSession.chatId._id;
+
+      // Navega a GuestScreen con el sessionId en la URL
+      router.push(`/guest?session=${sessionId}&chat=${chatId}`);
+    } catch (error) {
+      console.error("Error al crear sesión de invitado:", error);
+    }
+  };
 
   return (
     <ScrollView style={{ backgroundColor: activeColors.background }}>
@@ -77,7 +114,7 @@ export default function HomeScreen() {
           ></BlackButton>
           <OutlinedBlackButton
             title={"Ingresa como invitado"}
-            handlePress={() => router.navigate("/guest")}
+            handlePress={() => handleGuest()}
             isLoading={false}
           ></OutlinedBlackButton>
         </View>

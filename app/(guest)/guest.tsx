@@ -10,7 +10,7 @@ import {
   ScrollView,
   useColorScheme,
 } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NavBar from "@/components/NavBar";
 import { TextInput } from "react-native-paper";
@@ -26,6 +26,53 @@ import "regenerator-runtime/runtime";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import IaGuestMessage from "@/components/IaGuestMessage";
+
+const GET_GUEST_MESSAGES = gql`
+  query GetChatMessages(
+    $orderBy: String!
+    $limit: Int!
+    $chatId: String!
+    $sessionId: String
+    $desc: Boolean
+  ) {
+    getChatMessages(
+      orderBy: $orderBy
+      limit: $limit
+      chatId: $chatId
+      sessionId: $sessionId
+      desc: $desc
+    ) {
+      items {
+        _id
+        chatId
+        role
+        content
+        rated
+        sessionId
+        createdAt
+        updatedAt
+      }
+      totalItemsCount
+    }
+  }
+`;
+
+const CREATE_GUEST_MESSAGE = gql`
+  mutation CreateGuestMessage($input: CreateGuestMessageInput!) {
+    createGuestMessage(input: $input) {
+      _id
+      chatId
+      role
+      content
+      rated
+      sessionId
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 export default function guestScreen() {
   const { width } = Dimensions.get("window");
@@ -81,6 +128,117 @@ export default function guestScreen() {
     }
   };
 
+  // Session Id
+  const { session, chat } = useLocalSearchParams();
+
+  // obtener mensajes
+  interface Message {
+    _id: string;
+    role: string;
+    content: string;
+  }
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  const { data, refetch } = useQuery(GET_GUEST_MESSAGES, {
+    variables: {
+      orderBy: "createdAt",
+      limit: 100,
+      chatId: chat,
+      sessionId: session,
+      desc: false,
+    },
+    onCompleted: (data) => {
+      if (data?.getChatMessages?.items) {
+        setMessages(data.getChatMessages.items);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (session && chat) {
+      refetch();
+    }
+  }, [session, chat]);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }
+  }, [messages]);
+
+  // Enviar mensaje
+  const [isLoading, setIsLoading] = useState(false);
+  const [createGuestMessage] = useMutation(CREATE_GUEST_MESSAGE);
+
+  const handleSend = async () => {
+    if (!inputValue.trim()) return;
+
+    const userMessage: Message = {
+      _id: Date.now().toString(), // ID temporal para mostrar en la lista
+      role: "USER",
+      content: inputValue,
+    };
+
+    // Añade el mensaje del usuario localmente
+    setMessages((prev) => [...prev, userMessage]);
+
+    // Limpia el campo de texto
+    setInputValue("");
+
+    // Añade un mensaje de carga
+    const loadingMessage = {
+      _id: "loading",
+      role: "IA",
+      content: "",
+    };
+    setMessages((prev) => [...prev, loadingMessage]);
+
+    // Muestra el mensaje de carga
+    setIsLoading(true);
+
+    console.log(session);
+
+    try {
+      const response = await createGuestMessage({
+        variables: {
+          input: {
+            sessionId: session,
+            content: inputValue,
+            role: "USER",
+          },
+        },
+      });
+      if (response) {
+        const iaMessage = {
+          _id: response.data.createGuestMessage[1]._id,
+          role: "IA",
+          content: response.data.createGuestMessage[1].content,
+        };
+
+        // Actualiza con la respuesta del servidor
+        setMessages((prev) =>
+          prev.map((msg) => (msg._id === "loading" ? iaMessage : msg))
+        );
+
+        console.log(data);
+        refetch();
+      }
+    } catch (error) {
+      console.error("Error al enviar mensaje:", error);
+      setMessages((prev) => prev.filter((msg) => msg._id !== "loading"));
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Desplázate hacia abajo cuando cambien los mensajes
+  useEffect(() => {
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
+
   return (
     <SafeAreaView style={styles(activeColors).safeArea}>
       <MenuGuestDrawer
@@ -124,7 +282,7 @@ export default function guestScreen() {
         {/* ===============================   CHATS ================================= */}
         <View style={styles(activeColors).cardContainer}>
           <View style={{ flexDirection: "row-reverse", flex: 1 }}>
-            {width > 880 ? (
+            {width > 880 && messages.length > 0 ? (
               <TouchableOpacity
                 onPress={toggleRightDrawer}
                 style={{ maxWidth: 24, width: 24, margin: 10, flex: 1 }}
@@ -138,13 +296,20 @@ export default function guestScreen() {
             ) : null}
 
             <View style={styles(activeColors).card}>
-              <ScrollView style={{ gap: 20 }}>
-                {/* <UserMessage message="Que es el RFC?" />
-                <IaMessage message="El RFC es una clave única de registro utilizada en México para identificar a las personas físicas y morales que realizan actividades económicas y deben contribuir con el gasto público ante el SAT (Servicio de Administración Tributaria). Esta clave se compone de 13 caracteres alfanuméricos, formados por las iniciales del nombre de la persona física o moral, seguido de la fecha de nacimiento o constitución y 3 caracteres más llamados homoclave que el SAT otorga para que el RFC sea una clave única e irrepetible entre todos los contribuyentes del país" />
-                 */}
+              <ScrollView style={{ gap: 20 }} ref={scrollViewRef}>
+                {messages.length > 0 ? (
+                  messages.map((msg) =>
+                    msg.role === "USER" ? (
+                      <UserMessage message={msg.content} />
+                    ) : (
+                      <IaGuestMessage message={msg} />
+                    )
+                  )
+                ) : (
                 <PreguntasPreguntadas
                   onPressPregunta={handlePregunta}
                 ></PreguntasPreguntadas>
+                )}
               </ScrollView>
             </View>
           </View>
@@ -193,9 +358,8 @@ export default function guestScreen() {
             {/* =================== SEND BUTTON =================== */}
             <View style={styles(activeColors).sendButton}>
               <TouchableOpacity
-                onPress={() => {
-                  throw new Error("Envianding.");
-                }}
+                onPress={() => handleSend()}
+                disabled={isLoading}
               >
                 <MaterialCommunityIcons
                   name="send"

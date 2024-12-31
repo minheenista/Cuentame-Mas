@@ -34,6 +34,26 @@ const REGISTER_USER = gql`
   }
 `;
 
+const CREATE_GUEST_SESSION = gql`
+  mutation CreateGuestSession {
+    createGuestSession {
+      _id
+      sessionId
+      createdAt
+      chatId {
+        _id
+        userId
+        sessionId
+        iamodelId
+        title
+        createdAt
+        updatedAt
+      }
+      status
+    }
+  }
+`;
+
 export default function signupScreen() {
   const width = Dimensions.get("window").width;
 
@@ -94,6 +114,22 @@ export default function signupScreen() {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
+
+  const [createGuestSession] = useMutation(CREATE_GUEST_SESSION);
+
+  // Crear sesion de invitado
+  const handleGuest = async () => {
+    try {
+      const { data } = await createGuestSession();
+      const sessionId = data.createGuestSession.sessionId;
+      const chatId = data.createGuestSession.chatId._id;
+
+      // Navega a GuestScreen con el sessionId en la URL
+      router.push(`/guest?session=${sessionId}&chat=${chatId}`);
+    } catch (error) {
+      console.error("Error al crear sesión de invitado:", error);
+    }
+  };
 
   return (
     <ImageBackground
@@ -305,7 +341,7 @@ export default function signupScreen() {
 
             <Text style={styles(activeColors).errorText}>{message}</Text>
 
-            <TouchableOpacity onPress={() => router.navigate("/guest")}>
+            <TouchableOpacity onPress={() => handleGuest()}>
               <Text
                 style={
                   width > 500
