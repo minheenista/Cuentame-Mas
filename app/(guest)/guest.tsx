@@ -143,7 +143,7 @@ export default function guestScreen() {
 
   const { data, refetch } = useQuery(GET_GUEST_MESSAGES, {
     variables: {
-      orderBy: "createdAt",
+      orderBy: "created_at",
       limit: 100,
       chatId: chat,
       sessionId: session,
@@ -170,6 +170,7 @@ export default function guestScreen() {
 
   // Enviar mensaje
   const [isLoading, setIsLoading] = useState(false);
+  const [isNew, setIsNew] = useState(false);
   const [createGuestMessage] = useMutation(CREATE_GUEST_MESSAGE);
 
   const handleSend = async () => {
@@ -215,9 +216,10 @@ export default function guestScreen() {
           _id: response.data.createGuestMessage[1]._id,
           role: "IA",
           content: response.data.createGuestMessage[1].content,
+          isNew: true, // Indicar que es un mensaje nuevo
         };
 
-        // Actualiza con la respuesta del servidor
+        // Actualiza los mensajes reemplazando el "loading" por el mensaje de la IA
         setMessages((prev) =>
           prev.map((msg) => (msg._id === "loading" ? iaMessage : msg))
         );
@@ -302,7 +304,7 @@ export default function guestScreen() {
                     msg.role === "USER" ? (
                       <UserMessage message={msg.content} />
                     ) : (
-                      <IaGuestMessage message={msg} />
+                      <IaGuestMessage message={msg} isNew={isNew} />
                     )
                   )
                 ) : (

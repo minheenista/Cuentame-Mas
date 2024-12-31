@@ -8,6 +8,7 @@ import {
   Pressable,
   useColorScheme,
   ActivityIndicator,
+  Animated,
 } from "react-native";
 import { Avatar } from "react-native-paper";
 import * as Speech from "expo-speech";
@@ -46,31 +47,62 @@ const ME = gql`
   }
 `;
 
-const IaGuestMessage = ({ message }: any) => {
+const IaGuestMessage = ({
+  message,
+  isNew,
+}: {
+  message: any;
+  isNew: Boolean;
+}) => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
   // Typing effect ===========================================================
   const [displayedText, setDisplayedText] = useState(""); // Texto progresivo
-  const [isTyping, setIsTyping] = useState(true);
+  const [isTyping, setIsTyping] = useState(isNew || false);
+  const fadeAnim = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
-    let typingTimeout: NodeJS.Timeout;
+    if (message.isNew) {
+      // Solo mostrar la animación si es un mensaje nuevo
+      setIsTyping(true);
+      setDisplayedText(""); // Reiniciar texto mostrado
 
-    const typeText = (text: string, index: number) => {
-      if (index < text.length) {
-        setDisplayedText((prev) => prev + text[index]);
-        typingTimeout = setTimeout(() => typeText(text, index + 1), 20); // 50ms entre cada caracter
-      } else {
-        setIsTyping(false); // Finalizó la escritura
-      }
-    };
+      let typingTimeout: NodeJS.Timeout;
 
-    typeText(message.content, 0);
+      const typeText = (text: string, index: number) => {
+        if (index < text.length) {
+          setDisplayedText((prev) => prev + text[index]);
+          typingTimeout = setTimeout(() => typeText(text, index + 1), 20);
+        } else {
+          setIsTyping(false);
+          fadeIn(); // Activar efecto fade-in al terminar
+        }
+      };
 
-    return () => clearTimeout(typingTimeout); // Limpiar timeout al desmontar
-  }, [message.content]);
+      typeText(message.content, 0);
+
+      return () => {
+        clearTimeout(typingTimeout);
+        message.isNew = false; // Marcar como procesado
+      };
+    } else {
+      // Mostrar directamente el texto para mensajes existentes
+      setDisplayedText(message.content);
+      fadeIn();
+    }
+  }, [message]);
+
+  const fadeIn = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      //message.isNew = false; // Marcar mensaje como procesado
+    });
+  };
 
   // Speech implementation ==================================================
 
@@ -156,7 +188,9 @@ const IaGuestMessage = ({ message }: any) => {
   }
 
   return (
-    <View style={styles(activeColors).iaMessage}>
+    <Animated.View
+      style={[styles(activeColors).iaMessage, { opacity: fadeAnim }]}
+    >
       <View style={styles(activeColors).container}>
         <Avatar.Image
           source={require("../assets/images/logojpg.png")}
@@ -164,6 +198,15 @@ const IaGuestMessage = ({ message }: any) => {
         />
         <Text style={styles(activeColors).text}>{displayedText}</Text>
       </View>
+      {isTyping ? (
+        <Image
+          source={require("./../assets/images/writing.gif")}
+          style={[
+            styles(activeColors).loadingGif,
+            { alignSelf: "center", height: 50, width: 50 },
+          ]}
+        />
+      ) : null}
       <View style={styles(activeColors).buttons}>
         <Pressable onPress={toggleSpeech}>
           <MaterialCommunityIcons
@@ -195,13 +238,7 @@ const IaGuestMessage = ({ message }: any) => {
           ></MaterialCommunityIcons>
         </Pressable>
       </View>
-      {isTyping ? (
-        <Image
-          source={require("./../assets/images/writing.gif")}
-          style={styles(activeColors).loadingGif}
-        />
-      ) : null}
-    </View>
+    </Animated.View>
   );
 };
 
