@@ -57,6 +57,8 @@ const CREATE_GUEST_SESSION = gql`
 export default function signupScreen() {
   const width = Dimensions.get("window").width;
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // state del formulario
   const [name, saveName] = useState("");
   const [lastname, saveLastName] = useState("");
@@ -87,6 +89,8 @@ export default function signupScreen() {
       saveMessage("");
     }
 
+    setIsLoading(true);
+
     // guardar el usuario en la base
     try {
       const { data } = await registerUser({
@@ -100,8 +104,10 @@ export default function signupScreen() {
         },
       });
       router.replace("/login");
+      setIsLoading(false);
     } catch (error: any) {
       saveMessage(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -323,20 +329,15 @@ export default function signupScreen() {
                 <PinkButton
                   title={"Registrarse"}
                   handlePress={() => handleSubmit()}
-                  isLoading={false}
+                  isLoading={isLoading}
                 ></PinkButton>
               ) : (
                 <BlackButton
                   title={"Registrarse"}
                   handlePress={() => handleSubmit()}
-                  isLoading={false}
+                  isLoading={isLoading}
                 ></BlackButton>
               )}
-              {/*  <BlackButton
-                title={"Registrarse"}
-                handlePress={() => handleSubmit()}
-                isLoading={false}
-              ></BlackButton> */}
             </View>
 
             <Text style={styles(activeColors).errorText}>{message}</Text>

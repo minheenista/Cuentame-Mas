@@ -57,6 +57,8 @@ export default function loginScreen() {
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // state del form
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -74,6 +76,8 @@ export default function loginScreen() {
       setMessage("");
     }
 
+    setIsLoading(true);
+
     //autenticar usuario
     try {
       const { data } = await loginUser({
@@ -89,6 +93,7 @@ export default function loginScreen() {
       //guardar token en localstorage
       if (accessToken) {
         await AsyncStorage.setItem("token", `${accessToken}`);
+        setIsLoading(false);
       } else {
         console.warn("No se obtuvo un token");
       }
@@ -96,6 +101,7 @@ export default function loginScreen() {
       router.navigate("/(user)/");
     } catch (error: any) {
       setMessage(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -252,13 +258,13 @@ export default function loginScreen() {
                 <PinkButton
                   title={"INICIAR SESIÓN"}
                   handlePress={() => handleSubmit()}
-                  isLoading={false}
+                  isLoading={isLoading}
                 ></PinkButton>
               ) : (
                 <BlackButton
                   title={"INICIAR SESIÓN"}
                   handlePress={() => handleSubmit()}
-                  isLoading={false}
+                  isLoading={isLoading}
                 ></BlackButton>
               )}
             </View>

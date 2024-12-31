@@ -13,10 +13,10 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NavBar from "@/components/NavBar";
-import { TextInput } from "react-native-paper";
+import { ActivityIndicator, TextInput } from "react-native-paper";
 import { Colors } from "@/constants/Colors";
 import MenuGuestDrawer from "@/components/MenuGuestDrawer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import React from "react";
 import ReferencesDrawer from "@/components/ReferencesDrawer";
 import PreguntasPreguntadas from "@/components/PreguntasPreguntadas";
@@ -306,9 +306,9 @@ export default function guestScreen() {
                     )
                   )
                 ) : (
-                <PreguntasPreguntadas
-                  onPressPregunta={handlePregunta}
-                ></PreguntasPreguntadas>
+                  <PreguntasPreguntadas
+                    onPressPregunta={handlePregunta}
+                  ></PreguntasPreguntadas>
                 )}
               </ScrollView>
             </View>
@@ -321,6 +321,7 @@ export default function guestScreen() {
               onChangeText={setInputValue}
               style={{ flex: 1, height: 50, flexShrink: 0 }}
               mode="outlined"
+              disabled={isLoading}
               label={"Ingresa tu pregunta"}
               outlineColor={activeColors.secondaryDark}
               theme={{
@@ -348,6 +349,7 @@ export default function guestScreen() {
                 <TextInput.Icon
                   icon={isListening ? "microphone-off" : "microphone"}
                   color={activeColors.textSecondary}
+                  disabled={isLoading}
                   onPress={() => {
                     toggleSpeech();
                   }}
@@ -361,11 +363,18 @@ export default function guestScreen() {
                 onPress={() => handleSend()}
                 disabled={isLoading}
               >
-                <MaterialCommunityIcons
-                  name="send"
-                  color={activeColors.secondaryDark}
-                  size={24}
-                ></MaterialCommunityIcons>
+                {isLoading ? (
+                  <ActivityIndicator
+                    animating={true}
+                    color={activeColors.secondaryDark}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="send"
+                    color={activeColors.secondaryDark}
+                    size={24}
+                  ></MaterialCommunityIcons>
+                )}
               </TouchableOpacity>
             </View>
           </View>

@@ -10,6 +10,7 @@ import {
   Pressable,
   useColorScheme,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import Modal from "react-native-modal";
 import { TextInput } from "react-native-paper";
@@ -136,6 +137,7 @@ export const ReminderItem = ({
 
   // Editar Recordatorio
   const [updateReminder] = useMutation(UPDATE_REMINDER);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (title) {
@@ -150,6 +152,7 @@ export const ReminderItem = ({
       return;
     }
 
+    setIsLoading(true);
     try {
       const { data } = await updateReminder({
         variables: {
@@ -163,16 +166,20 @@ export const ReminderItem = ({
       if (data) {
         closeSmallModalEdit();
         refetch();
+        setIsLoading(false);
       }
     } catch (error) {
       setMessage("Error al editar el recordatorio");
+      setIsLoading(false);
     }
   };
 
   // Eliminar Recordatorio
   const [deleteReminder] = useMutation(DELETE_REMINDER);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   const handleDeleteReminder = async (id: any) => {
+    setIsLoadingDelete(true);
     try {
       const { data } = await deleteReminder({
         variables: { id },
@@ -180,8 +187,12 @@ export const ReminderItem = ({
       if (data) {
         closeSmallModalDelete();
         refetch();
+        setIsLoadingDelete(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error al eliminar el recordatorio");
+      setIsLoadingDelete(false);
+    }
   };
 
   return (
@@ -292,11 +303,18 @@ export const ReminderItem = ({
             </Pressable>
             <Pressable
               style={styles(activeColors).pinkButton}
+              disabled={isLoading}
               onPress={() => {
                 handleEditReminder();
               }}
             >
-              <Text style={styles(activeColors).modalButtonText}>Guardar</Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles(activeColors).modalButtonText}>
+                  Guardar
+                </Text>
+              )}
             </Pressable>
           </View>
         </View>
@@ -341,11 +359,18 @@ export const ReminderItem = ({
             </Pressable>
             <Pressable
               style={styles(activeColors).dangerButton}
+              disabled={isLoadingDelete}
               onPress={() => {
                 handleDeleteReminder(id);
               }}
             >
-              <Text style={styles(activeColors).modalButtonText}>Eliminar</Text>
+              {isLoadingDelete ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles(activeColors).modalButtonText}>
+                  Eliminar
+                </Text>
+              )}
             </Pressable>
           </View>
         </View>

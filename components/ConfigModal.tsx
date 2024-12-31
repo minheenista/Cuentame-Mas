@@ -9,6 +9,7 @@ import {
   useColorScheme,
   ScrollView,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import Modal from "react-native-modal";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
@@ -195,6 +196,7 @@ const FirstTab = () => {
   const [secureText, setSecureText] = useState(true);
   const [secureTextConfirm, setSecureTextConfirm] = useState(true);
   const [secureTextOld, setSecureTextOld] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleSecureText = () => {
     setSecureText(!secureText);
@@ -240,8 +242,8 @@ const FirstTab = () => {
     if (User) {
       setName(User.name);
       setSurname(User.lastname);
-      const regimenFiscalDynamic = findRegimenFiscal(User.regimenFiscal);
-      setRegimenFiscal(regimenFiscalDynamic ?? null);
+      //const regimenFiscalDynamic = findRegimenFiscal(User.regimenFiscal); // TODO: Implementar findRegimenFiscal
+      //setRegimenFiscal(regimenFiscalDynamic ?? null);
     }
   }, [User]);
 
@@ -264,6 +266,8 @@ const FirstTab = () => {
         return;
       }
     }
+
+    setIsLoading(true);
 
     const input: {
       name?: string;
@@ -290,10 +294,12 @@ const FirstTab = () => {
         setNewPassword("");
         setMessage("Perfil actualizado exitosamente");
         console.log(data);
+        setIsLoading(false);
       }
     } catch (error) {
       setMessage("Error al actualizar el perfil");
       console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -540,7 +546,7 @@ const FirstTab = () => {
                 handleUpdateUser();
               }}
               title="Guardar Cambios"
-              isLoading={false}
+              isLoading={isLoading}
             ></PinkButton>
           </View>
         ) : null}
@@ -592,6 +598,7 @@ const SecondTab = () => {
 
   // Crear Recordatorio =========================================================
   const [createReminder] = useMutation(CREATE_REMINDER);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { data, loading, error, refetch } = useQuery(ME);
   const reminders = data.me.reminders;
@@ -605,6 +612,7 @@ const SecondTab = () => {
       return;
     } else {
       setMessage("");
+      setIsLoading(true);
       try {
         const { data } = await createReminder({
           variables: {
@@ -616,9 +624,11 @@ const SecondTab = () => {
         });
         closeSmallModal();
         refetch();
+        setIsLoading(false);
         setInputTitleReminder("");
       } catch (error: any) {
         setMessage(error.message);
+        setIsLoading(false);
       }
     }
   };
@@ -759,7 +769,12 @@ const SecondTab = () => {
               handleCreateReminder();
             }}
           >
-            <Text style={styles(activeColors).modalButtonText}>Guardar</Text>
+            {" "}
+            {isLoading ? (
+              <ActivityIndicator size="small" color={activeColors.background} />
+            ) : (
+              <Text style={styles(activeColors).modalButtonText}>Guardar</Text>
+            )}
           </Pressable>
         </View>
       </Modal>

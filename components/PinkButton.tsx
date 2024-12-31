@@ -22,14 +22,10 @@ const PinkButton = ({ title, handlePress, isLoading }: PinkButtonProps) => {
       disabled={isLoading}
       style={[Styles.roundBlackButton]}
     >
-      <Text style={[Styles.whiteText]}>{title}</Text>
-      {isLoading && (
-        <ActivityIndicator
-          animating={isLoading}
-          color="#fff"
-          size="small"
-          style={{ marginLeft: 10 }}
-        />
+      {isLoading ? (
+        <ActivityIndicator animating={isLoading} color="#fff" size="small" />
+      ) : (
+        <Text style={[Styles.whiteText]}>{title}</Text>
       )}
     </TouchableOpacity>
   );

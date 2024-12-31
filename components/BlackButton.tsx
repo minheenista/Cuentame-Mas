@@ -22,14 +22,10 @@ const BlackButton = ({ title, handlePress, isLoading }: BlackButtonProps) => {
       disabled={isLoading}
       style={[Styles.roundBlackButton]}
     >
-      <Text style={[Styles.whiteText]}>{title}</Text>
-      {isLoading && (
-        <ActivityIndicator
-          animating={isLoading}
-          color="#fff"
-          size="small"
-          style={{ marginLeft: 10 }}
-        />
+      {isLoading ? (
+        <ActivityIndicator animating={isLoading} color="#fff" size="small" />
+      ) : (
+        <Text style={[Styles.whiteText]}>{title}</Text>
       )}
     </TouchableOpacity>
   );

@@ -9,6 +9,7 @@ import {
   Text,
   useColorScheme,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import Modal from "react-native-modal";
 import { Menu, TextInput } from "react-native-paper";
@@ -120,9 +121,12 @@ const ChatItem = ({ chat, id }: { chat: any; id: any }) => {
     hideMenu();
   };
 
+  const [isLoadingEdit, setIsLoadingEdit] = useState(false);
+
   const [updateChat] = useMutation(EDIT_CHAT);
 
   const handleSave = async () => {
+    setIsLoadingEdit(true);
     try {
       const { data } = await updateChat({
         variables: {
@@ -134,8 +138,12 @@ const ChatItem = ({ chat, id }: { chat: any; id: any }) => {
       });
       if (data) {
         setIsEditing(false);
+        setIsLoadingEdit(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error al actualizar el nombre del chat");
+      setIsLoadingEdit(false);
+    }
   };
 
   const handleCancelEdit = () => {
@@ -147,8 +155,11 @@ const ChatItem = ({ chat, id }: { chat: any; id: any }) => {
 
   const [deleteChat] = useMutation(DELETE_CHAT);
 
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleDelete = async () => {
     console.log("Deleting Chat", id);
+    setIsDeleting(true);
     try {
       const { data } = await deleteChat({
         variables: {
@@ -159,8 +170,12 @@ const ChatItem = ({ chat, id }: { chat: any; id: any }) => {
         console.log("Chat deleted", data);
         refetch();
         closeSmallModalDelete();
+        setIsDeleting(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error al eliminar el chat");
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -180,18 +195,24 @@ const ChatItem = ({ chat, id }: { chat: any; id: any }) => {
               handleSave();
             }}
           >
-            <MaterialCommunityIcons
-              name="check"
-              size={24}
-              color={activeColors.success}
-            />
+            {isLoadingEdit ? (
+              <ActivityIndicator size="small" color={activeColors.success} />
+            ) : (
+              <MaterialCommunityIcons
+                name="check"
+                size={24}
+                color={activeColors.success}
+              />
+            )}
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCancelEdit}>
-            <MaterialCommunityIcons
-              name="close"
-              size={24}
-              color={activeColors.danger}
-            />
+            {isLoadingEdit ? null : (
+              <MaterialCommunityIcons
+                name="close"
+                size={24}
+                color={activeColors.danger}
+              />
+            )}
           </TouchableOpacity>
         </View>
       ) : (
@@ -266,12 +287,19 @@ const ChatItem = ({ chat, id }: { chat: any; id: any }) => {
               <Text style={styles(activeColors).modalButtonText}>Cancelar</Text>
             </Pressable>
             <Pressable
+              disabled={isDeleting}
               style={styles(activeColors).dangerButton}
               onPress={() => {
                 handleDelete();
               }}
             >
-              <Text style={styles(activeColors).modalButtonText}>Eliminar</Text>
+              {isDeleting ? (
+                <ActivityIndicator size="small" color="White" />
+              ) : (
+                <Text style={styles(activeColors).modalButtonText}>
+                  Eliminar
+                </Text>
+              )}
             </Pressable>
           </View>
         </View>

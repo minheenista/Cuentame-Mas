@@ -8,25 +8,17 @@ import {
   StyleSheet,
   Animated,
   Image,
-  Dimensions,
   TouchableOpacity,
-  Button,
   FlatList,
   Pressable,
   useColorScheme,
   Easing,
+  ActivityIndicator,
 } from "react-native";
 import { Avatar, Divider } from "react-native-paper";
 import ChatItem from "./ChatItem";
 import ConfigModal from "./ConfigModal";
 import { gql, useMutation, useQuery } from "@apollo/client";
-
-const chats = [
-  { id: "1", name: "Que son los puntos infonavit y como usarlos?" },
-  { id: "2", name: "Chat 2" },
-  { id: "3", name: "Chat 3" },
-  // Agrega más chats según sea necesario
-];
 
 const ME = gql`
   query Me {
@@ -164,7 +156,10 @@ const SidebarDrawer = ({
   // Crear Chat ====================================================================
   const [createChat] = useMutation(CREATE_CHAT);
 
+  const [isLoadingCreateChat, setIsLoadingCreateChat] = useState(false);
+
   const handleCreateChat = async () => {
+    setIsLoadingCreateChat(true);
     try {
       const createChatData = await createChat({
         variables: {
@@ -197,9 +192,11 @@ const SidebarDrawer = ({
 
         toggleDrawer(); // Cierra el drawer
         refetch(); // Refresca la lista de chats en la consulta
+        setIsLoadingCreateChat(false);
       }
     } catch (error) {
       console.log("Error al crear chat", error);
+      setIsLoadingCreateChat(false);
     }
   };
 
@@ -244,12 +241,21 @@ const SidebarDrawer = ({
           handleCreateChat();
         }}
       >
-        <MaterialCommunityIcons
-          name="plus"
-          size={24}
-          color={activeColors.text}
-        ></MaterialCommunityIcons>
-        <Text style={styles(activeColors).textButton}> Crear Conversación</Text>
+        {isLoadingCreateChat ? (
+          <ActivityIndicator animating={true} color={activeColors.text} />
+        ) : (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <MaterialCommunityIcons
+              name="plus"
+              size={24}
+              color={activeColors.text}
+            ></MaterialCommunityIcons>
+            <Text style={styles(activeColors).textButton}>
+              {" "}
+              Crear Conversación
+            </Text>
+          </View>
+        )}
       </TouchableOpacity>
       <Divider />
       {/* ============= LISTA DE CONVERSACIONES ============================== */}

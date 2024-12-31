@@ -21,6 +21,7 @@ import {
   FlatList,
   ScrollView,
   useColorScheme,
+  ActivityIndicator,
 } from "react-native";
 import { Avatar, Divider, TextInput } from "react-native-paper";
 import "regenerator-runtime/runtime";
@@ -231,8 +232,10 @@ export default function userScreen() {
 
   // Crear Chat ====================================================================
   const [createChat] = useMutation(CREATE_CHAT);
+  const [isLoadingCreateChat, setIsLoadingCreateChat] = useState(false);
 
   const handleCreateChat = async () => {
+    setIsLoadingCreateChat(true);
     try {
       const createChatData = await createChat({
         variables: {
@@ -248,9 +251,11 @@ export default function userScreen() {
         setSelectedChatId(newChatId); // Actualiza el estado con el nuevo ID
         handleSelectChat(newChatId);
         setSelectedChatMessages(createChatData.data.createChat.messages);
+        setIsLoadingCreateChat(false);
       }
     } catch (error) {
       console.log("Error al crear chat", error);
+      setIsLoadingCreateChat(false);
     }
   };
 
@@ -430,16 +435,23 @@ export default function userScreen() {
               onPress={function (): void {
                 handleCreateChat();
               }}
+              disabled={isLoadingCreateChat}
             >
-              <MaterialCommunityIcons
-                name="plus"
-                size={24}
-                color={activeColors.text}
-              ></MaterialCommunityIcons>
-              <Text style={styles(activeColors).textButton}>
-                {" "}
-                Crear Conversación
-              </Text>
+              {isLoadingCreateChat ? (
+                <ActivityIndicator animating={true} color={activeColors.text} />
+              ) : (
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <MaterialCommunityIcons
+                    name="plus"
+                    size={24}
+                    color={activeColors.text}
+                  ></MaterialCommunityIcons>
+                  <Text style={styles(activeColors).textButton}>
+                    {" "}
+                    Crear Conversación
+                  </Text>
+                </View>
+              )}
             </TouchableOpacity>
             <Divider bold />
 
@@ -589,11 +601,18 @@ export default function userScreen() {
                   handleCreateMessage();
                 }}
               >
-                <MaterialCommunityIcons
-                  name="send"
-                  color={activeColors.secondaryDark}
-                  size={24}
-                ></MaterialCommunityIcons>
+                {isLoading ? (
+                  <ActivityIndicator
+                    animating={true}
+                    color={activeColors.secondaryDark}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="send"
+                    color={activeColors.secondaryDark}
+                    size={24}
+                  ></MaterialCommunityIcons>
+                )}
               </TouchableOpacity>
             </View>
           </View>
