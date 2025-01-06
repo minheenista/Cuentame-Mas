@@ -769,7 +769,6 @@ const SecondTab = () => {
               handleCreateReminder();
             }}
           >
-            {" "}
             {isLoading ? (
               <ActivityIndicator size="small" color={activeColors.background} />
             ) : (
