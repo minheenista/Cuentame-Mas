@@ -302,9 +302,13 @@ export default function guestScreen() {
                 {messages.length > 0 ? (
                   messages.map((msg) =>
                     msg.role === "USER" ? (
-                      <UserMessage message={msg.content} />
+                      <UserMessage message={msg.content} key={msg._id} />
                     ) : (
-                      <IaGuestMessage message={msg} isNew={isNew} />
+                      <IaGuestMessage
+                        message={msg}
+                        isNew={isNew}
+                        key={msg._id}
+                      />
                     )
                   )
                 ) : (
