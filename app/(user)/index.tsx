@@ -540,13 +540,7 @@ export default function userScreen() {
                         />
                       );
                     } else if (message.role === "IA") {
-                      return (
-                        <IaMessage
-                          key={message._id}
-                          message={message}
-                          isNew={isNew}
-                        />
-                      );
+                      return <IaMessage key={message._id} message={message} />;
                     }
                     return null;
                   })
