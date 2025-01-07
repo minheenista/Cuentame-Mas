@@ -85,6 +85,15 @@ export default function signupScreen() {
     if (password.length < 8) {
       saveMessage("La contraseña debe ser de al menos 8 caracteres");
       return;
+    } else if (
+      !/[A-Z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+    ) {
+      saveMessage(
+        "La contraseña debe contener al menos una letra mayúscula, un número y un carácter especial"
+      );
+      return;
     } else {
       saveMessage("");
     }
@@ -103,8 +112,11 @@ export default function signupScreen() {
           },
         },
       });
-      router.replace("/login");
-      setIsLoading(false);
+      if (data) {
+        saveMessage("Usuario creado correctamente");
+        router.replace("/login");
+        setIsLoading(false);
+      }
     } catch (error: any) {
       saveMessage(error.message);
       setIsLoading(false);
