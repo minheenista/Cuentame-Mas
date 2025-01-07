@@ -161,7 +161,7 @@ export default function userScreen() {
   const scrollViewRef = useRef<ScrollView>(null);
 
   interface Message {
-    id: string;
+    _id: string;
     role: string;
     content: string;
   }
@@ -277,10 +277,12 @@ export default function userScreen() {
     console.log("Input Value:", inputValue);
 
     const userMessage = {
-      id: Date.now().toString(), // ID temporal
+      _id: Date.now().toString(), // ID temporal
       role: "USER",
       content: inputValue,
     };
+
+    // mensaje local
     setSelectedChatMessages((prevMessages) => [...prevMessages, userMessage]);
 
     // Limpia el input
@@ -288,9 +290,9 @@ export default function userScreen() {
 
     // Añade un mensaje de carga
     const loadingMessage = {
-      id: "loading",
+      _id: "loading",
       role: "IA",
-      content: "Cargando respuesta...",
+      content: "",
     };
     setSelectedChatMessages((prevMessages) => [
       ...prevMessages,
@@ -311,6 +313,7 @@ export default function userScreen() {
         },
       });
       if (createdMessage) {
+        // cambio de nombre al chat
         if (selectedChatId) {
           const selectedChat = Chats.find(
             (chat: any) => chat._id === selectedChatId
@@ -328,14 +331,14 @@ export default function userScreen() {
         }
 
         const responseMessage = {
-          id: createdMessage.data.createMessage[1].id,
+          _id: createdMessage.data.createMessage[1]._id,
           role: "IA",
           content: createdMessage.data.createMessage[1].content,
         };
 
         setSelectedChatMessages((prevMessages) =>
           prevMessages.map((msg) =>
-            msg.id === "loading" ? responseMessage : msg
+            msg._id === "loading" ? responseMessage : msg
           )
         );
 
@@ -346,7 +349,7 @@ export default function userScreen() {
     } catch (error) {
       console.log(error);
       setSelectedChatMessages((prevMessages) =>
-        prevMessages.filter((msg) => msg.id !== "loading")
+        prevMessages.filter((msg) => msg._id !== "loading")
       );
     } finally {
       setIsLoading(false);
@@ -461,8 +464,8 @@ export default function userScreen() {
             </Text>
 
             <FlatList
-              data={filteredChats}
-              key={filteredChats._id}
+              data={orderedChats}
+              key={orderedChats._id}
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <TouchableOpacity
@@ -531,13 +534,19 @@ export default function userScreen() {
                     if (message.role === "USER") {
                       return (
                         <UserMessage
-                          key={message.id}
+                          key={message._id}
                           message={message.content}
                           label={data.me.name.charAt(0).toUpperCase()}
                         />
                       );
                     } else if (message.role === "IA") {
-                      return <IaMessage key={message.id} message={message} />;
+                      return (
+                        <IaMessage
+                          key={message._id}
+                          message={message}
+                          isNew={isNew}
+                        />
+                      );
                     }
                     return null;
                   })

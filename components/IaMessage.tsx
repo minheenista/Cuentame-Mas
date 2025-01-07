@@ -153,7 +153,7 @@ const IaMessage = ({ message }: any) => {
     }
   };
 
-  if (message.id === "loading") {
+  if (message._id === "loading") {
     return (
       <View style={styles(activeColors).loadingContainer}>
         <Image

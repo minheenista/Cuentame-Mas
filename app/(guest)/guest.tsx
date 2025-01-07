@@ -216,7 +216,6 @@ export default function guestScreen() {
           _id: response.data.createGuestMessage[1]._id,
           role: "IA",
           content: response.data.createGuestMessage[1].content,
-          isNew: true, // Indicar que es un mensaje nuevo
         };
 
         // Actualiza los mensajes reemplazando el "loading" por el mensaje de la IA

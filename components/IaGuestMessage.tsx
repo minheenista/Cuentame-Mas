@@ -63,8 +63,8 @@ const IaGuestMessage = ({
   const [isTyping, setIsTyping] = useState(isNew || false);
   const fadeAnim = useState(new Animated.Value(0))[0];
 
-  useEffect(() => {
-    if (message.isNew) {
+  /* useEffect(() => {
+    if (isNew === message.isNew) {
       // Solo mostrar la animación si es un mensaje nuevo
       setIsTyping(true);
       setDisplayedText(""); // Reiniciar texto mostrado
@@ -103,7 +103,7 @@ const IaGuestMessage = ({
       //message.isNew = false; // Marcar mensaje como procesado
     });
   };
-
+ */
   // Speech implementation ==================================================
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -198,7 +198,7 @@ const IaGuestMessage = ({
         />
         <Text style={styles(activeColors).text}>{displayedText}</Text>
       </View>
-      {isTyping ? (
+      {/* {isTyping ? (
         <Image
           source={require("./../assets/images/writing.gif")}
           style={[
@@ -206,7 +206,7 @@ const IaGuestMessage = ({
             { alignSelf: "center", height: 50, width: 50 },
           ]}
         />
-      ) : null}
+      ) : null} */}
       <View style={styles(activeColors).buttons}>
         <Pressable onPress={toggleSpeech}>
           <MaterialCommunityIcons
