@@ -87,7 +87,7 @@ export default function HomeScreen() {
                 : styles(activeColors).introTextMedium
             }
           >
-            Obtén respuestas inmediatas a tus dudas de de educación financiera
+            Obtén respuestas inmediatas a tus dudas de educación financiera
           </Text>
           <Image
             source={require("./../../assets/images/logo.png")}
