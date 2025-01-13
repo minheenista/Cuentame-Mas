@@ -40,14 +40,14 @@ const PreguntasPreguntadas = ({
         >
           <View style={styles(activeColors).cardQuestion}>
             <Text style={styles(activeColors).cardText}>
-              Como empezar a invertir?
+              Cómo empezar a invertir?
             </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onPressPregunta("Que es la E-Firma?")}>
           <View style={styles(activeColors).cardQuestion}>
             <Text style={styles(activeColors).cardText}>
-              Que es la E-Firma?
+              Qué es la E-Firma?
             </Text>
           </View>
         </TouchableOpacity>
@@ -56,13 +56,13 @@ const PreguntasPreguntadas = ({
         >
           <View style={styles(activeColors).cardQuestion}>
             <Text style={styles(activeColors).cardText}>
-              Como funciona el credito?
+              Cómo funciona el crédito?
             </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onPressPregunta("Que es el Afore?")}>
           <View style={styles(activeColors).cardQuestion}>
-            <Text style={styles(activeColors).cardText}>Que es el Afore?</Text>
+            <Text style={styles(activeColors).cardText}>Qué es el Afore?</Text>
           </View>
         </TouchableOpacity>
       </View>

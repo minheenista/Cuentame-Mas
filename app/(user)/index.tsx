@@ -173,6 +173,7 @@ export default function userScreen() {
 
   const handleSelectChat = (chatId: any) => {
     refetch();
+    setErrorMessage("");
     console.log("Selected Chat ID desde index:", chatId);
     const selectedChat = Chats.find((chat: any) => chat._id === chatId);
     setSelectedChatId(chatId); // Actualiza el estado
@@ -197,6 +198,7 @@ export default function userScreen() {
   const handleChatSelection = (chat: any) => {
     setSelectedChatMessages(chat.messages); // Actualiza el chat seleccionado
     setSelectedChatId(chat._id); // Actualiza el chat seleccionado
+    setErrorMessage("");
     if (isLeftDrawerVisible) {
       toggleLeftDrawer();
     }
@@ -236,6 +238,7 @@ export default function userScreen() {
 
   const handleCreateChat = async () => {
     setIsLoadingCreateChat(true);
+    setErrorMessage("");
     try {
       const createChatData = await createChat({
         variables: {
@@ -264,6 +267,7 @@ export default function userScreen() {
 
   // Crear mensaje ================================================================
   const [isLoading, setIsLoading] = useState(false);
+  const [errormessage, setErrorMessage] = useState("");
 
   const [createMessage] = useMutation(CREATE_MESSAGE);
 
@@ -275,6 +279,7 @@ export default function userScreen() {
     }
     console.log("Selected Chat ID desde mensaje:", selectedChatId);
     console.log("Input Value:", inputValue);
+    setErrorMessage("");
 
     const userMessage = {
       _id: Date.now().toString(), // ID temporal
@@ -351,6 +356,9 @@ export default function userScreen() {
       setSelectedChatMessages((prevMessages) =>
         prevMessages.filter((msg) => msg._id !== "loading")
       );
+      setErrorMessage(
+        `Se ha producido un error al enviar el mensaje, vuelve a intentarlo: ${error}`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -403,7 +411,7 @@ export default function userScreen() {
               style={styles(activeColors).logoHeader}
             ></Image>
 
-            <Text style={styles(activeColors).titleHeader}>Cuentame +</Text>
+            <Text style={styles(activeColors).titleHeader}>Cuéntame +</Text>
           </View>
           {selectedChatMessages.length > 0 ? (
             <TouchableOpacity onPress={toggleRightDrawer}>
@@ -427,7 +435,7 @@ export default function userScreen() {
                 style={styles(activeColors).logo}
               ></Image>
               <Pressable onPress={() => router.navigate("/")}>
-                <Text style={styles(activeColors).titleHeader}>Cuentame +</Text>
+                <Text style={styles(activeColors).titleHeader}>Cuéntame +</Text>
               </Pressable>
             </View>
             <Divider bold />
@@ -549,6 +557,11 @@ export default function userScreen() {
                     onPressPregunta={handlePregunta}
                   ></PreguntasPreguntadas>
                 )}
+                {errormessage ? (
+                  <Text style={styles(activeColors).errorText}>
+                    {errormessage}
+                  </Text>
+                ) : null}
               </ScrollView>
             </View>
           </View>
@@ -744,5 +757,13 @@ const styles = (activeColors: any) =>
       borderWidth: 2,
       padding: 10,
       marginLeft: 10,
+    },
+    errorText: {
+      marginTop: 10,
+      marginHorizontal: 20,
+      color: activeColors.danger,
+      fontFamily: "Poppins-Regular",
+      fontSize: 16,
+      textAlign: "center",
     },
   });

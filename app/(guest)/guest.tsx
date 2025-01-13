@@ -172,9 +172,11 @@ export default function guestScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [createGuestMessage] = useMutation(CREATE_GUEST_MESSAGE);
+  const [errormessage, setErrorMessage] = useState("");
 
   const handleSend = async () => {
     if (!inputValue.trim()) return;
+    setErrorMessage("");
 
     const userMessage: Message = {
       _id: Date.now().toString(), // ID temporal para mostrar en la lista
@@ -229,6 +231,9 @@ export default function guestScreen() {
     } catch (error) {
       console.error("Error al enviar mensaje:", error);
       setMessages((prev) => prev.filter((msg) => msg._id !== "loading"));
+      setErrorMessage(
+        `Se ha producido un error al enviar el mensaje, vuelve a intentarlo: ${error}`
+      );
       setIsLoading(false);
     } finally {
       setIsLoading(false);
@@ -315,6 +320,11 @@ export default function guestScreen() {
                     onPressPregunta={handlePregunta}
                   ></PreguntasPreguntadas>
                 )}
+                {errormessage ? (
+                  <Text style={styles(activeColors).errorText}>
+                    {errormessage}
+                  </Text>
+                ) : null}
               </ScrollView>
             </View>
           </View>
@@ -466,5 +476,13 @@ const styles = (activeColors: any) =>
       borderWidth: 2,
       padding: 10,
       marginLeft: 10,
+    },
+    errorText: {
+      marginTop: 10,
+      marginHorizontal: 20,
+      color: activeColors.danger,
+      fontFamily: "Poppins-Regular",
+      fontSize: 16,
+      textAlign: "center",
     },
   });

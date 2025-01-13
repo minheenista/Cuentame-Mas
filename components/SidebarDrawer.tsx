@@ -231,7 +231,7 @@ const SidebarDrawer = ({
           source={require("./../assets/images/logo.png")}
           style={styles(activeColors).logo}
         ></Image>
-        <Text style={styles(activeColors).title}> Cuentame +</Text>
+        <Text style={styles(activeColors).title}> Cuéntame +</Text>
       </View>
       <Divider />
       {/* =================== CREATE CHAT BUTTON ============================ */}
