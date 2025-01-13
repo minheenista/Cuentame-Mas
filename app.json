@@ -25,7 +25,8 @@
       },
       "permissions": [
         "RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.michifus.cuentamemas"
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +38,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "49093ea2-178c-4398-835d-26a26bc74b35"
+      }
     }
   }
 }
