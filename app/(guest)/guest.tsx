@@ -120,10 +120,12 @@ export default function guestScreen() {
 
   const toggleSpeech = () => {
     if (isListening) {
+      resetTranscript();
       SpeechRecognition.stopListening();
       setIsListening(false);
     } else {
-      SpeechRecognition.startListening({ continuous: true });
+      resetTranscript();
+      SpeechRecognition.startListening({ continuous: true, language: "es-MX" });
       setIsListening(true);
     }
   };
