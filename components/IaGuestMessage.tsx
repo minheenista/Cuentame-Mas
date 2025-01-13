@@ -189,14 +189,14 @@ const IaGuestMessage = ({
 
   return (
     <Animated.View
-      style={[styles(activeColors).iaMessage, { opacity: fadeAnim }]}
+      style={[styles(activeColors).iaMessage]}
     >
       <View style={styles(activeColors).container}>
         <Avatar.Image
           source={require("../assets/images/logojpg.png")}
           size={32}
         />
-        <Text style={styles(activeColors).text}>{displayedText}</Text>
+        <Text style={styles(activeColors).text}>{message.content}</Text>
       </View>
       {/* {isTyping ? (
         <Image
