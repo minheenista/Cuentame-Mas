@@ -106,9 +106,9 @@ const FirstTab = () => {
 
   const regimenesFiscales = [
     { label: "No Definido", value: "NO_DEFINIDO" },
-    { label: "Arrendamientos", value: "ARRENDAMIENTO" },
+    { label: "Arrendamiento", value: "ARRENDAMIENTO" },
     {
-      label: "Sueldos Y Salarios E Ingresos Asimmilados A Salarios",
+      label: "Sueldos y Salarios e Ingresos Asimilados a Salarios",
       value: "SUELDOS_Y_SALARIOS",
     },
     { label: "Demás Ingresos", value: "DEMAS_INGRESOS" },
@@ -244,8 +244,8 @@ const FirstTab = () => {
     if (User) {
       setName(User.name);
       setSurname(User.lastname);
-      //const regimenFiscalDynamic = findRegimenFiscal(User.regimenFiscal); // TODO: Implementar findRegimenFiscal
-      //setRegimenFiscal(regimenFiscalDynamic ?? null);
+      const regimenFiscalDynamic = findRegimenFiscal(User.regimenFiscal); // TODO: Implementar findRegimenFiscal
+      setRegimenFiscal(regimenFiscalDynamic);
     }
   }, [User]);
 
