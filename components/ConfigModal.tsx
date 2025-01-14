@@ -73,6 +73,8 @@ const ME = gql`
         createdAt
         updatedAt
       }
+      emailPreferences
+      pushPreferences
     }
   }
 `;
@@ -569,6 +571,18 @@ const CREATE_REMINDER = gql`
   }
 `;
 
+const UPDATE_USER_NOTIFICATIONS = gql`
+  mutation UpdateUserNotificationPreferences(
+    $input: UpdateUserNotificationPreferencesInput!
+  ) {
+    updateUserNotificationPreferences(input: $input) {
+      _id
+      emailPreferences
+      pushPreferences
+    }
+  }
+`;
+
 const SecondTab = () => {
   const width = Dimensions.get("window").width;
   const isMobile = width < 900;
@@ -576,13 +590,6 @@ const SecondTab = () => {
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === "dark";
   const activeColors = Colors[isDarkMode ? "dark" : "light"];
-
-  // Notificaciones
-  const [isPushOn, setIsPushOn] = React.useState(false);
-  const onToggleSwitchPush = () => setIsPushOn(!isPushOn);
-
-  const [isEmailOn, setIsEmailOn] = React.useState(false);
-  const onToggleSwitchEmail = () => setIsEmailOn(!isEmailOn);
 
   // Modal Crear Recordatorio ==================================================
   const [isSmallModalVisible, setIsSmallModalVisible] = useState(false);
@@ -631,6 +638,51 @@ const SecondTab = () => {
         setIsLoading(false);
       }
     }
+  };
+
+  // Notificaciones ===============================================================
+  // Notificaciones
+  const [isPushOn, setIsPushOn] = React.useState(false);
+  const [isEmailOn, setIsEmailOn] = React.useState(false);
+
+  // Actualiza preferencias de notificaciones cuando los datos cambien
+  useEffect(() => {
+    if (data) {
+      setIsPushOn(data.me.pushPreferences);
+      setIsEmailOn(data.me.emailPreferences);
+    }
+  }, [data]);
+
+  const [updateUserNotifications] = useMutation(UPDATE_USER_NOTIFICATIONS);
+
+  const handleUpdateUserNotifications = async (key: string, value: boolean) => {
+    try {
+      const variables = {
+        input: {
+          emailPreferences: key === "email" ? value : isEmailOn,
+          pushPreferences: key === "push" ? value : isPushOn,
+        },
+      };
+      const { data } = await updateUserNotifications({ variables });
+      if (data) {
+        console.log("Notificaciones actualizadas", data);
+      }
+    } catch (error) {
+      console.log("Error al actualizar notificaciones:", error);
+    }
+  };
+
+  // Toggle de switches
+  const onToggleSwitchPush = () => {
+    const newValue = !isPushOn;
+    setIsPushOn(newValue);
+    handleUpdateUserNotifications("push", newValue);
+  };
+
+  const onToggleSwitchEmail = () => {
+    const newValue = !isEmailOn;
+    setIsEmailOn(newValue);
+    handleUpdateUserNotifications("email", newValue);
   };
 
   return (

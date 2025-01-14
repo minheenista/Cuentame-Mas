@@ -58,6 +58,8 @@ const ME = gql`
           updatedAt
         }
       }
+      emailPreferences
+      pushPreferences
     }
   }
 `;
