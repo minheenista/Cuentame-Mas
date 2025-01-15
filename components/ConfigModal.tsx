@@ -10,6 +10,7 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  LogBox,
 } from "react-native";
 import Modal from "react-native-modal";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
@@ -913,6 +914,8 @@ const ModalWithTabs: React.FC<ModalWithTabsProps> = ({
   const layout = useWindowDimensions();
   const width = Dimensions.get("window").width;
   const isMobile = width < 900; // Determina si es un dispositivo móvil
+
+  LogBox.ignoreAllLogs();
 
   const [routes] = React.useState([
     { key: "first", title: "Editar Perfil" },

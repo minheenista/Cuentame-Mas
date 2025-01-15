@@ -186,6 +186,7 @@ export default function signupScreen() {
 
             {/* ===================== NAME INPUT ==================== */}
             <TextInput
+              value={name}
               onChangeText={(texto) => saveName(texto)}
               style={
                 width > 500
@@ -217,6 +218,7 @@ export default function signupScreen() {
 
             {/* =================== LAST NAME INPUT ===================== */}
             <TextInput
+              value={lastname}
               onChangeText={(texto) => saveLastName(texto)}
               style={
                 width > 500
@@ -248,6 +250,7 @@ export default function signupScreen() {
 
             {/* =================== EMAIL INPUT ===================== */}
             <TextInput
+              value={email}
               onChangeText={(texto) => saveEmail(texto)}
               style={
                 width > 500
@@ -279,6 +282,7 @@ export default function signupScreen() {
 
             {/* =================== PASSWORD INPUT ===================== */}
             <TextInput
+              value={password}
               onChangeText={(texto) => savePassword(texto)}
               mode="outlined"
               label={"Contraseña"}

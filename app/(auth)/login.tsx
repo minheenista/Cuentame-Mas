@@ -164,6 +164,7 @@ export default function loginScreen() {
 
             {/* =================== INPUT EMAIL =================== */}
             <TextInput
+              value={email}
               onChangeText={(texto) => setEmail(texto)}
               style={
                 width > 500
@@ -195,6 +196,7 @@ export default function loginScreen() {
 
             {/* =================== INPUT PASSWORD =================== */}
             <TextInput
+              value={password}
               onChangeText={(texto) => setPassword(texto)}
               mode="outlined"
               label={"Contraseña"}
